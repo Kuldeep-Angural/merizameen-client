@@ -1,5 +1,5 @@
-import { Button, Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { Button, Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import '../home/home.css';
 const filterChips = [
@@ -59,7 +59,9 @@ export const LocationAndFilter = () => {
               <CardContent>
                 <Typography textAlign={'center'}>
                   <Button color="text" startIcon={<LocationOnIcon />}>
-                    {location?.city||"" + ',' + location?.state||"" + ',' + location?.country||""}
+                    <Typography>
+                      {location?.city || ''},<spa> {location?.state || ''}</spa>,{location?.country || ''}
+                    </Typography>
                   </Button>
                 </Typography>
               </CardContent>

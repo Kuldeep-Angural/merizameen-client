@@ -1,13 +1,13 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Avatar, Box, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Link, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import CompanyLogo from '../../ui/logos/newLogo.png';
 
+import { LinkButton } from '../../components/buttons/LinkButton';
 import FaceBookImage from '../../ui/png/facebook.png';
 import GoogleImage from '../../ui/png/google.png';
-import { LinkButton } from '../../components/buttons/LinkButton';
 export const SignInForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSigninForm, setIsSigninForm] = useState(true);
@@ -23,7 +23,7 @@ export const SignInForm = () => {
         <img src={CompanyLogo} loading="lazy" height={'100px'} />
       </CardContent>
       {isSigninForm && (
-        <Card sx={{ mt: '20px' }} >
+        <Card sx={{ mt: '20px' }}>
           <CardContent>
             <Typography fontWeight={'600'}>Welcome back! Please authorize to begin the journey.</Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
@@ -64,10 +64,10 @@ export const SignInForm = () => {
               </Grid>
               <Grid container>
                 <Grid item xs>
-                  <LinkButton style={{fontWeight:'600'}} text={'Forgot password?'} />
+                  <LinkButton style={{ fontWeight: '600' }} text={'Forgot password?'} />
                 </Grid>
                 <Grid item>
-                  <LinkButton style={{fontWeight:'600'}} onClick={() => setIsSigninForm(false)} text={"Don't have an account? Sign Up"} />
+                  <LinkButton style={{ fontWeight: '600' }} onClick={() => setIsSigninForm(false)} text={"Don't have an account? Sign Up"} />
                 </Grid>
               </Grid>
             </Box>
@@ -82,17 +82,17 @@ export const SignInForm = () => {
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-                <Input  autoComplete="name" autoFocus required id="standard-adornment-password" type="text" />
+                <Input autoComplete="name" autoFocus required id="standard-adornment-password" type="text" />
               </FormControl>
 
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                <Input autoComplete="email"  required id="standard-adornment-password" type="email" />
+                <Input autoComplete="email" required id="standard-adornment-password" type="email" />
               </FormControl>
 
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
-                <Input autoComplete="mobile"  required id="standard-adornment-password" htmlAttributes={{ type: 'tele' }} />
+                <Input autoComplete="mobile" required id="standard-adornment-password" htmlAttributes={{ type: 'tele' }} />
               </FormControl>
 
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
@@ -116,7 +116,7 @@ export const SignInForm = () => {
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <Grid md={6} item>
-                  <LinkButton onClick={() => setIsSigninForm(true)} style={{fontWeight:'600'}} text={'Already  have an account? Sign in'} />
+                  <LinkButton onClick={() => setIsSigninForm(true)} style={{ fontWeight: '600' }} text={'Already  have an account? Sign in'} />
                 </Grid>
               </Grid>
             </Box>

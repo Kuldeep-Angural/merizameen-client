@@ -1,6 +1,6 @@
-import React from "react"
-import { HomeWrapper } from "./HomeWrapper"
+import React from 'react';
+import { HomeWrapper } from './HomeWrapper';
 
-export const Home  = () => {
-    return(<HomeWrapper></HomeWrapper>)
-}
+export const Home = () => {
+  return <HomeWrapper></HomeWrapper>;
+};

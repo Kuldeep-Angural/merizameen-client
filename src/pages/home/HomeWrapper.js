@@ -1,13 +1,12 @@
-import { Children } from 'react';
-import { APNavBar } from '../../components/navbar/APNavBar';
 import { Footer } from '../../components/footer/Footer';
+import { APNavBar } from '../../components/navbar/APNavBar';
 import { LocationAndFilter } from './LocationAndFilter';
 
 export const HomeWrapper = (props) => {
   return (
     <>
       <APNavBar />
-      <LocationAndFilter/>
+      <LocationAndFilter />
       {props.children}
       <Footer />
     </>
