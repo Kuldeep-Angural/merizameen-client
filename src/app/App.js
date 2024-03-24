@@ -5,16 +5,18 @@ import { APRoutes } from '../constants/routes';
 import Auth from '../pages/authantication/Auth';
 import { theme } from '../theme/theme';
 import { Home } from '../pages/home/Home';
+import { Item } from '../pages/items/Item';
 export const App = () => {
-
-  
   return (
     <div className="app" style={{ height: '100%', width: '100%' }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>
-          <Route path={APRoutes.base} Component={Home}/>
-          <Route path={APRoutes.auth} Component={Auth}/>
+          <Route path={APRoutes.base} Component={Home} />
+          <Route path={APRoutes.home} Component={Home} />
+
+          <Route path={APRoutes.auth} Component={Auth} />
+          <Route path={APRoutes.preview} Component={Item} />
         </Routes>
       </ThemeProvider>
     </div>

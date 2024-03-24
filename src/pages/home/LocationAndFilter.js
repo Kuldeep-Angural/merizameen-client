@@ -1,7 +1,7 @@
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Button, Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import '../home/home.css';
+import '../home/home.scss';
 const filterChips = [
   { name: 'Flats', value: 'Flats' },
   { name: 'PG', value: 'PG' },
@@ -15,9 +15,13 @@ const filterChips = [
   { name: '2Bhk', value: '2Bhk' },
   { name: '3Bhk', value: '3Bhk' },
   { name: '3+Bhk', value: '3+Bhk' },
+  { name: 'Villas', value: 'Villas' },
+
+  { name: 'Farm-House', value: 'Farm-House' },
 ];
 export const LocationAndFilter = () => {
   const [location, setLocation] = useState({});
+  const [selectedChip, setSelectedChip] = useState('3Bhk');
 
   const getLocationParams = () => {
     if ('geolocation' in navigator) {
@@ -50,41 +54,44 @@ export const LocationAndFilter = () => {
     getLocationParams();
   }, []);
 
+  const handleChipClick = (item) => {
+    setSelectedChip(item.name);
+  };
+
+
   return (
-    <Card sx={{ marginTop: '10px', margin: '10px' }}>
-      <CardContent>
-        <Grid container gap={3}>
-          <Grid item md={3} xs={12}>
-            <Card>
-              <CardContent>
-                <Typography textAlign={'center'}>
-                  <Button color="text" startIcon={<LocationOnIcon />}>
+    <Card sx={{ marginTop: '10px', margin: '10px', padding: '10px' }}>
+      <Grid container gap={3}>
+        <Grid item md={3} xs={12}>
+          <Card>
+            <CardContent>
+              <Typography textAlign={'center'}>
+                <Button color="text" startIcon={<LocationOnIcon />}>
+                  {location && (
                     <Typography>
                       {location?.city || ''},<spa> {location?.state || ''}</spa>,{location?.country || ''}
                     </Typography>
-                  </Button>
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item md={8} xs={12}>
-            <Card>
-              <CardContent>
-                <Grid container gap={2}>
-                  {filterChips.map((item) => {
-                    return (
-                      <Grid item>
-                        <Chip className="chip-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} label={item.name} variant="outlined" />
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
+                  )}
+                </Button>
+              </Typography>
+            </CardContent>
+          </Card>
         </Grid>
-      </CardContent>
+
+        <Grid item md={8} xs={12}>
+          <CardContent>
+            <Grid container gap={2}>
+              {filterChips.map((item) => {
+                return (
+                  <Grid item onClick={() => handleChipClick(item)}>
+                    <Chip className={ 'chip-hover'} style={{ cursor: 'pointer',  backgroundColor: selectedChip === item.name && 'rgba(39, 195, 44, 0.7)' } } label={item.name} variant="outlined" />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </CardContent>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

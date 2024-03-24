@@ -3,7 +3,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import MenuIcon from '@mui/icons-material/Menu';
 import PhoneIcon from '@mui/icons-material/Phone';
 import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded';
-import { Badge, Card, CardContent, DialogActions, Divider, FormControl, Grid, Input, InputLabel, TextField } from '@mui/material';
+import { Badge, Card, CardContent, Chip, DialogActions, Divider, FormControl, Grid, Input, InputLabel, Link, TextField } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -19,6 +19,8 @@ import * as React from 'react';
 import CompanyLogo from '../../ui/logos/newLogo.png';
 import { GoogleMap } from '../../utils/utility';
 import { APDialog } from '../modal/APDialog';
+import '../../pages/Global.scss';
+
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -90,7 +92,9 @@ export const APNavBar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
-            <img src={CompanyLogo} loading="lazy" height={'60px'} />
+            <Link href="/">
+              <img src={CompanyLogo} loading="lazy" height={'60px'} />
+            </Link>
           </Grid>
           <Typography
             variant="h6"
@@ -131,25 +135,37 @@ export const APNavBar = () => {
               }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Buy</Typography>
+                <Typography className="nav-hover" textAlign="center">
+                  Buy
+                </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Rent</Typography>
+                <Typography className="nav-hover" textAlign="center">
+                  Rent
+                </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Agents</Typography>
+                <Typography className="nav-hover" textAlign="center">
+                  Agents
+                </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Services</Typography>
+                <Typography className="nav-hover" textAlign="center">
+                  Services
+                </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Post Property</Typography>
+                <Typography className="nav-hover" textAlign="center">
+                  Post Property
+                </Typography>
               </MenuItem>
             </Menu>
           </Box>
 
           <Grid sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>
-            <img src={CompanyLogo} loading="lazy" height={'60px'} />
+            <Link href="/">
+              <img src={CompanyLogo} loading="lazy" height={'60px'} />
+            </Link>
           </Grid>
           <Typography
             variant="h5"
@@ -169,20 +185,20 @@ export const APNavBar = () => {
           ></Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-              Buy
+              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} color="primary" label={'Buy'} variant="standard" />
             </Button>
             <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-              Rent
+              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} color="primary" label={'Rent'} variant="standard" />
             </Button>
             <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-              Agents
+              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} color="primary" label={'Agents'} variant="standard" />
             </Button>
             <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-              Services
+              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} color="primary" label={'Services'} variant="standard" />
             </Button>
 
             <Tooltip title="Post Property">
-              <Button onClick={handleCloseNavMenu} variant="outlined" color="inherit" sx={{ my: 2, marginLeft: '130px', color: 'white', display: 'block', borderRadius: '30px' }}>
+              <Button onClick={handleCloseNavMenu} variant="outlined" className="post-button" color="inherit" sx={{ my: 2, marginLeft: '130px', color: 'white', display: 'block', borderRadius: '30px' }}>
                 <Badge badgeContent={'free'} style={{ padding: 10, fontSize: '10px' }} color="success">
                   Post Property
                 </Badge>
@@ -204,7 +220,7 @@ export const APNavBar = () => {
           </Tooltip>
 
           <Box sx={{ flexGrow: 0 }}>
-            {isLoggedIn() ? (
+            {!isLoggedIn() ? (
               <Tooltip title="profile settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt={'Kuldeep Kumar'} src="/static/images/avatar/2.jpg" />

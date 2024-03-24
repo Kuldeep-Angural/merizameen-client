@@ -1,14 +1,15 @@
+import { Grid } from '@mui/material';
 import { Footer } from '../../components/footer/Footer';
 import { APNavBar } from '../../components/navbar/APNavBar';
-import { LocationAndFilter } from './LocationAndFilter';
 
 export const HomeWrapper = (props) => {
   return (
     <>
-      <APNavBar />
-      <LocationAndFilter />
-      {props.children}
-      <Footer />
+      <Grid sx={{ backgroundColor: 'rgba(169, 184, 183,)' }}>
+        <APNavBar />
+        {props.children}
+        <Footer />
+      </Grid>
     </>
   );
 };
