@@ -20,7 +20,8 @@ import CompanyLogo from '../../ui/logos/newLogo.png';
 import { GoogleMap } from '../../utils/utility';
 import { APDialog } from '../modal/APDialog';
 import '../../pages/Global.scss';
-
+import { useNavigate } from "react-router-dom";
+import {APRoutes} from '../../constants/routes';
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -37,6 +38,7 @@ export const APNavBar = () => {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openQueryPannel, setOpenQueryPannel] = React.useState(false);
   const [openCallBack, setOpenCallBack] = React.useState(false);
+  const naviGate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -220,7 +222,7 @@ export const APNavBar = () => {
           </Tooltip>
 
           <Box sx={{ flexGrow: 0 }}>
-            {!isLoggedIn() ? (
+            {isLoggedIn() ? (
               <Tooltip title="profile settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt={'Kuldeep Kumar'} src="/static/images/avatar/2.jpg" />
@@ -228,7 +230,7 @@ export const APNavBar = () => {
               </Tooltip>
             ) : (
               <Tooltip title="Signin / create account">
-                <IconButton sx={{ p: 0 }}>
+                <IconButton sx={{ p: 0 }} onClick={()=>naviGate(APRoutes.auth)}>
                   <AccountCircleIcon style={{ fontSize: '40px', color: 'inherit' }} />
                 </IconButton>
               </Tooltip>
