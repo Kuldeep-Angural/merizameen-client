@@ -156,7 +156,7 @@ export const APNavBar = () => {
                   Services
                 </Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
+              <MenuItem onClick={()=>{naviGate(APRoutes.postProperty)}}>
                 <Typography className="nav-hover" textAlign="center">
                   Post Property
                 </Typography>
@@ -200,7 +200,7 @@ export const APNavBar = () => {
             </Button>
 
             <Tooltip title="Post Property">
-              <Button onClick={handleCloseNavMenu} variant="outlined" className="post-button" color="inherit" sx={{ my: 2, marginLeft: '130px', color: 'white', display: 'block', borderRadius: '30px' }}>
+              <Button onClick={()=>{naviGate(APRoutes.postProperty)}} variant="outlined" className="post-button" color="inherit" sx={{ my: 2, marginLeft: '130px', color: 'white', display: 'block', borderRadius: '30px' }}>
                 <Badge badgeContent={'free'} style={{ padding: 10, fontSize: '10px' }} color="success">
                   Post Property
                 </Badge>
@@ -261,7 +261,8 @@ export const APNavBar = () => {
         </Toolbar>
       </Container>
       {/* Contact Dialoug */}
-      <APDialog
+      <APDialog 
+        
         open={openDialog}
         close={handleCloseDialog}
         content={
@@ -276,12 +277,12 @@ export const APNavBar = () => {
                 <Typography>9:30AM to 6:00PM IST</Typography>
 
                 <Grid container gap={2}>
-                  <Tooltip title="call">
+                  <Tooltip title="Call">
                     <Button variant="outlined" sx={{ fontSize: '10px' }} color="text" md={6} startIcon={<PhoneIcon style={{ paddingTop: '0px' }} />}>
                       9877726857
                     </Button>
                   </Tooltip>
-                  <Tooltip title="call">
+                  <Tooltip title="Request a callBack">
                     <Button variant="outlined" sx={{ fontSize: '10px' }} onClick={() => openCallBackDailog()} color="text" md={6} startIcon={<PhoneForwardedIcon style={{ paddingTop: '3px' }} />}>
                       Request a callBack
                     </Button>

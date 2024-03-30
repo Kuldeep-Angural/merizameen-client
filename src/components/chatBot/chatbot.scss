@@ -1,0 +1,146 @@
+// Variables
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$chatbot-bg-color: #f8f9fa;
+$chatbot-border-color: #ced4da;
+
+.react-chatbot-kit-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.react-chatbot-kit-chat-inner-container {
+ 
+}
+
+.react-chatbot-kit-chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: $primary-color;
+  color: #fff;
+}
+
+.react-chatbot-kit-chat-input-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+
+  input[type="text"] {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 8px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+
+  button {
+    background-color: $primary-color;
+    color: #fff;
+    border: none;
+    outline: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin-top: 1px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}
+
+.react-chatbot-kit-chat-message-container {
+  margin-top: 10px;
+
+  .message {
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    max-width: 70%;
+    word-wrap: break-word;
+
+    &.sent {
+      background-color: $primary-color;
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    &.received {
+      background-color: #e9ecef;
+      color: #000;
+      align-self: flex-start;
+    }
+  }
+}
+
+.react-chatbot-kit-chat-input {
+  display: flex;
+  align-items: center;
+
+  input[type="text"]::placeholder {
+    color: $secondary-color;
+  }
+}
+
+.react-chatbot-kit-chat-bot-message-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+
+  .avatar-container {
+    content: a;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: $primary-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+
+    .avatar-icon {
+      color: #fff;
+    }
+
+    .avatar-letter {
+      color: #fff;
+    }
+  }
+
+  .message {
+    padding: 8px;
+    border-radius: 5px;
+    max-width: 70%;
+    word-wrap: break-word;
+    background-color: #e9ecef;
+    color: #000;
+  }
+
+  .message-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent #e9ecef transparent;
+    margin-top: 10px;
+    margin-left: 5px;
+  }
+
+  .loading-icon-container {
+    margin-right: 10px;
+  }
+}
+
+.help-button {
+  &:hover {
+    background-color: rgba(69, 215, 74, 0.3);
+  }
+}
+
+// Add more styles as needed for error messages, loaders, etc.

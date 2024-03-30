@@ -6,6 +6,9 @@ import Auth from '../pages/authantication/Auth';
 import { theme } from '../theme/theme';
 import { Home } from '../pages/home/Home';
 import { Item } from '../pages/items/Item';
+import { PostProperty } from '../pages/postAd/PostProperty';
+import Chatbot from 'react-chatbot-kit'
+import 'react-chatbot-kit/build/main.css'
 export const App = () => {
   return (
     <div className="app" style={{ height: '100%', width: '100%' }}>
@@ -17,6 +20,7 @@ export const App = () => {
 
           <Route path={APRoutes.auth} Component={Auth} />
           <Route path={APRoutes.preview} Component={Item} />
+          <Route path={APRoutes.postProperty} Component={PostProperty} />
         </Routes>
       </ThemeProvider>
     </div>

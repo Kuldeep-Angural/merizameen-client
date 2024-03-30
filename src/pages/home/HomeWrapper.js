@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { Footer } from '../../components/footer/Footer';
 import { APNavBar } from '../../components/navbar/APNavBar';
+import Akira from '../../components/chatBot/Akira';
 
 export const HomeWrapper = (props) => {
   return (
@@ -9,6 +10,7 @@ export const HomeWrapper = (props) => {
         <APNavBar />
         {props.children}
         <Footer />
+        <Akira />
       </Grid>
     </>
   );

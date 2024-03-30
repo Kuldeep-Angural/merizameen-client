@@ -2,5 +2,6 @@ export const APRoutes = {
   base: '/',
   home: '/home',
   auth: '/auth',
-  preview: '/home/:listId'
+  preview: '/home/:listId',
+  postProperty:'/postAd'
 };
