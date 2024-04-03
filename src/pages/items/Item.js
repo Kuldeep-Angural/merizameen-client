@@ -74,7 +74,8 @@ export const Item = () => {
                   position: 'absolute',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: '#fff',
+                  backgroundColor:'white',
+                  color: 'black',
                   cursor: 'pointer',
                   left: '12px',
                 }}
@@ -91,7 +92,8 @@ export const Item = () => {
                   position: 'absolute',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: '#fff',
+                                    backgroundColor:'white',
+                  color: 'black',
                   cursor: 'pointer',
                   right: '12px',
                 }}
