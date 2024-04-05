@@ -93,8 +93,8 @@ export const HighLightCards = () => {
   return (
     <Card sx={{ marginTop: '50px', padding: '10px' }}>
       <Grid container rowSpacing={1} spacing={2}>
-        {itemsCount.map((item) => {
-          return <Items color={item.color} content={item.content} />;
+        {itemsCount.map((item, index) => {
+          return <Items key={index} color={item.color} content={item.content} />;
         })}
       </Grid>
     </Card>

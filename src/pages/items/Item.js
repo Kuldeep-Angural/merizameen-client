@@ -66,7 +66,7 @@ export const Item = () => {
       <Grid container spacing={2} mt={1} style={{ padding: '10px' }}>
         <Grid item md={6} xs={12}>
           <Card style={{ position: 'relative', display: 'inline-block' }}>
-            <CardContent sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
+            <CardContent sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
               <img style={{ display: 'block', maxWidth: '650px', minWidth: '650px', maxHeight: '400px', minHeight: '400px' }} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
               <IconButton
                 className="prev-btn"
@@ -74,7 +74,7 @@ export const Item = () => {
                   position: 'absolute',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  backgroundColor:'white',
+                  backgroundColor: 'white',
                   color: 'black',
                   cursor: 'pointer',
                   left: '12px',
@@ -92,7 +92,7 @@ export const Item = () => {
                   position: 'absolute',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                                    backgroundColor:'white',
+                  backgroundColor: 'white',
                   color: 'black',
                   cursor: 'pointer',
                   right: '12px',
@@ -106,7 +106,7 @@ export const Item = () => {
               </IconButton>
             </CardContent>
 
-            <CardContent sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>
+            <CardContent sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
               <img style={{ display: 'block', maxWidth: '100%', minWidth: '350px', maxHeight: '350px', height: '300px' }} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
               <IconButton
                 className="prev-btn"
@@ -146,24 +146,15 @@ export const Item = () => {
           </Card>
         </Grid>
 
-        <Grid item md={6} xs={12}>
-          <Typography mt={2} fontSize={'10px'} fontWeight={'500'} textAlign={'end'} marginRight={'5px'}>
-            posted on:{property.postedOn}
-          </Typography>
-          <Typography mt={2} fontSize={'19px'} paddingLeft={'10px'} fontWeight={'600'}>
-            {property.title}
-          </Typography>
-          <Typography mt={2} fontSize={'11px'} paddingLeft={'10px'} fontWeight={'500'} marginRight={'5px'}>
-            Listing Id #{property.id}
-          </Typography>
-
-          <Typography mt={2} fontSize={'15px'} paddingLeft={'10px'} fontWeight={'500'} marginRight={'5px'}>
-            Listing Id #{property.description}
-          </Typography>
+        <Grid item md={6} xs={12} style={{ flexWrap: 'wrap' }}>
+          <Typography style={{ marginTop: 2, fontSize: '10px', fontWeight: 500, textAlign: 'end', marginRight: 5 }}>posted on:{property.postedOn}</Typography>
+          <Typography style={{ marginTop: 2, fontSize: '19px', paddingLeft: 10, fontWeight: 600 }}>{property.title}</Typography>
+          <Typography style={{ marginTop: 2, fontSize: '11px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>Listing Id #{property.id}</Typography>
+          <Typography style={{ marginTop: 2, fontSize: '15px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>{property.description}</Typography>
 
           <CardContent>
             <Card>
-              <CardContent>
+              <CardContent sx={{ backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
                 <Grid container md={12} mt={2} justifyContent={'center'}>
                   <Grid item md={2}>
                     <ToolTipButton title={'beddrooms'} icon={<BedroomParentIcon />} text={property?.propertyOverview?.BedRooms + 'Beds'} />
@@ -218,20 +209,20 @@ export const Item = () => {
             </Typography>
             <Divider></Divider>
             <Grid container spacing={1}>
-              <Grid item md={3}>
+              <Grid item sx={12} md={3}>
                 <ToolTipButton title={property?.landmark?.[0] || ''} icon={<CarRentalIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[0] || 'n/a'} />
               </Grid>
 
-              <Grid item md={3}>
+              <Grid item sx={12} md={3}>
                 <ToolTipButton title={property?.amenities?.[1] || ''} icon={<PowerIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[1] || 'n/a'} />
               </Grid>
-              <Grid item md={3}>
+              <Grid item sx={12} md={3}>
                 <ToolTipButton title={property?.amenities?.[2] || ''} icon={<AllInclusiveIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[2] || 'n/a'} />
               </Grid>
-              <Grid item md={3}>
+              <Grid item sx={12} md={3}>
                 <ToolTipButton title={property?.amenities?.[3] || ''} icon={<EngineeringIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[3] || 'n/a'} />
               </Grid>
-              <Grid item md={3}>
+              <Grid item sx={12} md={3}>
                 <ToolTipButton title={property?.amenities?.[4] || ''} icon={<GrassIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[4] || 'n/a'} />
               </Grid>
             </Grid>

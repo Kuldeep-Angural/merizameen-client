@@ -19,9 +19,12 @@ const filterChips = [
 
   { name: 'Farm-House', value: 'Farm-House' },
 ];
-export const LocationAndFilter = () => {
+export const LocationAndFilter = ({ setFilterParams, filterParams }) => {
   const [location, setLocation] = useState({});
-  const [selectedChip, setSelectedChip] = useState('3Bhk');
+
+  const setSelectedChip = (name) => {
+    setFilterParams(name);
+  };
 
   const getLocationParams = () => {
     if ('geolocation' in navigator) {
@@ -58,21 +61,20 @@ export const LocationAndFilter = () => {
     setSelectedChip(item.name);
   };
 
-
   return (
     <Card sx={{ marginTop: '10px', margin: '10px', padding: '10px' }}>
       <Grid container gap={3}>
         <Grid item md={3} xs={12}>
           <Card>
-            <CardContent>
+            <CardContent style={{ backgroundColor: 'rgb(77, 135, 250,0.4)' }}>
               <Typography textAlign={'center'}>
-                <Button color="text" startIcon={<LocationOnIcon />}>
-                  {location && (
-                    <Typography>
-                      {location?.city || ''},<spa> {location?.state || ''}</spa>,{location?.country || ''}
+                {location.city && (
+                  <Button color="text" startIcon={<LocationOnIcon />}>
+                    <Typography fontWeight={550}>
+                      {location?.city || ''},<spa> {location?.state || ''}</spa>, {location?.country || ''}
                     </Typography>
-                  )}
-                </Button>
+                  </Button>
+                )}
               </Typography>
             </CardContent>
           </Card>
@@ -81,10 +83,10 @@ export const LocationAndFilter = () => {
         <Grid item md={8} xs={12}>
           <CardContent>
             <Grid container gap={2}>
-              {filterChips.map((item) => {
+              {filterChips.map((item, index) => {
                 return (
-                  <Grid item onClick={() => handleChipClick(item)}>
-                    <Chip className={ 'chip-hover'} style={{ cursor: 'pointer',  backgroundColor: selectedChip === item.name && 'rgba(39, 195, 44, 0.7)' } } label={item.name} variant="outlined" />
+                  <Grid key={index} item onClick={() => handleChipClick(item)}>
+                    <Chip className={'chip-hover'} style={{ cursor: 'pointer', backgroundColor: filterParams === item.name && 'rgba(39, 195, 44, 0.7)' }} label={item.name} variant="outlined" />
                   </Grid>
                 );
               })}

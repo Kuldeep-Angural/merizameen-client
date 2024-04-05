@@ -1,8 +1,10 @@
 import { Badge, Card, Divider, Grid, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cardsData } from '../../constants/staticData';
-
+import { dark } from '@mui/material/styles/createPalette';
+import Lottie from 'lottie-react';
+import ItemNotFound from '../../ui/json/noDataFOund.json';
 const RenderChips = ({ data }) => {
   const key = Object.keys(data)[0];
   const value = data[key];
@@ -18,18 +20,18 @@ const RenderChips = ({ data }) => {
   );
 };
 
-const ListedItems = () => {
+const ListedItems = ({ filterParams }) => {
   const naviGate = useNavigate();
+  const [properties, setProperties] = useState([]);
 
   const openItem = (id) => {
-    console.log(id);
     naviGate(`/home/${id}`);
   };
 
   const RenderCard = ({ item }) => {
     return (
       <Grid item md={6} xs={12} onClick={() => openItem(item.id)} style={{ cursor: 'pointer' }}>
-        <Card sx={{ backgroundColor: '#ffffff', height: '250px' }}>
+        <Card sx={{ backgroundColor: 'rgb(77, 135, 250,0.1)', height: '250px' }}>
           <Grid container spacing={3}>
             <Grid item md={12} sx={12} display={'flex'} justifyContent={'space-between'}>
               <Badge
@@ -93,13 +95,32 @@ const ListedItems = () => {
     );
   };
 
+  useEffect(() => {
+    let data = cardsData.filter((e) => e.type === filterParams);
+    setProperties(data);
+  }, [filterParams]);
+
   return (
     <Card sx={{ marginTop: '10px', padding: '10px' }}>
-      <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
-        {cardsData.map((item, index) => (
-          <RenderCard key={index} item={item} />
-        ))}
-      </Grid>
+      {properties.length > 0 ? (
+        <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
+          {properties.map((item, index) => (
+            <RenderCard key={index} item={item} />
+          ))}
+        </Grid>
+      ) : (
+        <Grid container md={12} xs={12} display={'flex'} justifyContent={'center'}>
+          <Grid item md={12} xs={12}>
+            <Lottie loop={true} animationData={ItemNotFound} style={{ height: '190px', cursor: 'pointer' }} />
+          </Grid>
+          <Grid item md={12} xs={12}>
+            <Typography fontSize={'20px'} fontWeight={600} textAlign={'center'}>
+              {' '}
+              sorry we don't have any {filterParams} in your Area{' '}
+            </Typography>
+          </Grid>
+        </Grid>
+      )}
     </Card>
   );
 };
