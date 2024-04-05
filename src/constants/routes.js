@@ -6,15 +6,15 @@ import { Item } from '../pages/items/Item';
 import { PostProperty } from '../pages/postAd/PostProperty';
 import { PageNotFound } from '../pages/notFoundPage/PageNotFound';
 export const APRoutes = () => {
-  const [pageTitle, updatePageTitle] = useState('');
-
-  const ROUTES = [
+   const ROUTES = [
     { name: '/', value: (index) => <Home key={index} updatePageTitle={updatePageTitle} /> },
     { name: '/auth', value: (index) => <Auth key={index} updatePageTitle={updatePageTitle} /> },
     { name: '/home', value: (index) => <Home key={index} updatePageTitle={updatePageTitle} /> },
     { name: '/home/:listId', value: (index) => <Item key={index} updatePageTitle={updatePageTitle} /> },
-    { name: '/home/postAd', value: (index) => <PostProperty key={index} updatePageTitle={updatePageTitle} /> },
+    { name: '/postAd', value: (index) => <PostProperty key={index} updatePageTitle={updatePageTitle} /> },
   ];
+  const [pageTitle, updatePageTitle] = useState('');
+
 
   useEffect(() => {
     document.title = pageTitle;

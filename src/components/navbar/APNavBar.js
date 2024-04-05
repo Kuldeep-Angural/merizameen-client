@@ -21,7 +21,7 @@ import { GoogleMap } from '../../utils/utility';
 import { APDialog } from '../modal/APDialog';
 import '../../pages/Global.scss';
 import { useNavigate } from "react-router-dom";
-import {APRoutes} from '../../constants/routes';
+import {APRoutes, ROUTES} from '../../constants/routes';
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -156,7 +156,7 @@ export const APNavBar = () => {
                   Services
                 </Typography>
               </MenuItem>
-              <MenuItem onClick={()=>{naviGate(APRoutes.postProperty)}}>
+              <MenuItem onClick={()=>{naviGate('/postAd')}}>
                 <Typography className="nav-hover" textAlign="center">
                   Post Property
                 </Typography>
@@ -200,7 +200,7 @@ export const APNavBar = () => {
             </Button>
 
             <Tooltip title="Post Property">
-              <Button onClick={()=>{naviGate(APRoutes.postProperty)}} variant="outlined" className="post-button" color="inherit" sx={{ my: 2, marginLeft: '130px', color: 'white', display: 'block', borderRadius: '30px' }}>
+              <Button onClick={()=>{naviGate('/postAd')}} variant="outlined" className="post-button" color="inherit" sx={{ my: 2, marginLeft: '130px', color: 'white', display: 'block', borderRadius: '30px' }}>
                 <Badge badgeContent={'free'} style={{ padding: 10, fontSize: '10px' }} color="success">
                   Post Property
                 </Badge>

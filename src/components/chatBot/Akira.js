@@ -34,9 +34,10 @@ const Akira = (prop) => {
           </Tooltip>
         </Grid>
       ) : (
-        <Grid position={'fixed'} bottom={5} right={-10}>
+        <Grid position={'fixed'} bottom={'10px'} right={'20px'}>
           <Tooltip title="Click to Open Your Personal Assistant">
-            <Lottie loop={true} ani animationData={SideArrowAnimation} style={{ height: '50px', fontSize: '50px', cursor: 'pointer' }} onClick={() => setIsSideView(!isSideView)} />
+            {/* <Lottie loop={true} ani animationData={SideArrowAnimation} style={{ height: '50px', fontSize: '50px', cursor: 'pointer' }} onClick={() => setIsSideView(!isSideView)} /> */}
+            <Lottie onClick={() => setIsSideView(!isSideView)} loop={true} animationData={ChatBotAnimation} style={{ height: '50px', cursor: 'pointer' }} />
           </Tooltip>
         </Grid>
       )}

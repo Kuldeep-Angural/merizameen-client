@@ -1,6 +1,7 @@
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Button, Card, CardContent, Chip, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import Skeleton from '@mui/material/Skeleton';
 import '../home/home.scss';
 const filterChips = [
   { name: 'Flats', value: 'Flats' },
@@ -68,12 +69,14 @@ export const LocationAndFilter = ({ setFilterParams, filterParams }) => {
           <Card>
             <CardContent style={{ backgroundColor: 'rgb(77, 135, 250,0.4)' }}>
               <Typography textAlign={'center'}>
-                {location.city && (
+                {location.city ? (
                   <Button color="text" startIcon={<LocationOnIcon />}>
                     <Typography fontWeight={550}>
                       {location?.city || ''},<spa> {location?.state || ''}</spa>, {location?.country || ''}
                     </Typography>
                   </Button>
+                ):(
+                  <Skeleton variant="rounded" width={300}  />
                 )}
               </Typography>
             </CardContent>
