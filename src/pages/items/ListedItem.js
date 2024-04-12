@@ -1,10 +1,11 @@
-import { Badge, Card, Divider, Grid, Typography } from '@mui/material';
+import { Card, Grid, Typography, Box, IconButton } from '@mui/material';
+import Lottie from 'lottie-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cardsData } from '../../constants/staticData';
-import { dark } from '@mui/material/styles/createPalette';
-import Lottie from 'lottie-react';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ItemNotFound from '../../ui/json/noDataFOund.json';
+import './Item.scss';
 const RenderChips = ({ data }) => {
   const key = Object.keys(data)[0];
   const value = data[key];
@@ -20,7 +21,7 @@ const RenderChips = ({ data }) => {
   );
 };
 
-const ListedItems = ({ filterParams }) => {
+const ListedItems = ({ filterParams,searchParams }) => {
   const naviGate = useNavigate();
   const [properties, setProperties] = useState([]);
 
@@ -30,75 +31,34 @@ const ListedItems = ({ filterParams }) => {
 
   const RenderCard = ({ item }) => {
     return (
-      <Grid item md={6} xs={12} onClick={() => openItem(item.id)} style={{ cursor: 'pointer' }}>
-        <Card sx={{ backgroundColor: 'rgb(77, 135, 250,0.1)', height: '250px' }}>
-          <Grid container spacing={3}>
-            <Grid item md={12} sx={12} display={'flex'} justifyContent={'space-between'}>
-              <Badge
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
-                }}
-                badgeContent={`+${item.images.length - 1}`}
-                style={{ fontSize: '15px', fontWeight: '800', color: 'white' }}
-              >
-                <img src={item.mainImage} height={'200px'} width={'200px'} />
-              </Badge>
-              <Typography textAlign={'center'} color="text" fontWeight={'600'} padding={'2px'}>
-                {item.title}
-                <br></br>
-                <Grid container spacing={1} sx={{ marginLeft: '20px' }} color={' rgba(0, 128, 255,9)'} height={'100px'}>
-                  {item.info.map((i) => {
-                    return (
-                      <>
-                        <Divider orientation="vertical" />
-                        <Grid mt={0} width={'100px'} padding={1} item>
-                          <RenderChips data={i} />
-                        </Grid>
-                      </>
-                    );
-                  })}
-                  <Divider orientation="vertical" />
-                  <Typography
-                    fontWeight={'500'}
-                    fontSize={'13px'}
-                    textAlign={'center'}
-                    sx={{
-                      marginRight: '22px',
-                      paddingRight: '2px',
-                      display: { xs: 'none', sm: 'none', md: 'flex', color: 'black' },
-                    }}
-                  >
-                    {item.description}
-                  </Typography>
-                </Grid>
-              </Typography>
-            </Grid>
-            <Grid container spacing={2} display={'flex'} justifyContent={'space-between'}>
-              <Grid item md={3} mt={1} marginLeft={5}>
-                <Divider></Divider>
-                <Typography fontWeight={'500'} fontSize={'12px'}>
-                  {item.relation}: {item.postedBy}
-                </Typography>
-                <Typography fontSize={'10px'}>Posted on: {item.postedOn}</Typography>
-              </Grid>
-
-              <Grid item md={3} mt={1} marginLeft={5}>
-                <Typography fontWeight={'500'} color={'rgba(143, 13, 15,2.4)'} textAlign={'center'} mt={2} mr={1} fontSize={'14px'}>
-                  &#8377;:{item.price}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Card>
+      <Grid item md={3} sm={6} xs={12}  style={{ cursor: 'pointer' }}>
+        <img style={{ borderRadius: '3%' }} onClick={() => openItem(item.id)} src={item.mainImage} height={'275px'} width={'100%'} />
+        <Typography fontWeight={'600'}>{item.title}</Typography>
+        <Box display={'flex'}>
+          <Typography>Property Type:</Typography>
+          <Typography>{item.type}</Typography>
+        </Box>
+        <Box display={'flex'} alignItems="center">
+          <Typography fontSize={'15px'}>{'Price'}:</Typography>
+          <Typography display={'flex'}  fontSize={'15px'} color={'primary'} fontWeight={'600'}>
+            {item.price}
+          </Typography>
+          <IconButton sx={{ marginLeft: '40px' }}   aria-label="Add to Cart" onClick={() => {}}>
+            <FavoriteBorderIcon  className='like-Button'/>
+          </IconButton>
+        </Box>
       </Grid>
     );
   };
 
   useEffect(() => {
-    let data = cardsData.filter((e) => e.type === filterParams);
-    setProperties(data);
+      let data = cardsData.filter((e) => e.type === filterParams);
+      setProperties(data);
+  
   }, [filterParams]);
+
+ 
+
 
   return (
     <Card sx={{ marginTop: '10px', padding: '10px' }}>

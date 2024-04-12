@@ -11,3 +11,14 @@
     color: rgba(69, 215, 74, 0.3);
   }
 }
+
+.like-Button{
+  &:hover{
+    color: red;
+  }
+}
+
+
+#imgContainer:hover .iconButton {
+  opacity: 1;
+}

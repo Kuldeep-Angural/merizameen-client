@@ -90,7 +90,7 @@ export const APNavBar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar color='transparent' position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
@@ -98,23 +98,9 @@ export const APNavBar = () => {
               <img src={CompanyLogo} loading="lazy" height={'60px'} />
             </Link>
           </Grid>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          ></Typography>
+          
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', } }}>
             <IconButton size="large" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleOpenNavMenu} color="inherit">
               <MenuIcon />
             </IconButton>
@@ -137,27 +123,27 @@ export const APNavBar = () => {
               }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography className="nav-hover" textAlign="center">
+                <Typography textAlign="center">
                   Buy
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography className="nav-hover" textAlign="center">
+                <Typography textAlign="center">
                   Rent
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography className="nav-hover" textAlign="center">
+                <Typography textAlign="center">
                   Agents
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography className="nav-hover" textAlign="center">
+                <Typography textAlign="center">
                   Services
                 </Typography>
               </MenuItem>
               <MenuItem onClick={()=>{naviGate('/postAd')}}>
-                <Typography className="nav-hover" textAlign="center">
+                <Typography textAlign="center">
                   Post Property
                 </Typography>
               </MenuItem>
@@ -187,21 +173,21 @@ export const APNavBar = () => {
           ></Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} color="primary" label={'Buy'} variant="standard" />
+              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }}  label={'Buy'} variant="outlined" />
             </Button>
             <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} color="primary" label={'Rent'} variant="standard" />
+              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }}  label={'Rent'} variant="outlined" />
             </Button>
             <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} color="primary" label={'Agents'} variant="standard" />
+              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }}  label={'Agents'} variant="outlined" />
             </Button>
             <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} color="primary" label={'Services'} variant="standard" />
+              <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }}  label={'Services'} variant="outlined" />
             </Button>
 
             <Tooltip title="Post Property">
-              <Button onClick={()=>{naviGate('/postAd')}} variant="outlined" className="post-button" color="inherit" sx={{ my: 2, marginLeft: '130px', color: 'white', display: 'block', borderRadius: '30px' }}>
-                <Badge badgeContent={'free'} style={{ padding: 10, fontSize: '10px' }} color="success">
+              <Button onClick={()=>{naviGate('/postAd')}} variant="outlined" className="post-button"  sx={{ my: 2, marginLeft: '130px',  display: 'block', borderRadius: '30px' }}>
+                <Badge badgeContent={'free'} style={{ padding: 10, fontSize: '10px' }} variant='outlined' color="success">
                   Post Property
                 </Badge>
               </Button>
@@ -214,8 +200,7 @@ export const APNavBar = () => {
                 setOpenDialog(true);
               }}
               variant="outlined"
-              color="secondary"
-              sx={{ my: 2, marginRight: '30px', color: 'white', display: 'block', borderRadius: '30px' }}
+              sx={{ my: 2, marginRight: '30px',  display: 'block', borderRadius: '30px' }}
             >
               <InfoIcon style={{ fontSize: '20px', color: 'inherit' }} />
             </IconButton>

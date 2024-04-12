@@ -1,12 +1,11 @@
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography,Box } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { cardsData } from '../../constants/staticData';
 import { HomeWrapper } from '../home/HomeWrapper';
 import '../items/Item.scss';
-
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import BathtubIcon from '@mui/icons-material/Bathtub';
 import BedroomParentIcon from '@mui/icons-material/BedroomParent';
@@ -15,7 +14,6 @@ import CropLandscapeIcon from '@mui/icons-material/CropLandscape';
 import DirectionsRailwayIcon from '@mui/icons-material/DirectionsRailway';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import GrassIcon from '@mui/icons-material/Grass';
 import HouseIcon from '@mui/icons-material/House';
 import LocalAtmIcon from '@mui/icons-material/LocalAtm';
@@ -23,10 +21,15 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PowerIcon from '@mui/icons-material/Power';
 import SubwayIcon from '@mui/icons-material/Subway';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import APImageViewer from '../../components/imageViewer/APImageViewer';
+import APModal from '../../components/modal/APModal';
 export const Item = () => {
   const [property, setProperty] = useState({});
   const [propertyImages, setPropertyImages] = useState([]);
-
+  const [currentImage, setCurrentImage] = useState(0);
+  const [size, setSize] = useState({});
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const params = useParams();
 
@@ -37,15 +40,14 @@ export const Item = () => {
     setImageIndex(0);
   }, []);
 
-  const previous = () => {
-    if (imageIndex === 0) {
-    } else {
-      setImageIndex(imageIndex - 1);
-    }
-  };
+  const openImageViewer = useCallback((index) => {
+    setCurrentImage(index);
+    setIsViewerOpen(true);
+  }, []);
 
-  const next = () => {
-    if (imageIndex < propertyImages.length - 1) setImageIndex(imageIndex + 1);
+  const closeImageViewer = () => {
+    setCurrentImage(0);
+    setIsViewerOpen(false);
   };
 
   const ToolTipButton = ({ title, icon, text }) => {
@@ -65,89 +67,28 @@ export const Item = () => {
     <HomeWrapper>
       <Grid container spacing={2} mt={1} style={{ padding: '10px' }}>
         <Grid item md={6} xs={12}>
-          <Card style={{ position: 'relative', display: 'inline-block' }}>
-            <CardContent sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
-              <img style={{ display: 'block', maxWidth: '650px', minWidth: '650px', maxHeight: '400px', minHeight: '400px' }} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
-              <IconButton
-                className="prev-btn"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  backgroundColor: 'white',
-                  color: 'black',
-                  cursor: 'pointer',
-                  left: '12px',
-                }}
-                title="previous"
-                id="start-button"
-                onClick={previous}
-                disabled={imageIndex === 0}
-              >
-                <ArrowBackIosIcon />
-              </IconButton>
-              <IconButton
-                className="next-btn"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  backgroundColor: 'white',
-                  color: 'black',
-                  cursor: 'pointer',
-                  right: '12px',
-                }}
-                id="end-button"
-                onClick={next}
-                title="next"
-                disabled={imageIndex === propertyImages.length - 1}
-              >
-                <ArrowForwardIosIcon />
-              </IconButton>
-            </CardContent>
+          <Box style={{ position: 'relative', display: 'inline-block', }}>
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }} >
+              <div id="imgContainer" style={{ position: 'relative', display: 'inline-block',}}>
+                <img onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width:'100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer' ,borderRadius:'10px'}} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
+                <IconButton style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0', transition: 'opacity 0.3s' }} onMouseEnter={(e) => (e.target.style.opacity = '1')} onMouseLeave={(e) => (e.target.style.opacity = '0')} aria-label="View Image" onClick={openImageViewer}>
+                  <FullscreenIcon />
+                </IconButton>
+              </div>
+              <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
+            </Box>
 
-            <CardContent sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
-              <img style={{ display: 'block', maxWidth: '100%', minWidth: '350px', maxHeight: '350px', height: '300px' }} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
-              <IconButton
-                className="prev-btn"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#fff',
-                  cursor: 'pointer',
-                  left: '12px',
-                }}
-                title="previous"
-                id="start-button"
-                onClick={previous}
-                disabled={imageIndex === 0}
-              >
-                <ArrowBackIosIcon />
-              </IconButton>
-              <IconButton
-                className="next-btn"
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#fff',
-                  cursor: 'pointer',
-                  right: '12px',
-                }}
-                id="end-button"
-                onClick={next}
-                title="next"
-                disabled={imageIndex === propertyImages.length - 1}
-              >
-                <ArrowForwardIosIcon />
-              </IconButton>
+            <CardContent sx={{ display: { xs: 'flex', sm: 'flex', md: 'none' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
+              <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', maxWidth: '100%', minWidth: '350px', maxHeight: '350px', height: '300px',borderRadius:'10px' }} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
+              <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
             </CardContent>
-          </Card>
+          </Box>
         </Grid>
 
-        <Grid item md={6} xs={12} style={{ flexWrap: 'wrap' }}>
-          <Typography style={{ marginTop: 2, fontSize: '10px', fontWeight: 500, textAlign: 'end', marginRight: 5 }}>posted on:{property.postedOn}</Typography>
+        <Grid item md={6} xs={12} sm={12} sx={{ flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
+          <Typography textOverflow={'ellipsis'} style={{ marginTop: 2, fontSize: '10px', fontWeight: 500, textAlign: 'end', marginRight: 5 }}>
+            posted on:{property.postedOn}
+          </Typography>
           <Typography style={{ marginTop: 2, fontSize: '19px', paddingLeft: 10, fontWeight: 600 }}>{property.title}</Typography>
           <Typography style={{ marginTop: 2, fontSize: '11px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>Listing Id #{property.id}</Typography>
           <Typography style={{ marginTop: 2, fontSize: '15px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>{property.description}</Typography>
@@ -155,9 +96,9 @@ export const Item = () => {
           <CardContent>
             <Card>
               <CardContent sx={{ backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
-                <Grid container md={12} mt={2} justifyContent={'center'}>
+                <Grid container mt={2} justifyContent={'center'}>
                   <Grid item md={2}>
-                    <ToolTipButton title={'beddrooms'} icon={<BedroomParentIcon />} text={property?.propertyOverview?.BedRooms + 'Beds'} />
+                    <ToolTipButton title={'bedrooms'} icon={<BedroomParentIcon />} text={property?.propertyOverview?.BedRooms + 'Beds'} />
                   </Grid>
 
                   <Grid item md={2}>
@@ -261,6 +202,8 @@ export const Item = () => {
           </CardContent>
         </Grid>
       </Grid>
+
+     
     </HomeWrapper>
   );
 };

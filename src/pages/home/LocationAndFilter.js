@@ -1,6 +1,7 @@
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { Button, Card, CardContent, Chip, Grid, Typography } from '@mui/material';
+import { Button, Card, CardContent, Chip, Grid, Typography,FormControl,OutlinedInput,Fab } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
 import Skeleton from '@mui/material/Skeleton';
 import '../home/home.scss';
 const filterChips = [
@@ -20,7 +21,7 @@ const filterChips = [
 
   { name: 'Farm-House', value: 'Farm-House' },
 ];
-export const LocationAndFilter = ({ setFilterParams, filterParams }) => {
+export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, setSearchParams }) => {
   const [location, setLocation] = useState({});
 
   const setSelectedChip = (name) => {
@@ -62,6 +63,10 @@ export const LocationAndFilter = ({ setFilterParams, filterParams }) => {
     setSelectedChip(item.name);
   };
 
+  const handleSearch = (e) => {
+    setSearchParams(e.target.value)
+  }
+
   return (
     <Card sx={{ marginTop: '10px', margin: '10px', padding: '10px' }}>
       <Grid container gap={3}>
@@ -83,7 +88,7 @@ export const LocationAndFilter = ({ setFilterParams, filterParams }) => {
           </Card>
         </Grid>
 
-        <Grid item md={8} xs={12}>
+        <Grid item md={5} xs={12}>
           <CardContent>
             <Grid container gap={2}>
               {filterChips.map((item, index) => {
@@ -93,6 +98,22 @@ export const LocationAndFilter = ({ setFilterParams, filterParams }) => {
                   </Grid>
                 );
               })}
+            </Grid>
+          </CardContent>
+        </Grid>
+
+        <Grid item md={3} xs={12} display={'flex'} justifyContent={"center"}>
+          <CardContent>
+            <Grid container gap={2}>
+            <FormControl sx={{ m: 1, width: '25ch' }}    variant="standard">
+              <OutlinedInput style={{borderRadius:'33px',color:'grey',borderColor:'grey'}} fullWidth 
+              endAdornment={<SearchIcon style={{cursor:'pointer',borderRadius:'50%',fontSize:'40px'}}
+              onClick={()=>alert('search')}/>} aria-describedby="outlined-weight-helper-text"
+              onChange={handleSearch}
+              placeholder='Search'
+              
+              />
+          </FormControl>
             </Grid>
           </CardContent>
         </Grid>

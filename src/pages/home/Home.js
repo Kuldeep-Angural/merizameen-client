@@ -7,6 +7,7 @@ import ListedItems from '../items/ListedItem';
 
 export const Home = ({ updatePageTitle }) => {
   const [filterParams, setFilterParams] = useState('3Bhk');
+  const [searchParams, setSearchParams] = useState('')
   useEffect(() => {
     updatePageTitle('Merizameen Home');
   }, []);
@@ -14,9 +15,9 @@ export const Home = ({ updatePageTitle }) => {
   return (
     <Box>
       <HomeWrapper>
-        <LocationAndFilter setFilterParams={setFilterParams} filterParams={filterParams} />
+        <LocationAndFilter setFilterParams={setFilterParams} filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} />
         <HighLightCards />
-        <ListedItems filterParams={filterParams} />
+        <ListedItems filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams}/>
       </HomeWrapper>
     </Box>
   );
