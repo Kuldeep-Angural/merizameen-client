@@ -22,15 +22,9 @@ import { APDialog } from '../modal/APDialog';
 import '../../pages/Global.scss';
 import { useNavigate } from "react-router-dom";
 import {APRoutes, ROUTES} from '../../constants/routes';
-const pages = ['Products', 'Pricing', 'Blog'];
+import { options, settings } from '../../constants/constant';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const options = [
-  { value: 'Agent', label: 'Agent' },
-  { value: 'Builder', label: 'Builder' },
-  { value: 'Individual', label: 'Individual' },
-  { value: 'Other', label: 'Other' },
-];
+
 
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -90,15 +84,30 @@ export const APNavBar = () => {
   };
 
   return (
-    <AppBar color='transparent' position="static">
+    <AppBar color='transparent' position="static" >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
-            <Link href="/">
+            <Link onClick={()=>{naviGate('/')}} style={{cursor:'pointer'}}>
               <img src={CompanyLogo} loading="lazy" height={'60px'} />
             </Link>
           </Grid>
-          
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="#app-bar-with-responsive-menu"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          ></Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', } }}>
             <IconButton size="large" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" onClick={handleOpenNavMenu} color="inherit">
@@ -151,7 +160,7 @@ export const APNavBar = () => {
           </Box>
 
           <Grid sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}>
-            <Link href="/">
+            <Link onClick={()=>{naviGate('/')}} style={{cursor:'pointer'}}>
               <img src={CompanyLogo} loading="lazy" height={'60px'} />
             </Link>
           </Grid>
@@ -200,13 +209,13 @@ export const APNavBar = () => {
                 setOpenDialog(true);
               }}
               variant="outlined"
-              sx={{ my: 2, marginRight: '30px',  display: 'block', borderRadius: '30px' }}
+              sx={{ my: 2, marginRight: '15px',  display: 'block', borderRadius: '30px' }}
             >
               <InfoIcon style={{ fontSize: '20px', color: 'inherit' }} />
             </IconButton>
           </Tooltip>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, }}>
             {isLoggedIn() ? (
               <Tooltip title="profile settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

@@ -16,7 +16,7 @@ const APModal = (props) => {
   }));
   return (
     <StyledModal open={open} closeAfterTransition autoSave={true} onClose={handleClose} aria-labelledby="modal-title" aria-describedby="modal-description">
-      <div style={{ maxHeight: '450px', overflow: 'auto', backgroundColor: 'rgb(255, 255, 255,0.7)', padding: '20px', borderRadius: '8px', scrollbarWidth: 'none', scrollbarColor: 'rgb(103, 214, 107)' }}>{children}</div>
+      <div style={{ maxHeight: '450px', overflow: 'auto', backgroundColor: '#ffff', padding: '20px', borderRadius: '8px', scrollbarWidth: 'none', scrollbarColor: 'rgb(103, 214, 107)' }}>{children}</div>
     </StyledModal>
   );
 };

@@ -65,13 +65,13 @@ export const Item = () => {
 
   return (
     <HomeWrapper>
-      <Grid container spacing={2} mt={1} style={{ padding: '10px' }}>
+      <Grid container spacing={2} mt={1} style={{ padding: '10px' }} >
         <Grid item md={6} xs={12}>
           <Box style={{ position: 'relative', display: 'inline-block', }}>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }} >
               <div id="imgContainer" style={{ position: 'relative', display: 'inline-block',}}>
-                <img onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width:'100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer' ,borderRadius:'10px'}} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
-                <IconButton style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0', transition: 'opacity 0.3s' }} onMouseEnter={(e) => (e.target.style.opacity = '1')} onMouseLeave={(e) => (e.target.style.opacity = '0')} aria-label="View Image" onClick={openImageViewer}>
+                <img  onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width:'100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer' ,borderRadius:'10px'}} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
+                <IconButton  style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0', transition: 'opacity 0.3s' }} onMouseEnter={(e) => (e.target.style.opacity = '1')} onMouseLeave={(e) => (e.target.style.opacity = '0')} aria-label="View Image" onClick={openImageViewer}>
                   <FullscreenIcon />
                 </IconButton>
               </div>
