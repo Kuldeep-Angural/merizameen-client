@@ -20,12 +20,14 @@ export const SignInForm = () => {
   return (
     <Grid>
       <CardContent sx={{ textAlign: 'center' }}>
-        <img src={CompanyLogo} loading="lazy" height={'100px'} />
+        <img src={CompanyLogo} loading="lazy" height={'80px'} />
       </CardContent>
       {isSigninForm && (
         <Card sx={{ mt: '20px' }}>
           <CardContent>
-            <Typography fontWeight={'600'}>Welcome back! Please authorize to begin the journey.</Typography>
+            <Typography fontWeight={'600'} sx={{ textAlign: 'center' }}>
+              Welcome back! Please authorize to begin the journey.
+            </Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
               <FormControl variant="standard" fullWidth>
                 <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
@@ -92,14 +94,22 @@ export const SignInForm = () => {
 
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
-                <Input autoComplete="mobile" required id="standard-adornment-password" htmlAttributes={{ type: 'tele' }} />
+                <Input
+                  autoComplete="mobile"
+                  id="standard-adornment-password"
+                  type='number'
+                  inputProps={{
+                    style: { '-moz-appearance': 'textfield' }, // For Firefox
+                    'aria-hidden': true, // Hide arrows from screen readers
+                  }}
+                />
               </FormControl>
 
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                 <Input fullWidth required id="standard-adornment-password" type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
               </FormControl>
-              <FormControlLabel control={<Checkbox value="termsAndConditions" color="primary" />} label="i agree to the Terms and conditions " />
+              <FormControlLabel control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
                   Sign Up

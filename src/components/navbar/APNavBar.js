@@ -3,7 +3,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import MenuIcon from '@mui/icons-material/Menu';
 import PhoneIcon from '@mui/icons-material/Phone';
 import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded';
-import { Badge, Card, CardContent, Chip, DialogActions, Divider, FormControl, Grid, Input, InputLabel, Link, TextField } from '@mui/material';
+import { Badge, Card, CardContent, Chip, DialogActions, Divider, FormControl, Grid,  Input, InputLabel, Link, TextField } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -84,7 +84,9 @@ export const APNavBar = () => {
   };
 
   return (
-    <AppBar color='transparent' position="static" >
+    <>
+
+    <AppBar elevation={1} position="static"  color='transparent' sx={{height:'76px'}} >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
@@ -403,5 +405,8 @@ export const APNavBar = () => {
         }
       />
     </AppBar>
+
+    </>
+
   );
 };

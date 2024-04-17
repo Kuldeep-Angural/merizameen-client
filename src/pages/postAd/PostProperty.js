@@ -118,8 +118,8 @@ export const PostProperty = () => {
                   <Grid container spacing={2}>
                     <Grid item md={4} xs={12}>
                       <Tooltip title="uplad property images">
-                        <Button  title="uplad property images" fullWidth onClick={postAdData?.propertyImages?.length > 0 ? () => setOpenModal(true) : () => {}} sx={{ height: '60px' }} variant="outlined" component="label">
-                          <input  style={{ width: '100%' }} onChange={handleChange} accept="image/*" name="propertyImages" multiple type="file" hidden />
+                        <Button title="uplad property images" fullWidth onClick={postAdData?.propertyImages?.length > 0 ? () => setOpenModal(true) : () => {}} sx={{ height: '60px' }} variant="outlined" component="label">
+                          <input style={{ width: '100%' }} onChange={handleChange} accept="image/*" name="propertyImages" multiple type="file" hidden />
                           <Badge bac badgeContent={postAdData?.propertyImages?.length || 0} color="primary">
                             <BackupIcon style={{ fontSize: '60px', color: '#bdbdbd', width: '100%' }} />
                           </Badge>
@@ -161,7 +161,16 @@ export const PostProperty = () => {
                         return (
                           <Grid item md={2} xs={6}>
                             <FormControl sx={{ m: 1 }} variant="outlined">
-                              <OutlinedInput onChange={handleBasicInfo} aria-describedby="outlined-weight-helper-text" name={item.name} type="number" />
+                              <OutlinedInput
+                                onChange={handleBasicInfo}
+                                aria-describedby="outlined-weight-helper-text"
+                                name={item.name}
+                                type="number"
+                                inputProps={{
+                                  style: { '-moz-appearance': 'textfield' }, // For Firefox
+                                  'aria-hidden': true, // Hide arrows from screen readers
+                                }}
+                              />
                               <FormHelperText id="outlined-weight-helper-text">{item.label}</FormHelperText>
                             </FormControl>
                           </Grid>

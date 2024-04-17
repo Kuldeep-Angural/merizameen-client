@@ -15,7 +15,7 @@ export const APRoutes = () => {
   ];
   const [pageTitle, updatePageTitle] = useState('');
 
-
+  
   useEffect(() => {
     document.title = pageTitle;
   }, [pageTitle]);

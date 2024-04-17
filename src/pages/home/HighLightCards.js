@@ -11,7 +11,7 @@ export const HighLightCards = () => {
             Post your Property Ads
           </Typography>
           <Typography mt={2} fontWeight={'500'} minHeight={'50px'} maxHeight={'80px'} textAlign={'center'}>
-            Sell/Rent out your property & Get <br></br>unlimited responses
+            Sell/Rent out your property & Get <br/>unlimited responses
           </Typography>
 
           <Grid display={'flex'} justifyContent={'center'}>
@@ -85,13 +85,13 @@ export const HighLightCards = () => {
   const Items = ({ color, content }) => {
     return (
       <Grid item md={3} xs={6}>
-        <Card sx={{ backgroundColor: color, height: '180px' }}>{content}</Card>
+        <Card sx={{ backgroundColor: color, height: '180px',boxShadow:'0',borderRadius:'16px', transform:'all',"&:hover":{ boxShadow:3} }} >{content}</Card>
       </Grid>
     );
   };
 
   return (
-    <Card sx={{ marginTop: '50px', padding: '10px' }}>
+    <Card sx={{ marginTop: '1px', padding: '10px' }}>
       <Grid container rowSpacing={1} spacing={2}>
         {itemsCount.map((item, index) => {
           return <Items key={index} color={item.color} content={item.content} />;
