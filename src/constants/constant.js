@@ -1,3 +1,9 @@
+export const SESSION_KEYS = {
+  TOKEN: 'TOKEN',
+  EXPIRY: 'EXPIRY',
+  FACILITY: 'FACILITY'
+}
+
 export const medium = [
   { value: 'Sell', label: 'Sell' },
   { value: 'Rent', label: 'Rent' },

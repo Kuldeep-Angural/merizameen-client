@@ -4,19 +4,51 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Avatar, Box, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import CompanyLogo from '../../ui/logos/newLogo.png';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { LinkButton } from '../../components/buttons/LinkButton';
 import FaceBookImage from '../../ui/png/facebook.png';
 import GoogleImage from '../../ui/png/google.png';
+import {Box as jBox} from '@mui/joy/Box';
+import CircularProgress from '@mui/joy/CircularProgress';
+import { login, selectLoginLoading, selectSignUpLoading, signUp } from './authSlice';
+
 export const SignInForm = () => {
+
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSigninForm, setIsSigninForm] = useState(true);
+  const [credentials,setCredentials] = useState({});
+  
+  const dispatch = useDispatch();
+
+  const loginLoading = useSelector(selectLoginLoading);
+  const signUpLoading = useSelector(selectSignUpLoading);
+
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const handleChange = (event) => {
+    const { name , value } = event.target;
+    setCredentials({...credentials,[name]:value})
+  }
+
+  const onSubmit = (e,name) => {
+    e.preventDefault()
+
+    if (name==='login') {
+      dispatch(login({email:credentials.email,password:credentials.password})).then((resp)=>{
+        console.log(resp);
+      });
+    }else{
+      dispatch(signUp({name:credentials.name,mobile:credentials.mobile,email:credentials.email,password:credentials.password})).then((resp)=>{
+        console.log(resp);
+      });;
+    }
+  }
+
   return (
     <Grid>
       <CardContent sx={{ textAlign: 'center' }}>
@@ -31,12 +63,7 @@ export const SignInForm = () => {
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
               <FormControl variant="standard" fullWidth>
                 <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                <Input
-                  autoComplete="email"
-                  autoFocus
-                  required
-                  id="standard-adornment-password"
-                  type="email"
+                <Input autoComplete="email" autoFocus required name='email'  type="email" onChange={handleChange}
                   endAdornment={
                     <InputAdornment position="end">
                       <AccountCircleIcon />
@@ -47,12 +74,12 @@ export const SignInForm = () => {
 
               <FormControl variant="standard" fullWidth sx={{ mt: 5 }}>
                 <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-                <Input fullWidth required id="standard-adornment-password" type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
+                <Input fullWidth name='password' required  onChange={handleChange} type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
               </FormControl>
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
-                  Sign In
+                <Button type="submit" onClick={(e)=>onSubmit(e,'login')} variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
+                 {loginLoading ===true ? "loading" :'sign in'}
                 </Button>
               </Grid>
               <Divider> or continue using </Divider>
@@ -84,12 +111,12 @@ export const SignInForm = () => {
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-                <Input autoComplete="name" autoFocus required id="standard-adornment-password" type="text" />
+                <Input  name='name' onChange={handleChange} autoComplete="name" autoFocus required  type="text" />
               </FormControl>
 
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                <Input autoComplete="email" required id="standard-adornment-password" type="email" />
+                <Input  name='email' onChange={handleChange} autoComplete="email" required  type="email" />
               </FormControl>
 
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
@@ -107,11 +134,11 @@ export const SignInForm = () => {
 
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-                <Input fullWidth required id="standard-adornment-password" type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
+                <Input name='password' onChange={handleChange} fullWidth required  type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
               </FormControl>
               <FormControlLabel control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
+                <Button type="submit" onClick={(e)=>onSubmit(e,'signup')} variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
                   Sign Up
                 </Button>
               </Grid>
