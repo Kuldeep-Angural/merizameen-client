@@ -1,13 +1,16 @@
 
 import axios from 'axios';
-import { HEADERS } from '../../configuration/headers';
 const BASE_ENDPOINT = process.env.REACT_APP_API_END_POINT;
 
 
 export const signUpUser = async (credentials) =>{
-  const basicAuthData = btoa(credentials.name + ':' +credentials.email + ':' +credentials.mobile + ':' + credentials.password);  
-  return await axios.post(BASE_ENDPOINT + '/api/signup', {}, {
-    headers: HEADERS.SIGNUP(basicAuthData)}).then(function (response) {
+  return await axios.post(BASE_ENDPOINT + '/auth/signup', {
+    name:btoa(credentials.name) ,
+    email:btoa(credentials.email),
+    mobile:btoa(credentials.mobile),
+    password:btoa(credentials.password)
+  }, {
+   }).then(function (response) {
     if (response.status === 200) {
       return {...response.data}
     }
@@ -17,10 +20,10 @@ export const signUpUser = async (credentials) =>{
   }
 
   export const loginUser = async (credentials) =>{
-    const basicAuthData = btoa(credentials.email + ':' + credentials.password);  
-    return await axios.post(BASE_ENDPOINT + '/api/login', {}, {
-      headers: HEADERS.LOGIN(basicAuthData)
-    }).then(function (response) {
+    return await axios.post(BASE_ENDPOINT + '/auth/login', {
+      email:btoa(credentials.email),
+      password:btoa(credentials.password)
+    }, {}).then(function (response) {
       if (response.status === 200) {
         return {...response.data}
       }

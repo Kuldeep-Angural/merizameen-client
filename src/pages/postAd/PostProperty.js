@@ -8,11 +8,16 @@ import BackupIcon from '@mui/icons-material/Backup';
 import APModal from '../../components/modal/APModal';
 import { himachalCities, punjabCities, punjabCitiesIndia } from '../../constants/cities';
 import { amenities, basicInfo, landMarks, medium, propertyTypes, state } from '../../constants/constant';
+import { useDispatch, useSelector } from 'react-redux';
+import { postProperty, selectPostLoading } from './postPropertySlice';
 
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
   const [postAdData, setPostAdData] = useState({ location: { state: 'Punjab' } });
   const [openModal, setOpenModal] = useState(false);
+  const loading = useSelector(selectPostLoading);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     setCities(postAdData?.location?.state === 'Punjab' ? punjabCities : himachalCities);
@@ -94,7 +99,31 @@ export const PostProperty = () => {
     });
   };
 
-  const handleSaveButton = () => {};
+     // Append data to the formData object
+     const handlePostButton = () => {
+      const formData = new FormData();
+    
+      formData.append('mainImage', postAdData.mainImage);
+      formData.append('title', postAdData.title);
+      formData.append('location', JSON.stringify(postAdData.location));
+      formData.append('basicInfo', JSON.stringify(postAdData.basicInfo));
+      formData.append('amenities', JSON.stringify(postAdData.amenities));
+      formData.append('landMarks', JSON.stringify(postAdData.landMarks));
+    
+      if (postAdData?.propertyImages?.length > 0) {
+        postAdData.propertyImages.forEach((image, index) => {
+          formData.append(`propertyImages[${index}]`, image);
+        });
+      }
+      dispatch(postProperty(formData)).then((resp) => {
+        console.log(resp);
+      });
+    };
+    
+  
+
+  
+  console.log(postAdData);
 
   return (
     <HomeWrapper>
@@ -303,8 +332,8 @@ export const PostProperty = () => {
             </CardContent>
           </Card>
           <Box display={'flex'} justifyContent={'center'} mt={3}>
-            <Button style={{ minWidth: '200px', maxWidth: '400px' }} variant="outlined" onClick={handleSaveButton}>
-              post
+            <Button style={{ minWidth: '200px', maxWidth: '400px' }} variant="outlined" onClick={handlePostButton}>
+              {loading ? "loading..":"post"}
             </Button>
           </Box>
         </Grid>

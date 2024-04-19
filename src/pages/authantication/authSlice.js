@@ -48,7 +48,8 @@ export const authSlice = createSlice({
         state.status = 'done';
         state.loginLoading = false
         state.authData = action.payload;
-        createSession(action.payload.token);
+        console.log(action.payload.user);
+        createSession(action?.payload?.accessToken);
       });
   },
 });

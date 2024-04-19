@@ -43,7 +43,7 @@ export const SignInForm = () => {
         console.log(resp);
       });
     }else{
-      dispatch(signUp({name:credentials.name,mobile:credentials.mobile,email:credentials.email,password:credentials.password})).then((resp)=>{
+      dispatch(signUp({name:credentials?.name,mobile:credentials?.mobile,email:credentials?.email,password:credentials?.password})).then((resp)=>{
         console.log(resp);
       });;
     }
@@ -123,11 +123,12 @@ export const SignInForm = () => {
                 <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
                 <Input
                   autoComplete="mobile"
+                  name='mobile'
                   id="standard-adornment-password"
                   type='number'
+                  onChange={handleChange}
                   inputProps={{
-                    style: { '-moz-appearance': 'textfield' }, // For Firefox
-                    'aria-hidden': true, // Hide arrows from screen readers
+                    style: { '-moz-appearance': 'textfield' }, 'aria-hidden': true,
                   }}
                 />
               </FormControl>

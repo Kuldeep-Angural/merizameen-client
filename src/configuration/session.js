@@ -6,10 +6,10 @@ export function createSession(token) {
     if (jwt) {
         const exp = new Date(jwt.exp * 1000);
         localStorage.setItem(SESSION_KEYS.TOKEN, token);
+        localStorage.setItem(SESSION_KEYS.USER,JSON.stringify(jwt))
         localStorage.setItem(SESSION_KEYS.EXPIRY, exp.getTime());
     }else{
-        console.log("inside parseJwt");
-        // window.location.href = window.location.origin+process.env.REACT_APP_BASE_NAME+"/";
+        // window.location.href = window.location.origin+"/";
     }
 }
 
