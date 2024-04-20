@@ -1,7 +1,8 @@
 export const SESSION_KEYS = {
   TOKEN: 'TOKEN',
   EXPIRY: 'EXPIRY',
-  FACILITY: 'FACILITY'
+  FACILITY: 'FACILITY',
+  USER:'USER'
 }
 
 export const medium = [
