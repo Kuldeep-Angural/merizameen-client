@@ -13,7 +13,23 @@ import { postProperty, selectPostLoading } from './postPropertySlice';
 
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
-  const [postAdData, setPostAdData] = useState({ location: { state: 'Punjab' } });
+  const [postAdData, setPostAdData] = useState({
+  location:{
+    state:'Punjab',
+    city:'Pathankot'
+  },
+  basicInfo:{
+
+  },
+  amenities:{
+
+  },
+  landMarks:{
+
+  },
+  propertyType:'2Bhk',
+  postFor:'Sell'
+});
   const [openModal, setOpenModal] = useState(false);
   const loading = useSelector(selectPostLoading);
   const dispatch = useDispatch();
@@ -34,7 +50,7 @@ export const PostProperty = () => {
         reader.readAsDataURL(file);
       }
     }
-    if (e.target.name === 'propertyImages') {
+    else if (e.target.name === 'propertyImages') {
       const files = e.target.files;
       const imagesArray = [];
 
@@ -50,7 +66,7 @@ export const PostProperty = () => {
         reader.readAsDataURL(files[i]);
       }
     }
-    if (e.target.name === 'title') {
+    else{
       setPostAdData({ ...postAdData, [e.target.name]: e.target.value });
     }
   };
@@ -99,22 +115,27 @@ export const PostProperty = () => {
     });
   };
 
-     // Append data to the formData object
      const handlePostButton = () => {
+
+
       const formData = new FormData();
-    
-      formData.append('mainImage', postAdData.mainImage);
-      formData.append('title', postAdData.title);
-      formData.append('location', JSON.stringify(postAdData.location));
-      formData.append('basicInfo', JSON.stringify(postAdData.basicInfo));
-      formData.append('amenities', JSON.stringify(postAdData.amenities));
-      formData.append('landMarks', JSON.stringify(postAdData.landMarks));
+      formData.append('mainImage', postAdData?.mainImage);
+      formData.append('amenities', JSON.stringify(postAdData?.amenities));
+      formData.append('basicInfo', JSON.stringify(postAdData?.basicInfo));
+      formData.append('title', postAdData?.title);
+      formData.append('location', JSON.stringify(postAdData?.location));
+      formData.append('landMarks', JSON.stringify(postAdData?.landMarks));
+      formData.append('postFor',postAdData?.postFor);
+      formData.append('propertyType',postAdData?.propertyType);
+      formData.append('discription',postAdData?.discription);
     
       if (postAdData?.propertyImages?.length > 0) {
         postAdData.propertyImages.forEach((image, index) => {
           formData.append(`propertyImages[${index}]`, image);
         });
       }
+
+      
       dispatch(postProperty(formData)).then((resp) => {
         console.log(resp);
       });
@@ -157,7 +178,7 @@ export const PostProperty = () => {
                     </Grid>
 
                     <Grid item md={4} xs={12}>
-                      <TextField fullWidth select defaultValue="2Bhk" SelectProps={{ native: true }} helperText="Please select your property type" variant="outlined">
+                      <TextField fullWidth select defaultValue='2Bhk' value={postAdData?.propertyType||""} name='propertyType' onChange={handleChange} SelectProps={{ native: true }} helperText="Please select your property type" variant="outlined">
                         {propertyTypes.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
@@ -167,7 +188,7 @@ export const PostProperty = () => {
                     </Grid>
 
                     <Grid item md={4} xs={12}>
-                      <TextField fullWidth select defaultValue="Sell" SelectProps={{ native: true }} helperText="Chose Sell/Rent" variant="outlined">
+                      <TextField fullWidth select defaultValue="Sell" name='postFor' value={postAdData?.postFor||""} onChange={handleChange} SelectProps={{ native: true }} helperText="Post For Sell/Rent" variant="outlined">
                         {medium.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
@@ -195,6 +216,7 @@ export const PostProperty = () => {
                                 aria-describedby="outlined-weight-helper-text"
                                 name={item.name}
                                 type="number"
+                                value={postAdData?.basicInfo?.[item?.name]||""}
                                 inputProps={{
                                   style: { '-moz-appearance': 'textfield' }, // For Firefox
                                   'aria-hidden': true, // Hide arrows from screen readers
@@ -217,7 +239,7 @@ export const PostProperty = () => {
                     </Typography>
                     <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
                       <Grid item md={4} xs={6} sm={6}>
-                        <TextField fullWidth select onChange={handleLocationChange} defaultValue="Punjab" SelectProps={{ native: true }} optio name="state" helperText="State" variant="outlined">
+                        <TextField fullWidth select value={postAdData?.location?.state||""} onChange={handleLocationChange} defaultValue="Punjab" SelectProps={{ native: true }} optio name="state" helperText="State" variant="outlined">
                           {state.map((option) => (
                             <option key={option} value={option}>
                               {option}
@@ -227,7 +249,7 @@ export const PostProperty = () => {
                       </Grid>
 
                       <Grid item md={4} xs={6} sm={6}>
-                        <TextField fullWidth select onChange={handleLocationChange} defaultValue={cities[0]} SelectProps={{ native: true }} optio name="city" helperText="City" variant="outlined">
+                        <TextField fullWidth select onChange={handleLocationChange} value={postAdData?.location?.city||""} defaultValue={cities[0]} SelectProps={{ native: true }} optio name="city" helperText="City" variant="outlined">
                           {cities.map((option) => (
                             <option key={option.name} value={option.name}>
                               {option.name}
@@ -238,22 +260,22 @@ export const PostProperty = () => {
 
                       <Grid item md={4} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <OutlinedInput onChange={handleLocationChange} aria-describedby="outlined-weight-helper-text" name={'district'} />
+                          <OutlinedInput onChange={handleLocationChange} value={postAdData?.location?.district||""} aria-describedby="outlined-weight-helper-text" name={'district'} />
                           <FormHelperText id="outlined-weight-helper-text">District</FormHelperText>
                         </FormControl>
                       </Grid>
 
                       <Grid item md={4} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <OutlinedInput onChange={handleLocationChange} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
+                          <OutlinedInput onChange={handleLocationChange} value={postAdData?.location?.pinCode||""} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
                           <FormHelperText id="outlined-weight-helper-text">Pincode</FormHelperText>
                         </FormControl>
                       </Grid>
 
                       <Grid item md={12} xs={12} sm={12}>
                         <FormControl fullWidth variant="outlined">
-                          <OutlinedInput onChange={handleLocationChange} aria-describedby="outlined-weight-helper-text" name={'discription'} type="number" />
-                          <FormHelperText id="outlined-weight-helper-text">Discription</FormHelperText>
+                          <OutlinedInput onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.discription||""} postAdData name={'discription'} type="text" />
+                          <FormHelperText id="outlined-weight-helper-text">Property Discription</FormHelperText>
                         </FormControl>
                       </Grid>
                     </Grid>
@@ -276,7 +298,7 @@ export const PostProperty = () => {
                 </Grid>
                 <Grid item md={12} xs={12} sm={12}>
                   <FormControl fullWidth variant="outlined">
-                    <OutlinedInput onChange={handleChange} aria-describedby="outlined-weight-helper-text" name={'title'} />
+                    <OutlinedInput onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.title||""} name={'title'} />
                     <FormHelperText id="outlined-weight-helper-text">Enter title here</FormHelperText>
                   </FormControl>
                 </Grid>
@@ -291,7 +313,7 @@ export const PostProperty = () => {
                   {amenities.map((item) => {
                     return (
                       <Grid item md={4}>
-                        <FormControlLabel control={<Checkbox />} sx={{}} onClick={handleAmenities} name={item.name} label={item.label} />
+                        <FormControlLabel control={<Checkbox value={postAdData?.amenities?.[item?.name]||""}  name={item?.name}/>}  onClick={handleAmenities}   label={item.label} />
                       </Grid>
                     );
                   })}
@@ -314,7 +336,8 @@ export const PostProperty = () => {
                             endAdornment={<InputAdornment position="end">km</InputAdornment>}
                             type="number"
                             slotProps={false}
-                            name={item.name}
+                            name={item?.name}
+                            value={postAdData?.landMarks?.[item?.name]||""}
                             onChange={handleLandMarks}
                             inputProps={{
                               inputMode: 'numeric',

@@ -5,7 +5,7 @@ import { APRoutes } from '../constants/routes';
 import { theme } from '../theme/theme';
 import Chatbot from 'react-chatbot-kit';
 import 'react-chatbot-kit/build/main.css';
-export const App = () => {    
+export const App = () => {
   return (
     <div className="app" style={{ height: '100%', width: '100%' }}>
       <ThemeProvider theme={theme}>
