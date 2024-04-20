@@ -85,8 +85,8 @@ export const APNavBar = () => {
 
   return (
     <>
-
-    <AppBar elevation={1} position="static"  color='transparent' sx={{height:'76px'}} >
+    
+    <AppBar elevation={1} position="static"  color='transparent'  >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Grid sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
@@ -198,14 +198,14 @@ export const APNavBar = () => {
 
             <Tooltip title="Post Property">
               <Button onClick={()=>{naviGate('/postAd')}} variant="outlined" className="post-button"  sx={{ my: 2, marginLeft: '130px',  display: 'block', borderRadius: '30px' }}>
-                <Badge badgeContent={'free'} style={{ padding: 10, fontSize: '10px' }} variant='outlined' color="success">
+                <Badge  style={{ padding: 4, fontSize: '10px' }} variant='outlined' color="success">
                   Post Property
                 </Badge>
               </Button>
             </Tooltip>
           </Box>
 
-          <Tooltip title="contact us">
+          <Tooltip title="Contact us">
             <IconButton
               onClick={() => {
                 setOpenDialog(true);
@@ -219,7 +219,7 @@ export const APNavBar = () => {
 
           <Box sx={{ flexGrow: 0, }}>
             {isLoggedIn() ? (
-              <Tooltip title="profile settings">
+              <Tooltip title="Profile settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt={'Kuldeep Kumar'} src="/static/images/avatar/2.jpg" />
                 </IconButton>
@@ -408,5 +408,5 @@ export const APNavBar = () => {
 
     </>
 
-  );
+  );  
 };
