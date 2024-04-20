@@ -68,20 +68,20 @@ export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, 
   }
 
   return (
-    <Card sx={{ marginTop: '10px', margin: '10px', padding: '10px' }}>
+    <Card elevation={2} sx={{ marginTop: '5px', margin: '5px', padding: '4px',alignItems:'center' }}>
       <Grid container gap={3}>
         <Grid item md={3} xs={12}>
-          <Card>
+          <Card variant="outlined">
             <CardContent style={{ backgroundColor: 'rgb(77, 135, 250,0.4)' }}>
               <Typography textAlign={'center'}>
                 {location.city ? (
-                  <Button color="text" startIcon={<LocationOnIcon />}>
-                    <Typography fontWeight={550}>
-                      {location?.city || ''},<spa> {location?.state || ''}</spa>, {location?.country || ''}
+                  <Button size="small" color="text" sx={{ p: '0px' }} startIcon={<LocationOnIcon />}>
+                    <Typography fontWeight={500}>
+                      {location?.city || ''},<span> {location?.state || ''}</span>, {location?.country || ''}
                     </Typography>
                   </Button>
-                ):(
-                  <Skeleton variant="rounded" width={300}  />
+                ) : (
+                  <Skeleton variant="rounded" width={300} />
                 )}
               </Typography>
             </CardContent>
@@ -94,7 +94,7 @@ export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, 
               {filterChips.map((item, index) => {
                 return (
                   <Grid key={index} item onClick={() => handleChipClick(item)}>
-                    <Chip className={'chip-hover'} style={{ cursor: 'pointer', backgroundColor: filterParams === item.name && 'rgba(39, 195, 44, 0.7)' }} label={item.name} variant="outlined" />
+                    <Chip className={'chip-hover'} style={{ cursor: 'pointer', backgroundColor: filterParams === item.name && 'rgba(39, 195, 44, 0.7)' }} label={item.name} variant="filled" />
                   </Grid>
                 );
               })}
@@ -102,18 +102,12 @@ export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, 
           </CardContent>
         </Grid>
 
-        <Grid item md={3} xs={12} display={'flex'} justifyContent={"center"}>
+        <Grid item md={3} xs={12} display={'flex'} justifyContent={'center'}>
           <CardContent>
             <Grid container gap={2}>
-            <FormControl sx={{ m: 1, width: '25ch' }}    variant="standard">
-              <OutlinedInput style={{borderRadius:'33px',color:'grey',borderColor:'grey'}} fullWidth 
-              endAdornment={<SearchIcon style={{cursor:'pointer',borderRadius:'50%',fontSize:'40px'}}
-              onClick={()=>alert('search')}/>} aria-describedby="outlined-weight-helper-text"
-              onChange={handleSearch}
-              placeholder='Search'
-              
-              />
-          </FormControl>
+              <FormControl sx={{ m: 1, width: '30ch' }} variant="standard">
+                <OutlinedInput style={{ borderRadius: '33px', color: 'grey', borderColor: 'grey' }} fullWidth endAdornment={<SearchIcon style={{ cursor: 'pointer', borderRadius: '50%', fontSize: '40px' }} onClick={() => alert('search')} />} aria-describedby="outlined-weight-helper-text" onChange={handleSearch} placeholder="Search" />
+              </FormControl>
             </Grid>
           </CardContent>
         </Grid>

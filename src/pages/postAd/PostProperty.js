@@ -157,7 +157,7 @@ export const PostProperty = () => {
                 <Grid item md={4} sm={6} xs={6}>
                   <Tooltip title="upload main image">
                     <Button variant="text" component="label">
-                      <img onClick={() => {}} style={{ cursor: 'pointer', borderRadius: '10px' }} src={postAdData.mainImage ? postAdData.mainImage : imageIcon} height={'150px'} width={'100%'} alt="uplad image" />
+                      <img onClick={() => {}} style={{ cursor: 'pointer', borderRadius: '10px' }} src={postAdData.mainImage ? postAdData.mainImage : imageIcon} height={'150px'} width={'100%'} alt="upload image" />
                       <input onChange={handleChange} accept="image/*" name="mainImage" type="file" hidden />
                     </Button>
                   </Tooltip>
@@ -376,7 +376,7 @@ export const PostProperty = () => {
                   <Grid item md={12} display={'flex'} justifyContent={'center'}>
                     <Button
                       type="button"
-                      className="-gray -text"
+                      className="-gray-text"
                       onClick={() => {
                         const updatedImages = [...postAdData.propertyImages];
                         updatedImages.length > 1 && updatedImages.splice(index, 1);
