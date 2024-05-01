@@ -55,17 +55,13 @@ export const SignInForm = ({ route }) => {
     e.preventDefault();
     if (name === 'login') {
       dispatch(login({ email: credentials.email, password: credentials.password })).then((resp) => {
-        if (resp?.payload?.message) {
-          route && naviGate(route);
-        } else {
-          toastRef.current.showToast({ messageType: 'warning', messageText: resp?.payload?.error?.response?.data?.message });
-        }
+       
       });
     } else {
       dispatch(signUp({ name: credentials?.name, mobile: credentials?.mobile, email: credentials?.email, password: credentials?.password })).then((resp) => {
         console.log(resp);
         if (resp.payload.status === 200) {
-          setOtp({ id: resp.payload.id });
+          setOtp({ id: resp?.payload?.data?.id });
           setIsOpen(true);
         }
       });
@@ -106,7 +102,7 @@ export const SignInForm = ({ route }) => {
         dispatch(sentOtprequest(forgotPasswordData.email)).then((resp)=>{
           toastRef.current.showToast({ messageType: 'warning', messageText: resp?.payload?.message});
           if (resp.payload.status===200) {
-            setForgotPasswordData({id:resp.payload.id});
+            setForgotPasswordData({id:resp.payload.data.id});
             addDelay(2000).then(()=>{
               setIsEmailSent(true);
               

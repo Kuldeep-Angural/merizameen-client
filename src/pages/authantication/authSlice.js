@@ -74,8 +74,9 @@ export const authSlice = createSlice({
         state.status = 'done';
         state.loginLoading = false
         state.authData = action.payload;
-        if (action?.payload?.userData) {
-          const decodedData = atob(action?.payload?.userData);
+        console.log(action?.payload);
+        if (action?.payload?.data) {
+          const decodedData = atob(action?.payload?.data?.userData);
           const [userId, name, email, mobile, roles] = decodedData.split(":");
           const user = {
             _id: userId,
@@ -84,9 +85,10 @@ export const authSlice = createSlice({
             mobile: mobile,
             roles: roles,
           };
+          console.log(user);
           localStorage.setItem(SESSION_KEYS.USER,JSON.stringify(user));
           state.userData = user;
-          createSession(action?.payload?.accessToken);
+          createSession(action?.payload?.data?.accessToken);
         }
       })
       .addCase(logout.fulfilled , (state,action)=>{
