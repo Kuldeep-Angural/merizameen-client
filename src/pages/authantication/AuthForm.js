@@ -63,7 +63,8 @@ export const SignInForm = ({ route }) => {
     } else {
       dispatch(signUp({ name: credentials?.name, mobile: credentials?.mobile, email: credentials?.email, password: credentials?.password })).then((resp) => {
         console.log(resp);
-        if (resp.payload.status === 200) {
+        if (resp.payload.message) {
+          toastRef.current.showToast(resp.payload.message)
           setOtp({ id: resp?.payload?.data?.id });
           setIsOpen(true);
         }
