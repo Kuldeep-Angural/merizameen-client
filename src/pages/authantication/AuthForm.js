@@ -55,7 +55,15 @@ export const SignInForm = ({ route }) => {
     e.preventDefault();
     if (name === 'login') {
       dispatch(login({ email: credentials.email, password: credentials.password })).then((resp) => {
-       console.log(resp.payload);
+       if (resp.payload.message) {
+         toastRef.current.showToast(resp?.payload?.message)
+        }
+        else{
+         toastRef.current.showToast({
+          messagetext:'internal Server Error' , messageType:'error'
+         })
+
+        }
       });
     } else {
       dispatch(signUp({ name: credentials?.name, mobile: credentials?.mobile, email: credentials?.email, password: credentials?.password })).then((resp) => {
