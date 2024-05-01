@@ -55,7 +55,7 @@ export const SignInForm = ({ route }) => {
     e.preventDefault();
     if (name === 'login') {
       dispatch(login({ email: credentials.email, password: credentials.password })).then((resp) => {
-       if (resp.payload.message.messageType=== 'error') {
+       if (resp.payload.message.messageType === 'error') {
          toastRef.current.showToast(resp?.payload?.message)
         }
         
