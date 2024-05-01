@@ -75,7 +75,7 @@ export const authSlice = createSlice({
         state.loginLoading = false
         state.authData = action.payload;
         console.log(action?.payload);
-        if (action?.payload?.data) {
+        if (action?.payload?.data?.userData) {
           const decodedData = atob(action?.payload?.data?.userData);
           const [userId, name, email, mobile, roles] = decodedData.split(":");
           const user = {

@@ -55,7 +55,7 @@ export const SignInForm = ({ route }) => {
     e.preventDefault();
     if (name === 'login') {
       dispatch(login({ email: credentials.email, password: credentials.password })).then((resp) => {
-       
+       console.log(resp.payload);
       });
     } else {
       dispatch(signUp({ name: credentials?.name, mobile: credentials?.mobile, email: credentials?.email, password: credentials?.password })).then((resp) => {
