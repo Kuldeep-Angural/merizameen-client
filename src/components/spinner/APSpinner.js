@@ -5,7 +5,7 @@ import { Box, Dialog } from '@mui/material';
 const APSpinner = ({ spinnerState }) => {
   return spinnerState ? 
    
-        <Box sx={{boxShadow:'',position:'absolute', display: 'flex' , marginTop: '50vh',marginLeft:'50vw' , zIndex:'999999999999999999',justifyContent:'center' , alignItems:'center' }}>
+        <Box sx={{position:'absolute', display: 'flex' , marginTop: '50vh',marginLeft:'50vw' , zIndex:'999999999999999999',justifyContent:'center' , alignItems:'center' }}>
         <CircularProgress   size={50} />
       </Box>
 :
