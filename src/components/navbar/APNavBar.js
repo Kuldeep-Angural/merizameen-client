@@ -99,18 +99,18 @@ export const APNavBar = () => {
   };
 
   const handlePostPropertyEvent = React.useCallback(() => {
-       naviGate('/postAd') 
-  },[USER]);
+    naviGate('/postAd');
+  }, [USER]);
 
   const handleUserClick = (eventName) => {
     console.log(eventName);
-    if (eventName==='Logout') {
-      dispatch(logout()).then((resp)=>{
+    if (eventName === 'Logout') {
+      dispatch(logout()).then((resp) => {
         naviGate('/');
       });
     }
     return handleCloseUserMenu();
-  }
+  };
 
   return (
     <>
@@ -249,13 +249,18 @@ export const APNavBar = () => {
               {isLoggedIn() ? (
                 <Tooltip title="Profile settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={USER?.name} src={USER?.image||"/static/images/avatar/2.jpg"} />
+                    <Avatar alt={USER?.name} src={USER?.image || '/static/images/avatar/2.jpg'} />
                   </IconButton>
                 </Tooltip>
               ) : (
                 <Tooltip title="Signin / create account">
-                  <IconButton sx={{ p: 0 }} onClick={()=>{!isLoggedIn() && naviGate('/auth')}} >
-                    <AccountCircleIcon  style={{ fontSize: '40px', color: 'inherit' }} />
+                  <IconButton
+                    sx={{ p: 0 }}
+                    onClick={() => {
+                      !isLoggedIn() && naviGate('/auth');
+                    }}
+                  >
+                    <AccountCircleIcon style={{ fontSize: '40px', color: 'inherit' }} />
                   </IconButton>
                 </Tooltip>
               )}
@@ -276,7 +281,7 @@ export const APNavBar = () => {
                 onClose={handleCloseUserMenu}
               >
                 {userSettings.map((setting) => (
-                  <MenuItem key={setting} onClick={()=>  handleUserClick(setting)}>
+                  <MenuItem key={setting} onClick={() => handleUserClick(setting)}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
@@ -290,42 +295,34 @@ export const APNavBar = () => {
           close={handleCloseDialog}
           content={
             <>
-              <Card>
-                <CardContent>
-                  <Typography textAlign={'center'} fontWeight={'700'}>
-                    Contact Us
-                  </Typography>
-                  <Typography>1st Floor, Manchanda Tower opposite Novelty Mall, Pathankot, Punjab, India </Typography>
+              <Typography textAlign={'center'} fontWeight={'700'}>
+                Contact Us
+              </Typography>
+              <Typography>1st Floor, Manchanda Tower opposite Novelty Mall, Pathankot, Punjab, India </Typography>
 
-                  <Typography>9:30AM to 6:00PM IST</Typography>
+              <Typography>9:30AM to 6:00PM IST</Typography>
 
-                  <Grid container gap={2}>
-                    <Tooltip title="Call">
-                      <Button variant="outlined" sx={{ fontSize: '10px' }} color="text" md={6} startIcon={<PhoneIcon style={{ paddingTop: '0px' }} />}>
-                        9877726857
-                      </Button>
-                    </Tooltip>
-                    <Tooltip title="Request a callBack">
-                      <Button variant="outlined" sx={{ fontSize: '10px' }} onClick={() => openCallBackDailog()} color="text" md={6} startIcon={<PhoneForwardedIcon style={{ paddingTop: '3px' }} />}>
-                        Request a callBack
-                      </Button>
-                    </Tooltip>
-                  </Grid>
-
-                  <Divider sx={{ mt: 2 }}></Divider>
-                  {GoogleMap()}
-                  <Grid textAlign={'center'} mt={2}>
-                    <Button variant="outlined" onClick={() => openQuery()} textAlign={'center'}>
-                      click here to share your query
-                    </Button>
-                  </Grid>
-                </CardContent>
-                <DialogActions>
-                  <Button fullWidth variant="outlined" onClick={handleCloseDialog}>
-                    close
+              <Grid container gap={2}>
+                <Tooltip title="Call">
+                  <Button variant="outlined" sx={{ fontSize: '10px' }} color="text" md={6} startIcon={<PhoneIcon style={{ paddingTop: '0px' }} />}>
+                    9877726857
                   </Button>
-                </DialogActions>
-              </Card>
+                </Tooltip>
+                <Tooltip title="Request a callBack">
+                  <Button variant="outlined" sx={{ fontSize: '10px' }} onClick={() => openCallBackDailog()} color="text" md={6} startIcon={<PhoneForwardedIcon style={{ paddingTop: '3px' }} />}>
+                    Request a callBack
+                  </Button>
+                </Tooltip>
+              </Grid>
+              {GoogleMap()}
+              <Box justifyContent={'space-around'} display={'flex'} textAlign={'center'} mt={1}>
+                <Button variant="outlined" onClick={() => openQuery()} textAlign={'center'}>
+                  click here to share your query
+                </Button>
+                <Button variant="outlined" onClick={handleCloseDialog}>
+                  close
+                </Button>
+              </Box>
             </>
           }
         />
@@ -336,55 +333,51 @@ export const APNavBar = () => {
           close={handleCloseCallBackDailog}
           content={
             <>
-              <Card>
-                <CardContent>
-                  <Typography textAlign={'center'} fontWeight={'600'}>
-                    Call Back Request
-                  </Typography>
-                  <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-                    <FormControl variant="standard" fullWidth>
-                      <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-                      <Input autoComplete="name" required id="standard-adornment-password" type="text" />
-                    </FormControl>
+              <Typography textAlign={'center'} fontWeight={'600'}>
+                Call Back Request
+              </Typography>
+              <Box component="form" noValidate mt={3} onSubmit={() => {}}>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
+                  <Input autoComplete="name" required id="standard-adornment-password" type="text" />
+                </FormControl>
 
-                    <FormControl variant="standard" fullWidth>
-                      <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                      <Input autoComplete="email" required id="standard-adornment-password" type="email" />
-                    </FormControl>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
+                  <Input autoComplete="email" required id="standard-adornment-password" type="email" />
+                </FormControl>
 
-                    <FormControl variant="standard" fullWidth>
-                      <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
-                      <Input autoComplete="mobile" required id="standard-adornment-password" type="Mobile" />
-                    </FormControl>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
+                  <Input autoComplete="mobile" required id="standard-adornment-password" type="Mobile" />
+                </FormControl>
 
-                    <FormControl variant="standard" fullWidth sx={{ mt: 2 }}>
-                      <InputLabel htmlFor="standard-adornment-password"> </InputLabel>
-                      <TextField id="outlined-select-currency" variant="standard" label="i am " select>
-                        {options.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </FormControl>
+                <FormControl variant="standard" fullWidth sx={{ mt: 2 }}>
+                  <InputLabel htmlFor="standard-adornment-password"> </InputLabel>
+                  <TextField id="outlined-select-currency" variant="standard" label="i am " select>
+                    {options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </FormControl>
 
-                    <FormControl variant="standard" fullWidth>
-                      <InputLabel htmlFor="standard-adornment-password">Query</InputLabel>
-                      <Input multiline rowsF={4} autoComplete="text" required id="standard-adornment-password" type="text" />
-                    </FormControl>
-                  </Box>
-                </CardContent>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel htmlFor="standard-adornment-password">Query</InputLabel>
+                  <Input multiline rowsF={4} autoComplete="text" required id="standard-adornment-password" type="text" />
+                </FormControl>
+              </Box>
 
-                <DialogActions>
-                  <Button fullWidth variant="outlined" onClick={handleCloseCallBackDailog}>
-                    close
-                  </Button>
+              <DialogActions>
+                <Button fullWidth variant="outlined" onClick={handleCloseCallBackDailog}>
+                  close
+                </Button>
 
-                  <Button fullWidth variant="outlined" onClick={handleSendCallBackRequest}>
-                    Send
-                  </Button>
-                </DialogActions>
-              </Card>
+                <Button fullWidth variant="outlined" onClick={handleSendCallBackRequest}>
+                  Send
+                </Button>
+              </DialogActions>
             </>
           }
         />
@@ -396,38 +389,34 @@ export const APNavBar = () => {
           close={handleCloseFeedback}
           content={
             <>
-              <Card>
-                <CardContent>
-                  <Typography textAlign={'center'} fontWeight={'600'}>
-                    Feedback Form
-                  </Typography>
-                  <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-                    <FormControl variant="standard" fullWidth>
-                      <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-                      <Input autoComplete="name" autoFocus required id="standard-adornment-password" type="text" />
-                    </FormControl>
+              <Typography textAlign={'center'} fontWeight={'600'}>
+                Feedback Form
+              </Typography>
+              <Box component="form" noValidate mt={3} onSubmit={() => {}}>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
+                  <Input autoComplete="name" autoFocus required id="standard-adornment-password" type="text" />
+                </FormControl>
 
-                    <FormControl variant="standard" fullWidth>
-                      <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                      <Input autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
-                    </FormControl>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
+                  <Input autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
+                </FormControl>
 
-                    <FormControl variant="standard" fullWidth>
-                      <InputLabel htmlFor="standard-adornment-password">Enter your feedback</InputLabel>
-                      <Input multiline rowsF={4} autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
-                    </FormControl>
-                  </Box>
-                </CardContent>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel htmlFor="standard-adornment-password">Enter your feedback</InputLabel>
+                  <Input multiline rowsF={4} autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
+                </FormControl>
+              </Box>
 
-                <DialogActions>
-                  <Button fullWidth variant="outlined" onClick={handleCloseFeedback}>
-                    close
-                  </Button>
-                  <Button fullWidth variant="outlined" onClick={handleSendFeedBack}>
-                    Send
-                  </Button>
-                </DialogActions>
-              </Card>
+              <DialogActions>
+                <Button fullWidth variant="outlined" onClick={handleCloseFeedback}>
+                  close
+                </Button>
+                <Button fullWidth variant="outlined" onClick={handleSendFeedBack}>
+                  Send
+                </Button>
+              </DialogActions>
             </>
           }
         />
