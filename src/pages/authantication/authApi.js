@@ -5,7 +5,7 @@ const BASE_ENDPOINT = process.env.REACT_APP_API_END_POINT;
 
 
 export const signUpUser = async (credentials) =>{
-  return await axios.post(BASE_ENDPOINT + '/auth/signup', {
+  return await axios.post(BASE_ENDPOINT + '/api/auth/signup', {
     name:btoa(credentials.name) ,
     email:btoa(credentials.email),
     mobile:btoa(credentials.mobile),
@@ -22,7 +22,7 @@ export const signUpUser = async (credentials) =>{
 
 
   export const verify = async (credentials) =>{
-    return await axios.post(BASE_ENDPOINT + '/auth/verify', {
+    return await axios.post(BASE_ENDPOINT + '/api/auth/verify', {
      ...credentials
     }, {
      }).then(function (response) {
@@ -35,7 +35,7 @@ export const signUpUser = async (credentials) =>{
     }
 
   export const loginUser = async (credentials) =>{
-    return await axios.post(BASE_ENDPOINT + '/auth/login', {
+    return await axios.post(BASE_ENDPOINT + '/api/auth/login', {
       email:btoa(credentials.email || ""),
       password:btoa(credentials.password || "")
     }, {}).then(function (response) {
@@ -49,7 +49,7 @@ export const signUpUser = async (credentials) =>{
 
 
   export const logoutUser = async () =>{
-    return await axios.post(BASE_ENDPOINT + '/auth/logout',  {}, {
+    return await axios.post(BASE_ENDPOINT + '/api/auth/logout',  {}, {
       headers: HEADERS.AUTHENTIC(),
     }).then(function (response) {
       if (response.status === 200) {
@@ -63,7 +63,7 @@ export const signUpUser = async (credentials) =>{
 
   export const sendEmailForotp = async (credentials) => {
     console.log(credentials);
-    return await axios.post(BASE_ENDPOINT + '/user/otpRequestForPasswordChange', {
+    return await axios.post(BASE_ENDPOINT + '/api/user/otpRequestForPasswordChange', {
       email:credentials
     }, {}).then(function (response) {
       if (response.status === 200) {
@@ -75,7 +75,7 @@ export const signUpUser = async (credentials) =>{
   }
 
   export const forgotPassword = async (credentials) => {
-    return await axios.post(BASE_ENDPOINT + '/user/changePassword', {
+    return await axios.post(BASE_ENDPOINT + '/api/user/changePassword', {
      otp:btoa(credentials?.otp),
      id:btoa(credentials?.id ),
      password:btoa(credentials?.password)
