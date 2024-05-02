@@ -6,7 +6,7 @@ const initialState = {
   postLoading:false,
 };
 
-export const postProperty = createAsyncThunk('/api/user/addProperty', async (payload) => {
+export const postProperty = createAsyncThunk('/user/addProperty', async (payload) => {
   const response = await createObject(payload);
   return response;
 });
