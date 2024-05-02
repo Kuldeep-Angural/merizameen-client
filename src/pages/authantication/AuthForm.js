@@ -12,7 +12,7 @@ import CompanyLogo from '../../ui/logos/newLogo.png';
 import FaceBookImage from '../../ui/png/facebook.png';
 import GoogleImage from '../../ui/png/google.png';
 import { changePassword, login, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
-import { addDelay } from '../../utils/utility';
+import { addDelay, isExist, isValidData } from '../../utils/utility';
 import APSpinner from '../../components/spinner/APSpinner';
 
 export const SignInForm = ({ route }) => {
@@ -51,20 +51,28 @@ export const SignInForm = ({ route }) => {
     setCredentials({ ...credentials, [name]: value });
   };
 
-  const onSubmit = (e, name) => {
+  const onSubmit = (e, input) => {
     e.preventDefault();
-    if (name === 'login') {
-      dispatch(login({ email: credentials.email, password: credentials.password })).then((resp) => {
-       if (resp.payload.message.messageType === 'error') {
-         toastRef.current.showToast(resp?.payload?.message)
-        }
-        
-      });
+    const { email, password,mobile,name } = credentials;
+    if (input === 'login') {
+      if (!isValidData(email) || !isValidData(password)) {
+        toastRef.current.showToast({ messageType: 'warning', messageText: 'Email or Password required' });
+      } else if (!email.includes('@') || !email.endsWith('.com')) {
+        toastRef.current.showToast({ messageType: 'warning', messageText: 'Invalid email entered' });
+      } else {
+        dispatch(login({ email, password })).then((resp) => {
+          if (!resp || !resp.payload || !resp.payload.message) {
+            toastRef.current.showToast({ messageType: 'error', messageText: 'Internal server error or network error' });
+          } else if (resp.payload.message.messageType === 'error') {
+            toastRef.current.showToast(resp.payload.message);
+          }
+        });
+      }
     } else {
       dispatch(signUp({ name: credentials?.name, mobile: credentials?.mobile, email: credentials?.email, password: credentials?.password })).then((resp) => {
         console.log(resp);
         if (resp.payload.message) {
-          toastRef.current.showToast(resp.payload.message)
+          toastRef.current.showToast(resp.payload.message);
           setOtp({ id: resp?.payload?.data?.id });
           setIsOpen(true);
         }
@@ -93,41 +101,37 @@ export const SignInForm = ({ route }) => {
     setOtp({ ...otp, [name]: value });
   };
 
-
   const handleChangeForgotPassword = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
-    setForgotPasswordData({...forgotPasswordData,[name]:value});
-  }
-
+    setForgotPasswordData({ ...forgotPasswordData, [name]: value });
+  };
 
   const sendOtp = () => {
     if (forgotPasswordData?.email) {
-        dispatch(sentOtprequest(forgotPasswordData.email)).then((resp)=>{
-          toastRef.current.showToast({ messageType: 'warning', messageText: resp?.payload?.message});
-          if (resp.payload.status===200) {
-            setForgotPasswordData({id:resp.payload.data.id});
-            addDelay(2000).then(()=>{
-              setIsEmailSent(true);
-              
-            })
-          }
-        })
+      dispatch(sentOtprequest(forgotPasswordData.email)).then((resp) => {
+        toastRef.current.showToast(resp?.payload?.message);
+        if (resp.payload.status === 200) {
+          setForgotPasswordData({ id: resp.payload.data.id });
+          addDelay(2000).then(() => {
+            setIsEmailSent(true);
+          });
+        }
+      });
     }
   };
 
   const submitForgotpasswordRequest = () => {
     console.log(forgotPasswordData);
     if (forgotPasswordData?.otp && forgotPasswordData.confirmPassword && forgotPasswordData?.password) {
-        dispatch(changePassword({otp:forgotPasswordData?.otp,password:forgotPasswordData.password, id:forgotPasswordData?.id})).then((resp)=>{
-          toastRef.current.showToast({ messageType: 'warning', messageText: resp?.payload?.message});
-          addDelay(2000).then(()=>{
-            setIsOpenForgotPassword(false);
-            setIsEmailSent(false);
-          })
-        })
+      dispatch(changePassword({ otp: forgotPasswordData?.otp, password: forgotPasswordData.password, id: forgotPasswordData?.id })).then((resp) => {
+        toastRef.current.showToast({ messageType: 'warning', messageText: resp?.payload?.message });
+        addDelay(2000).then(() => {
+          setIsOpenForgotPassword(false);
+          setIsEmailSent(false);
+        });
+      });
     }
-   
   };
 
   return (
@@ -347,7 +351,7 @@ export const SignInForm = ({ route }) => {
               )}
 
               <Box mt={3} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                <Button variant="outlined" onClick={!isEmailSent ? ()=>sendOtp() :() =>submitForgotpasswordRequest()}>
+                <Button variant="outlined" onClick={!isEmailSent ? () => sendOtp() : () => submitForgotpasswordRequest()}>
                   {!isEmailSent ? 'send email' : 'Change Password'}
                 </Button>
               </Box>
