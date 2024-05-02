@@ -1,7 +1,7 @@
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import '../../pages/Global.scss';
-import { Box, Dialog } from '@mui/material';
+import { Box } from '@mui/material';
 const APSpinner = ({ spinnerState }) => {
   return spinnerState ? 
    
