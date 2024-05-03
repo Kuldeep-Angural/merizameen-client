@@ -1,7 +1,7 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Avatar, Box, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, FormHelperText, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ import CompanyLogo from '../../ui/logos/newLogo.png';
 import FaceBookImage from '../../ui/png/facebook.png';
 import GoogleImage from '../../ui/png/google.png';
 import { changePassword, login, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
-import { addDelay, isExist, isValidData } from '../../utils/utility';
+import { addDelay, isInValidData } from '../../utils/utility';
 import APSpinner from '../../components/spinner/APSpinner';
 
 export const SignInForm = ({ route }) => {
@@ -55,7 +55,7 @@ export const SignInForm = ({ route }) => {
     e.preventDefault();
     const { email, password,mobile,name } = credentials;
     if (input === 'login') {
-      if (!isValidData(email) || !isValidData(password)) {
+      if (isInValidData(email) || isInValidData(password)) {
         toastRef.current.showToast({ messageType: 'warning', messageText: 'Email or Password required' });
       } else if (!email.includes('@') || !email.endsWith('.com')) {
         toastRef.current.showToast({ messageType: 'warning', messageText: 'Invalid email entered' });
@@ -69,14 +69,22 @@ export const SignInForm = ({ route }) => {
         });
       }
     } else {
-      dispatch(signUp({ name: credentials?.name, mobile: credentials?.mobile, email: credentials?.email, password: credentials?.password })).then((resp) => {
-        console.log(resp);
-        if (resp.payload.message) {
-          toastRef.current.showToast(resp.payload.message);
-          setOtp({ id: resp?.payload?.data?.id });
-          setIsOpen(true);
-        }
-      });
+      if (isInValidData(name) || isInValidData(mobile) || isInValidData(email) || isInValidData(password)) {
+        toastRef.current.showToast({ messageType: 'warning', messageText: 'All Fields Are Required' });
+      } else if (!email.includes('@') || !email.endsWith('.com')) {
+        toastRef.current.showToast({ messageType: 'warning', messageText: 'Invalid email entered' });
+      } else {
+        dispatch(signUp({ name: name, mobile: mobile, email: email, password: password })).then((resp) => {
+          if (resp.payload.message) {
+            toastRef.current.showToast(resp.payload.message);
+            setOtp({ id: resp?.payload?.data?.id });
+            resp.payload.message.messageType === 'success' &&
+              addDelay(2000).then(() => {
+                setIsOpen(true);
+              });
+          }
+        });
+      }
     }
   };
 
@@ -152,9 +160,9 @@ export const SignInForm = ({ route }) => {
               Welcome back! Please authorize to begin the journey.
             </Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-              <FormControl variant="standard" fullWidth>
+              <FormControl required variant="standard" fullWidth>
                 <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                <Input
+                <Input 
                   autoComplete="email"
                   autoFocus
                   required
@@ -169,7 +177,7 @@ export const SignInForm = ({ route }) => {
                 />
               </FormControl>
 
-              <FormControl variant="standard" fullWidth sx={{ mt: 5 }}>
+              <FormControl required variant="standard" fullWidth sx={{ mt: 5 }}>
                 <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                 <Input fullWidth name="password" required onChange={handleChange} type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
               </FormControl>
@@ -212,17 +220,17 @@ export const SignInForm = ({ route }) => {
           <CardContent>
             <Typography fontWeight={'600'}> Welcome to Merizameen. - to begin create Account Please enter your details.</Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-              <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
-                <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-                <Input name="name" onChange={handleChange} autoComplete="name" autoFocus required type="text" />
+              <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
+                <InputLabel  htmlFor="standard-adornment-password">Name</InputLabel>
+                <Input name="name" onChange={handleChange} autoComplete="name" autoFocus type="text" />
               </FormControl>
 
-              <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
+              <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
                 <Input name="email" onChange={handleChange} autoComplete="email" required type="email" />
               </FormControl>
 
-              <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
+              <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
                 <Input
                   autoComplete="mobile"
@@ -237,7 +245,7 @@ export const SignInForm = ({ route }) => {
                 />
               </FormControl>
 
-              <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
+              <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                 <Input name="password" onChange={handleChange} fullWidth required type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
               </FormControl>
