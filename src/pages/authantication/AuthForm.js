@@ -134,6 +134,11 @@ export const SignInForm = ({ route }) => {
     }
   };
 
+
+  const googleLogin = () => {
+    window.open(process.env.REACT_APP_API_END_POINT+'/auth/google/callback', '_self');
+  }
+
   return (
     <Grid>
       <APToaster ref={toastRef} title="" />
@@ -176,7 +181,7 @@ export const SignInForm = ({ route }) => {
               </Grid>
               <Divider> or continue using </Divider>
               <Grid container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <Button>
+                <Button onClick={googleLogin}>
                   <Avatar src={GoogleImage} />
                 </Button>
                 <Button>

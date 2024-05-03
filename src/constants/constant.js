@@ -62,3 +62,15 @@ export const options = [
   { value: 'Individual', label: 'Individual' },
   { value: 'Other', label: 'Other' },
 ];
+
+
+
+export const googleConfig = {
+  clientId : `${process.env.GOOGLE_CLIENT_ID}`,
+  userEmailScope : 'https://www.googleapis.com/auth/userinfo.email',
+  userProfileScope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/analytics.readonly',
+  analyticsScope : 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/analytics.readonly',
+  redirectUrl : `${process.env.HOST}login`
+}
+export const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?access_type=offline&scope=${googleConfig.userProfileScope}&response_type=code&client_id=${googleConfig.clientId}&redirect_uri=${googleConfig.redirectUrl}`
+

@@ -48,6 +48,18 @@ export const signUpUser = async (credentials) =>{
   }
 
 
+  export  const googleLoginApi = async () =>{
+    return await  axios.get(process.env.REACT_APP_API_END_POINT+'/auth/google/profile', { withCredentials: true }).then(function (response) {
+      if (response.status === 200) {
+        console.log(response);
+        return {...response.data}
+      }
+    }).catch(function (error) {
+      return { error };
+    });
+  }
+
+
   export const logoutUser = async () =>{
     return await axios.post(BASE_ENDPOINT + '/auth/logout',  {}, {
       headers: HEADERS.AUTHENTIC(),
