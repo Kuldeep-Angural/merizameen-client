@@ -25,9 +25,11 @@ import { APRoutes, ROUTES } from '../../constants/routes';
 import { SESSION_KEYS, options, settings, userSettings } from '../../constants/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectUserData } from '../../pages/authantication/authSlice';
-import APModalBox from '../modal/APModalBox';
+import APModalBox from '../modal/Modal';
 import Auth from '../../pages/authantication/Auth';
 import { SignInForm } from '../../pages/authantication/AuthForm';
+import Profile from '../../pages/profile/Profile';
+import Modal from '../modal/Modal';
 
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -35,6 +37,8 @@ export const APNavBar = () => {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openQueryPannel, setOpenQueryPannel] = React.useState(false);
   const [openCallBack, setOpenCallBack] = React.useState(false);
+  const [profileModal, setProfileModal] = React.useState(false);
+
   const USER = useSelector(selectUserData);
   const naviGate = useNavigate();
   const dispatch = useDispatch();
@@ -108,6 +112,9 @@ export const APNavBar = () => {
       dispatch(logout()).then((resp) => {
         naviGate('/');
       });
+    }
+    if (eventName === 'Profile') {
+      setProfileModal(true);
     }
     return handleCloseUserMenu();
   };
@@ -246,20 +253,16 @@ export const APNavBar = () => {
             </Tooltip>
 
             <Box sx={{ flexGrow: 0 }}>
+              {console.log(USER)}
               {isLoggedIn() ? (
                 <Tooltip title="Profile settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={USER?.name} src={USER?.image || '/static/images/avatar/2.jpg'} />
+                    <Avatar alt={USER?.name} src={USER?.profilePic || '/static/images/avatar/2.jpg'} />
                   </IconButton>
                 </Tooltip>
               ) : (
                 <Tooltip title="Signin / create account">
-                  <IconButton
-                    sx={{ p: 0 }}
-                    onClick={() => {
-                      !isLoggedIn() && naviGate('/auth');
-                    }}
-                  >
+                  <IconButton sx={{ p: 0 }}>
                     <AccountCircleIcon style={{ fontSize: '40px', color: 'inherit' }} />
                   </IconButton>
                 </Tooltip>
@@ -420,6 +423,9 @@ export const APNavBar = () => {
             </>
           }
         />
+        <Modal open={profileModal} onClose={()=>setProfileModal(false)} title="User Profile" style={{minWidth:'400px' , maxWidth:'100%'}}>
+            <Profile/>
+        </Modal>      
       </AppBar>
     </>
   );
