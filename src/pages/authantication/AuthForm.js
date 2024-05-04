@@ -75,13 +75,15 @@ export const SignInForm = ({ route }) => {
         toastRef.current.showToast({ messageType: 'warning', messageText: 'Invalid email entered' });
       } else {
         dispatch(signUp({ name: name, mobile: mobile, email: email, password: password })).then((resp) => {
-          if (resp.payload.message) {
-            toastRef.current.showToast(resp.payload.message);
+          if (resp?.payload?.message === 'Network Error') {
+            toastRef.current.showToast({ messageType: 'warning', messageText: resp.payload.message });
+          } else if (resp?.payload?.message) {
+            toastRef.current.showToast(resp?.payload?.message);
             setOtp({ id: resp?.payload?.data?.id });
-            resp.payload.message.messageType === 'success' &&
-              addDelay(2000).then(() => {
+            resp.payload.message.messageType === 'success' && ( 
+               addDelay(2000).then(() => {
                 setIsOpen(true);
-              });
+              }))
           }
         });
       }
@@ -187,19 +189,17 @@ export const SignInForm = ({ route }) => {
                   {loginLoading === true ? 'loading' : 'sign in'}
                 </Button>
               </Grid>
-              <Divider> or continue using </Divider>
-              <Grid container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <Button onClick={googleLogin}>
-                  <Avatar src={GoogleImage} />
+              <Divider></Divider>
+              <Grid mt={2} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
+                <Button onClick={googleLogin} variant='outlined' color='text' sx={{letterSpacing:'0.2px' , textTransform:'capitalize'}}>
+                  <img src={GoogleImage} style={{height:'25px'}}/> &nbsp; Sign in with Google
                 </Button>
-                <Button>
-                  <Avatar src={FaceBookImage} />
-                </Button>
+                
               </Grid>
               <Grid container>
                 <Grid item xs>
                   <LinkButton
-                    style={{ fontWeight: '600' }}
+                    style={{textTransform:'capitalize', fontWeight: '600' }}
                     onClick={() => {
                       setIsOpenForgotPassword(true);
                     }}
@@ -207,7 +207,7 @@ export const SignInForm = ({ route }) => {
                   />
                 </Grid>
                 <Grid item>
-                  <LinkButton style={{ fontWeight: '600' }} onClick={() => setIsSigninForm(false)} text={"Don't have an account? Sign Up"} />
+                  <LinkButton  style={{textTransform:'capitalize', fontWeight: '600' }} onClick={() => setIsSigninForm(false)} text={"Don't have an account? Sign Up"} />
                 </Grid>
               </Grid>
             </Box>
@@ -250,24 +250,22 @@ export const SignInForm = ({ route }) => {
                 <Input name="password" onChange={handleChange} fullWidth required type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
               </FormControl>
 
-              <FormControlLabel control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
+              <FormControlLabel sx={{textTransform:'capitalize'}} control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <Button type="submit" onClick={(e) => onSubmit(e, 'signup')} variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
                   Sign Up
                 </Button>
               </Grid>
-              <Divider> or sign-Up using </Divider>
-              <Grid container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <Button>
-                  <Avatar src={GoogleImage} />
+              <Divider></Divider>
+              <Grid mt={2} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
+              <Button onClick={googleLogin} variant='outlined' color='text' sx={{letterSpacing:'0.2px' , textTransform:'capitalize'}}>
+                  <img src={GoogleImage} style={{height:'25px'}}/> &nbsp; Sign up with Google
                 </Button>
-                <Button>
-                  <Avatar src={FaceBookImage} />
-                </Button>
+              
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <Grid md={6} item>
-                  <LinkButton onClick={() => setIsSigninForm(true)} style={{ fontWeight: '600' }} text={'Already  have an account? Sign in'} />
+                  <LinkButton sx={{textTransform:'capitalize'}} onClick={() => setIsSigninForm(true)} style={{ fontWeight: '600' }} text={'Already  have an account? Sign in'} />
                 </Grid>
               </Grid>
             </Box>
@@ -283,9 +281,9 @@ export const SignInForm = ({ route }) => {
         content={
           <>
             <Box sx={{ padding: 2 }}>
-              <Typography textAlign={'center'}>Verify your email</Typography>
+              <Typography textAlign={'center'}>Verify Your Email</Typography>
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
-                <InputLabel htmlFor="standard-adornment-password">enter your otp</InputLabel>
+                <InputLabel htmlFor="standard-adornment-password">Enter Your OTP</InputLabel>
                 <Input
                   autoComplete="otp"
                   name="otp"

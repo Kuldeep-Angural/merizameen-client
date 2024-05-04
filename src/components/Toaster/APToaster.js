@@ -24,7 +24,7 @@ const APToaster = forwardRef(({ title, x, y, type }, ref) => {
     <div>
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={messageData?.position ? { ...messageData?.position } : { vertical: 'top', horizontal: 'center' }}>
         <Alert onClose={handleClose} severity={messageData.messageType || 'success'} variant="filled" sx={{ width: '400px', boxShadow: 3, borderRadius: '30px' }}>
-          {messageData?.messageText || ''}
+          {messageData?.messageText || 'Default toast'}
         </Alert>
       </Snackbar>
     </div>
