@@ -9,7 +9,7 @@ const initialState = {
   loginLoading:false,
   otpLoading:false,
   forgotPasswordLoading:false,
-  userData:localStorage.getItem(SESSION_KEYS.USER),
+  userData:JSON.parse(localStorage.getItem(SESSION_KEYS.USER)),
   status: 'done',
 };
 

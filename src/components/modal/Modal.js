@@ -32,19 +32,20 @@ const Modal = (props) => {
         <Typography fontWeight={600} fontSize={'20px'}>
           {title}
         </Typography>
-        <IconButton onClick={propOnClose} sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}>
-          <CloseIcon/>
-        </IconButton>
       </DialogTitle>
+
+      <IconButton onClick={propOnClose} sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}>
+        <CloseIcon />
+      </IconButton>
 
       <DialogContent>
         {subtitle && <Box style={{ fontSize: '16px', lineHeight: '1.5', margin: '0 0 10px 0', color: 'rgba(0, 0, 0, 0.8)' }} dangerouslySetInnerHTML={{ __html: subtitle }} />}
         {children}
       </DialogContent>
 
-      <DialogActions sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 ,  }}>
+      <DialogActions sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
         {!!props.onClose && (
-          <Button type="button" variant="text" sx={{ color: 'gray',marginRight:'15px' }} onClick={propOnClose}>
+          <Button type="button" variant="text" sx={{ color: 'gray', marginRight: '15px' }} onClick={propOnClose}>
             {cancelButtonTitle || 'Cancel'}
           </Button>
         )}

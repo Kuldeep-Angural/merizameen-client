@@ -253,7 +253,7 @@ export const APNavBar = () => {
             </Tooltip>
 
             <Box sx={{ flexGrow: 0 }}>
-              {console.log(USER)}
+              {console.log(USER.name)}
               {isLoggedIn() ? (
                 <Tooltip title="Profile settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -423,7 +423,7 @@ export const APNavBar = () => {
             </>
           }
         />
-        <Modal open={profileModal} onClose={()=>setProfileModal(false)} title="User Profile" style={{minWidth:'400px' , maxWidth:'100%'}}>
+        <Modal open={profileModal} onClose={()=>setProfileModal(false)} title="User Profile" style={{minWidth:'200px' , maxWidth:'500px'}}>
             <Profile/>
         </Modal>      
       </AppBar>
