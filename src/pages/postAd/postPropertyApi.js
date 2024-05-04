@@ -5,7 +5,7 @@ const BASE_ENDPOINT = process.env.REACT_APP_API_END_POINT;
 
 export const createObject = async (payload) => {
   return axios
-    .post(BASE_ENDPOINT+'/user/addProperty', payload, {
+    .post(BASE_ENDPOINT+'/post/addProperty', payload, {
       headers: HEADERS.AUTHENTIC(),
     })
     .then(function (response) {
