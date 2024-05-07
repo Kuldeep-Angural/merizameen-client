@@ -1,10 +1,11 @@
-import { Box, Button, FormControl, Grid, Input, InputLabel, Tooltip } from '@mui/material';
-import React, { useEffect, useMemo } from 'react';
+import { Button, FormControl, Grid, Input, InputLabel, Tooltip } from '@mui/material';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserData } from '../authantication/authSlice';
 import { getUserDetails, selectDataObj, setData } from './profileSlice';
 import imageIcon from '../../ui/images/noImage.webp';
 import { InputField } from '../../components/input/InputField';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Profile = () => {
   const USER = useSelector(selectUserData);
@@ -18,6 +19,7 @@ const Profile = () => {
 
   const handleChange = (event) => {
     const {name ,value} = event.target;
+    console.log(name,value);
     
     if (name==='profilePic') {
       const file = event.target.files[0];
@@ -72,11 +74,11 @@ const Profile = () => {
           <Input name="mobile" fullWidth onChange={handleChange} value={dataObj?.mobile || ""} autoComplete="tel" autoFocus type="number" />
         </FormControl>
       </Grid>
-
+    {/* using out own Inputfield Componenet Here */}
       <Grid item md={12} sm={12} xs={12}>
-        <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-          <InputField name="name" fullWidth onChange={handleChange}  autoComplete="name"  type="number" />
-        </FormControl>
+        
+          <InputField required name="password" onChange={handleChange} value={dataObj.password} label="password" helpertext='Name is required' type="text" />
+        
       </Grid>
     </Grid>
   );
