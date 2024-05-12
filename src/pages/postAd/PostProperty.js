@@ -1,15 +1,16 @@
 import { Grid, Card, Box, CardContent, Button, Badge, Tooltip, Divider, Typography, Chip, Checkbox, FormControlLabel, FormControl, OutlinedInput, InputAdornment, FormHelperText } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HomeWrapper } from '../home/HomeWrapper';
 import imageIcon from '../../ui/images/noImage.webp';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BackupIcon from '@mui/icons-material/Backup';
 import APModal from '../../components/modal/APModal';
-import { himachalCities, punjabCities, punjabCitiesIndia } from '../../constants/cities';
+import { himachalCities, punjabCities } from '../../constants/cities';
 import { amenities, basicInfo, landMarks, medium, propertyTypes, state } from '../../constants/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { postProperty, selectPostLoading } from './postPropertySlice';
+import { InputField } from '../../components/input/InputField';
 
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
@@ -23,6 +24,7 @@ export const PostProperty = () => {
     landMarks: {},
     propertyType: '2Bhk',
     postFor: 'Sell',
+    description:''
   });
   const [openModal, setOpenModal] = useState(false);
   const loading = useSelector(selectPostLoading);
@@ -30,7 +32,7 @@ export const PostProperty = () => {
 
   useEffect(() => {
     setCities(postAdData?.location?.state === 'Punjab' ? punjabCities : himachalCities);
-  }, [postAdData]);
+  }, [postAdData.location]);
 
   const handleChange = (e) => {
     if (e.target.name === 'mainImage') {
@@ -116,7 +118,7 @@ export const PostProperty = () => {
     formData.append('landMarks', JSON.stringify(postAdData?.landMarks));
     formData.append('postFor', postAdData?.postFor);
     formData.append('propertyType', postAdData?.propertyType);
-    formData.append('discription', postAdData?.discription);
+    formData.append('description', postAdData?.description);
     formData.append('price', postAdData?.price);
 
     if (postAdData?.propertyImages?.length > 0) {
@@ -126,22 +128,22 @@ export const PostProperty = () => {
     }
 
     dispatch(postProperty(formData)).then((resp) => {
-      console.log(resp);
+      // console.log(resp);
     });
   };
 
-  console.log(postAdData);
+  // console.log(postAdData);
 
   return (
     <HomeWrapper>
-      <Grid container spacing={2} p={3}>
+      <Grid container spacing={2} p={2}>
         <Grid item md={6} xs={12}>
           <Card>
             <CardContent>
               {/* main Image */}
               <Grid container spacing={2}>
                 <Grid item md={4} sm={6} xs={6}>
-                  <Tooltip title="upload main image">
+                  <Tooltip title="Upload Main Image">
                     <Button variant="text" component="label">
                       <img onClick={() => {}} style={{ cursor: 'pointer', borderRadius: '10px' }} src={postAdData.mainImage ? postAdData.mainImage : imageIcon} height={'150px'} width={'100%'} alt="upload image" />
                       <input onChange={handleChange} accept="image/*" name="mainImage" type="file" hidden />
@@ -153,8 +155,8 @@ export const PostProperty = () => {
                 <Grid item md={8} sm={6} xs={6} display={'flex'}>
                   <Grid container spacing={2}>
                     <Grid item md={4} xs={12}>
-                      <Tooltip title="uplad property images">
-                        <Button title="uplad property images" fullWidth onClick={postAdData?.propertyImages?.length > 0 ? () => setOpenModal(true) : () => {}} sx={{ height: '60px' }} variant="outlined" component="label">
+                      <Tooltip title="Upload Property Images">
+                        <Button fullWidth onClick={postAdData?.propertyImages?.length > 0 ? () => setOpenModal(true) : () => {}} sx={{ height: '60px' }} variant="outlined" component="label">
                           <input style={{ width: '100%' }} onChange={handleChange} accept="image/*" name="propertyImages" multiple type="file" hidden />
                           <Badge bac badgeContent={postAdData?.propertyImages?.length || 0} color="primary">
                             <BackupIcon style={{ fontSize: '60px', color: '#bdbdbd', width: '100%' }} />
@@ -164,7 +166,7 @@ export const PostProperty = () => {
                     </Grid>
 
                     <Grid item md={4} xs={12}>
-                      <TextField fullWidth select defaultValue="2Bhk" value={postAdData?.propertyType || ''} name="propertyType" onChange={handleChange} SelectProps={{ native: true }} helperText="Please select your property type" variant="outlined">
+                      <TextField fullWidth select defaultValue="2Bhk" value={postAdData?.propertyType || ''} name="propertyType" onChange={handleChange} SelectProps={{ native: true }} helperText="Type of Property" variant="outlined">
                         {propertyTypes.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
@@ -186,7 +188,7 @@ export const PostProperty = () => {
                 </Grid>
 
                 {/* Basic Info */}
-                <Grid md={12}>
+                <Grid item md={12}>
                   <Divider></Divider>
                   <Grid item md={12}>
                     <Typography fontWeight={'600'} textAlign={'center'}>
@@ -196,28 +198,22 @@ export const PostProperty = () => {
                       {basicInfo.map((item) => {
                         return (
                           <Grid item md={2} xs={6}>
-                            <FormControl sx={{ m: 1 }} variant="outlined">
-                              <OutlinedInput
+                              <InputField
                                 onChange={handleBasicInfo}
                                 aria-describedby="outlined-weight-helper-text"
                                 name={item.name}
                                 type="number"
                                 value={postAdData?.basicInfo?.[item?.name] || ''}
-                                inputProps={{
-                                  style: { '-moz-appearance': 'textfield' }, // For Firefox
-                                  'aria-hidden': true, // Hide arrows from screen readers
-                                }}
                               />
                               <FormHelperText id="outlined-weight-helper-text">{item.label}</FormHelperText>
-                            </FormControl>
                           </Grid>
                         );
                       })}
                     </Grid>
                   </Grid>
                 </Grid>
-
-                <Grid md={12} display={'flex'} justifyContent={'center'}>
+                      {/* Location and area */}
+                <Grid item md={12} display={'flex'} justifyContent={'center'}>
                   <Divider></Divider>
                   <Grid item md={12}>
                     <Typography fontWeight={'600'} textAlign={'center'}>
@@ -225,17 +221,17 @@ export const PostProperty = () => {
                     </Typography>
                     <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
                       <Grid item md={4} xs={6} sm={6}>
-                        <TextField fullWidth select value={postAdData?.location?.state || ''} onChange={handleLocationChange} defaultValue="Punjab" SelectProps={{ native: true }} optio name="state" helperText="State" variant="outlined">
+                        <TextField fullWidth select value={postAdData?.location?.state || ''} onChange={handleLocationChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" helperText="State" variant="outlined">
                           {state.map((option) => (
                             <option key={option} value={option}>
                               {option}
                             </option>
                           ))}
                         </TextField>
-                      </Grid>
+                      </Grid> 
 
                       <Grid item md={4} xs={6} sm={6}>
-                        <TextField fullWidth select onChange={handleLocationChange} value={postAdData?.location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} optio name="city" helperText="City" variant="outlined">
+                        <TextField fullWidth select onChange={handleLocationChange} value={postAdData?.location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" helperText="City" variant="outlined">
                           {cities.map((option) => (
                             <option key={option.name} value={option.name}>
                               {option.name}
@@ -260,8 +256,8 @@ export const PostProperty = () => {
 
                       <Grid item md={12} xs={12} sm={12}>
                         <FormControl fullWidth variant="outlined">
-                          <OutlinedInput onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.discription || ''} postAdData name={'discription'} type="text" />
-                          <FormHelperText id="outlined-weight-helper-text">Property Discription</FormHelperText>
+                          <InputField onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.description || ''} postAdData name={'description'} type="text" />
+                          <FormHelperText id="outlined-weight-helper-text">Property Description</FormHelperText>
                         </FormControl>
                       </Grid>
                     </Grid>
@@ -276,7 +272,7 @@ export const PostProperty = () => {
         <Grid item md={6} xs={12}>
           <Card>
             <CardContent>
-              <Grid md={12}>
+              <Grid item md={12}>
                 <Grid item md={12}>
                   <Typography fontWeight={'600'} textAlign={'center'}>
                     Title
@@ -284,12 +280,12 @@ export const PostProperty = () => {
                 </Grid>
                 <Grid item md={12} xs={12} sm={12}>
                   <FormControl fullWidth variant="outlined">
-                    <OutlinedInput onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.title || ''} name={'title'} />
+                    <InputField onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.title || ''} name={'title'} />
                     <FormHelperText id="outlined-weight-helper-text">Enter title here</FormHelperText>
                   </FormControl>
                 </Grid>
               </Grid>
-              <Grid md={12}>
+              <Grid item md={12}>
                 <Grid item md={12}>
                   <Typography fontWeight={'600'} textAlign={'center'}>
                     Amenities
@@ -317,21 +313,22 @@ export const PostProperty = () => {
                   {landMarks.map((item) => {
                     return (
                       <Grid item md={6} xs={12} sm={12}>
-                        <FormControl fullWidth variant="outlined">
-                          <OutlinedInput
-                            endAdornment={<InputAdornment position="end">km</InputAdornment>}
+                        <FormControl fullWidth>
+                          <InputField
+                            endAdornment={<InputAdornment position="end">KM</InputAdornment>}
                             type="number"
                             slotProps={false}
                             name={item?.name}
                             value={postAdData?.landMarks?.[item?.name] || ''}
                             onChange={handleLandMarks}
+                            placeholder={item.label}
                             inputProps={{
                               inputMode: 'numeric',
                               min: 0,
                               style: { '-moz-appearance': 'textfield', '::-webkit-outer-spin-button': { '-webkit-appearance': 'none', margin: 0 }, '::-webkit-inner-spin-button': { '-webkit-appearance': 'none', margin: 0 } },
                             }}
-                          />
-                          <FormHelperText id="outlined-weight-helper-text">{item.label}</FormHelperText>
+                            />
+                          {/* <FormHelperText id="outlined-weight-helper-text">{item.label}</FormHelperText> */}
                         </FormControl>
                       </Grid>
                     );
@@ -342,7 +339,7 @@ export const PostProperty = () => {
           </Card>
           <Box display={'flex'} justifyContent={'space-between'} mt={3}>
             <FormControl  variant="outlined">
-              <OutlinedInput
+              <InputField
                 onChange={handleChange}
                 aria-describedby="outlined-weight-helper-text"
                 name={'price'}

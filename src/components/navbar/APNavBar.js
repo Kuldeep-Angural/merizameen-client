@@ -253,7 +253,6 @@ export const APNavBar = () => {
             </Tooltip>
 
             <Box sx={{ flexGrow: 0 }}>
-              {console.log(USER.name)}
               {isLoggedIn() ? (
                 <Tooltip title="Profile settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -261,7 +260,7 @@ export const APNavBar = () => {
                   </IconButton>
                 </Tooltip>
               ) : (
-                <Tooltip title="Signin / create account">
+                <Tooltip title="Signin / Create Account">
                   <IconButton sx={{ p: 0 }}>
                     <AccountCircleIcon style={{ fontSize: '40px', color: 'inherit' }} />
                   </IconButton>

@@ -45,9 +45,9 @@ export const landMarks = [
 export const basicInfo = [
   { name: 'bedRoom', label: 'Bedroom' },
   { name: 'bathRoom', label: 'Bathroom' },
-  { name: 'totalArea', label: `Total Area in \u00B2 Yards` },
-  { name: 'carpetArea', label: `Carpet Area in \u00B2 Yards` },
-  { name: 'propertyAge', label: `Age of Property in Years` },
+  { name: 'totalArea', label: `Total (Yards)\u00B2` },
+  { name: 'carpetArea', label: `Carpet (Yards)\u00B2` },
+  { name: 'propertyAge', label: `Property Age in Years` },
 ];
 
 export const pages = ['Products', 'Pricing', 'Blog'];
