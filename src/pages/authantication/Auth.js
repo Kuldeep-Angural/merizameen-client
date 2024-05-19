@@ -19,7 +19,7 @@ const Auth = ({ updatePageTitle }) => {
 
   return (
     <>
-    <APSpinner spinnerState={loginLoading || signUpLoading || forgotPasswordLoading || otpLoading }/>
+    {/* <APSpinner spinnerState={loginLoading || signUpLoading || forgotPasswordLoading || otpLoading }/> */}
 
     <Grid container gap={2} component="main" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} columns={12} justifyContent={'center'} alignItems="center">
       <Grid item sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} md={6}>

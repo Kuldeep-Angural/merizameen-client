@@ -13,9 +13,10 @@ import FaceBookImage from '../../ui/png/facebook.png';
 import GoogleImage from '../../ui/png/google.png';
 import { changePassword, login, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
 import { addDelay, isInValidData } from '../../utils/utility';
-import APSpinner from '../../components/spinner/APSpinner';
 import LoaderButton from '../../components/loadingbutton/LoaderButton';
 
+import LoginIcon from '@mui/icons-material/Login';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 export const SignInForm = ({ route }) => {
   const [loading,setLoading]= useState(false)
   const [showPassword, setShowPassword] = React.useState(false);
@@ -155,7 +156,7 @@ export const SignInForm = ({ route }) => {
     <Grid>
       <APToaster ref={toastRef} title="" />
       <CardContent sx={{ textAlign: 'center' }}>
-        <img src={CompanyLogo} loading="lazy" height={'80px'} />
+        <img src={CompanyLogo} loading="lazy" height={'70px'} />
       </CardContent>
       {isSigninForm && (
         <Card sx={{ mt: '20px' }}>
@@ -187,15 +188,13 @@ export const SignInForm = ({ route }) => {
               </FormControl>
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <Button type="submit" onClick={(e) => onSubmit(e, 'login')} variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
-                  {loginLoading === true ? 'loading' : 'sign in'}
-                </Button>
+                <LoaderButton type="submit" startIcon={<LoginIcon/>} text={'Sign in'} loading={loginLoading} onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{width: '220px' }} >
+                </LoaderButton>
               </Grid>
               <Divider></Divider>
               <Grid mt={2} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <Button onClick={googleLogin} variant='outlined' color='text' sx={{letterSpacing:'0.2px' , textTransform:'capitalize'}}>
-                  <img src={GoogleImage} style={{height:'25px'}}/> &nbsp; Sign in with Google
-                </Button>
+                <LoaderButton onClick={googleLogin} variant='contained' color='warning' startIcon={<img src={GoogleImage} style={{height:'25px'}}/> } text="&nbsp; Sign in with Google" >
+                </LoaderButton>
                 
               </Grid>
               <Grid container>
@@ -254,16 +253,13 @@ export const SignInForm = ({ route }) => {
 
               <FormControlLabel sx={{textTransform:'capitalize'}} control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <Button type="submit" onClick={(e) => onSubmit(e, 'signup')} variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
-                  Sign Up
-                </Button>
+                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon/>} loadingPosition ='center' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
+                </LoaderButton>
               </Grid>
               <Divider></Divider>
               <Grid mt={2} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-              <Button onClick={googleLogin} variant='outlined' color='text' sx={{letterSpacing:'0.2px' , textTransform:'capitalize'}}>
-                  <img src={GoogleImage} style={{height:'25px'}}/> &nbsp; Sign up with Google
-                </Button>
-              
+              <LoaderButton onClick={googleLogin} variant='contained' color='warning' startIcon={<img src={GoogleImage} style={{height:'25px'}}/> } text="&nbsp; Sign up with Google">
+                </LoaderButton>
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <Grid md={6} item>
