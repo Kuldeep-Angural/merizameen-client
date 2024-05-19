@@ -14,8 +14,10 @@ import GoogleImage from '../../ui/png/google.png';
 import { changePassword, login, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
 import { addDelay, isInValidData } from '../../utils/utility';
 import APSpinner from '../../components/spinner/APSpinner';
+import LoaderButton from '../../components/loadingbutton/LoaderButton';
 
 export const SignInForm = ({ route }) => {
+  const [loading,setLoading]= useState(false)
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSigninForm, setIsSigninForm] = useState(true);
   const [isEmailSent, setIsEmailSent] = useState(false);
