@@ -169,7 +169,6 @@ export const SignInForm = ({ route }) => {
                 <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
                 <Input 
                   autoComplete="email"
-                  autoFocus
                   required
                   name="email"
                   type="email"
@@ -188,12 +187,12 @@ export const SignInForm = ({ route }) => {
               </FormControl>
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton type="submit" startIcon={<LoginIcon/>} text={'Sign in'} loading={loginLoading} onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{width: '220px' }} >
+                <LoaderButton type="submit" startIcon={<LoginIcon/>} text={'Sign in'} loading={loginLoading} loadingPosition='start' color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{width: '260px' }} >
                 </LoaderButton>
               </Grid>
               <Divider></Divider>
               <Grid mt={2} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton onClick={googleLogin} variant='contained' color='warning' startIcon={<img src={GoogleImage} style={{height:'25px'}}/> } text="&nbsp; Sign in with Google" >
+                <LoaderButton onClick={googleLogin} color="error" variant='contained' startIcon={<img src={GoogleImage} style={{height:'24px'}}/> } text="&nbsp; Sign in with Google" >
                 </LoaderButton>
                 
               </Grid>
@@ -223,7 +222,7 @@ export const SignInForm = ({ route }) => {
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
               <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
                 <InputLabel  htmlFor="standard-adornment-password">Name</InputLabel>
-                <Input name="name" onChange={handleChange} autoComplete="name" autoFocus type="text" />
+                <Input name="name" onChange={handleChange} autoComplete="name" type="text" />
               </FormControl>
 
               <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
@@ -253,12 +252,12 @@ export const SignInForm = ({ route }) => {
 
               <FormControlLabel sx={{textTransform:'capitalize'}} control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon/>} loadingPosition ='center' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 3, mb: 2, width: '200px' }}>
+                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon/>} loadingPosition ='start' color='info' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 3, mb: 2, width: '270px' }}>
                 </LoaderButton>
               </Grid>
               <Divider></Divider>
               <Grid mt={2} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-              <LoaderButton onClick={googleLogin} variant='contained' color='warning' startIcon={<img src={GoogleImage} style={{height:'25px'}}/> } text="&nbsp; Sign up with Google">
+              <LoaderButton onClick={googleLogin} variant='contained' color='error' startIcon={<img src={GoogleImage} style={{height:'25px'}}/> } text="&nbsp; Sign up with Google">
                 </LoaderButton>
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
