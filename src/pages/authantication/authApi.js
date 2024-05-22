@@ -61,7 +61,7 @@ export const signUpUser = async (credentials) =>{
 
 
   export const logoutUser = async () =>{
-    window.open(process.env.REACT_APP_API_END_POINT+'/auth/google/logout' , '_self');
+    // window.open(process.env.REACT_APP_API_END_POINT+'/auth/google/logout' , '_self');
     return await axios.post(BASE_ENDPOINT + '/auth/logout',  {}, {
       headers: HEADERS.AUTHENTIC(),
     }).then(function (response) {
