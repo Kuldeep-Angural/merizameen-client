@@ -30,6 +30,7 @@ import Auth from '../../pages/authantication/Auth';
 import { SignInForm } from '../../pages/authantication/AuthForm';
 import Profile from '../../pages/profile/Profile';
 import Modal from '../modal/Modal';
+import LoaderButton from '../loadingbutton/LoaderButton';
 
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -107,7 +108,6 @@ export const APNavBar = () => {
   }, [USER]);
 
   const handleUserClick = (eventName) => {
-    console.log(eventName);
     if (eventName === 'Logout') {
       dispatch(logout()).then((resp) => {
         naviGate('/');
@@ -121,7 +121,7 @@ export const APNavBar = () => {
 
   return (
     <>
-      <AppBar elevation={1} position="static" color="transparent">
+      <AppBar elevation={0} position="static" color='transparent'>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Grid sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
@@ -218,25 +218,18 @@ export const APNavBar = () => {
               }}
             ></Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-                <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} label={'Buy'} variant="outlined" />
-              </Button>
-              <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-                <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} label={'Rent'} variant="outlined" />
-              </Button>
-              <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-                <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} label={'Agents'} variant="outlined" />
-              </Button>
-              <Button onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-                <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} label={'Services'} variant="outlined" />
-              </Button>
+              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Buy" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
+              </LoaderButton>
+              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Rent" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
+              </LoaderButton>
+              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Agents" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
+              </LoaderButton>
+              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Services" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
+              </LoaderButton>
 
-              <Tooltip title="Post Property">
-                <Button onClick={handlePostPropertyEvent} variant="outlined" className="post-button" sx={{ my: 2, marginLeft: '130px', display: 'block', borderRadius: '30px' }}>
-                  <Badge style={{ padding: 4, fontSize: '10px' }} variant="outlined" color="success">
-                    Post Property
-                  </Badge>
-                </Button>
+              <Tooltip title="Post Property" >
+                <LoaderButton onClick={handlePostPropertyEvent} text='Post Property' variant="contained" className="post-button" sx={{ my: 1, marginLeft: '130px', display: 'block', borderRadius: '30px' }}>
+                </LoaderButton>
               </Tooltip>
             </Box>
 
@@ -302,7 +295,7 @@ export const APNavBar = () => {
               </Typography>
               <Typography>1st Floor, Manchanda Tower opposite Novelty Mall, Pathankot, Punjab, India </Typography>
 
-              <Typography>9:30AM to 6:00PM IST</Typography>
+              <Typography>9:00AM to 6:00PM IST</Typography>
 
               <Grid container gap={2}>
                 <Tooltip title="Call">
