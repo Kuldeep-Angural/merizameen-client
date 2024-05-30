@@ -127,16 +127,12 @@ export const PostProperty = () => {
       });
     }
 
-    dispatch(postProperty(formData)).then((resp) => {
-      // console.log(resp);
-    });
+    dispatch(postProperty(formData)).then((resp) => {});
   };
-
-  // console.log(postAdData);
 
   return (
     <HomeWrapper>
-      <Grid container spacing={2} p={2}>
+      <Grid container spacing={1} p={0}>
         <Grid item md={6} xs={12}>
           <Card>
             <CardContent>
@@ -212,57 +208,57 @@ export const PostProperty = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                      {/* Location and area */}
-                <Grid item md={12} display={'flex'} justifyContent={'center'}>
-                  <Divider></Divider>
-                  <Grid item md={12}>
-                    <Typography fontWeight={'600'} textAlign={'center'}>
-                      Location
-                    </Typography>
-                    <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
-                      <Grid item md={4} xs={6} sm={6}>
-                        <TextField fullWidth select value={postAdData?.location?.state || ''} onChange={handleLocationChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" helperText="State" variant="outlined">
-                          {state.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </TextField>
-                      </Grid> 
+                {/* Location and area */}
+                  <Grid item md={12} display={'flex'} justifyContent={'center'}>
+                    <Divider></Divider>
+                    <Grid item md={12}>
+                      <Typography fontWeight={'600'} textAlign={'center'}>
+                        Location
+                      </Typography>
+                      <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
+                        <Grid item md={4} xs={6} sm={6}>
+                          <TextField fullWidth select value={postAdData?.location?.state || ''} onChange={handleLocationChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
+                            {state.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </TextField>
+                        </Grid>
 
-                      <Grid item md={4} xs={6} sm={6}>
-                        <TextField fullWidth select onChange={handleLocationChange} value={postAdData?.location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" helperText="City" variant="outlined">
-                          {cities.map((option) => (
-                            <option key={option.name} value={option.name}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </TextField>
-                      </Grid>
+                        <Grid item md={4} xs={6} sm={6}>
+                          <TextField fullWidth select onChange={handleLocationChange} value={postAdData?.location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
+                            {cities.map((option) => (
+                              <option key={option.name} value={option.name}>
+                                {option.name}
+                              </option>
+                            ))}
+                          </TextField>
+                        </Grid>
 
-                      <Grid item md={4} xs={6} sm={6}>
-                        <FormControl fullWidth variant="outlined">
-                          <OutlinedInput onChange={handleLocationChange} value={postAdData?.location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
-                          <FormHelperText id="outlined-weight-helper-text">District</FormHelperText>
-                        </FormControl>
-                      </Grid>
+                        <Grid item md={4} xs={6} sm={6}>
+                          <FormControl fullWidth variant="outlined">
+                            <InputField onChange={handleLocationChange} value={postAdData?.location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
+                            <FormHelperText id="outlined-weight-helper-text">District</FormHelperText>
+                          </FormControl>
+                        </Grid>
 
-                      <Grid item md={4} xs={6} sm={6}>
-                        <FormControl fullWidth variant="outlined">
-                          <OutlinedInput onChange={handleLocationChange} value={postAdData?.location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
-                          <FormHelperText id="outlined-weight-helper-text">Pincode</FormHelperText>
-                        </FormControl>
-                      </Grid>
+                        <Grid item md={4} xs={6} sm={6}>
+                          <FormControl fullWidth variant="outlined">
+                            <InputField onChange={handleLocationChange} value={postAdData?.location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
+                            <FormHelperText id="outlined-weight-helper-text">Pincode</FormHelperText>
+                          </FormControl>
+                        </Grid>
 
-                      <Grid item md={12} xs={12} sm={12}>
-                        <FormControl fullWidth variant="outlined">
-                          <InputField onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.description || ''} postAdData name={'description'} type="text" />
-                          <FormHelperText id="outlined-weight-helper-text">Property Description</FormHelperText>
-                        </FormControl>
+                        <Grid item md={12} xs={12} sm={12}>
+                          <FormControl fullWidth variant="outlined">
+                            <InputField onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.description || ''} postAdData name={'description'} type="text" />
+                            <FormHelperText id="outlined-weight-helper-text">Property Description</FormHelperText>
+                          </FormControl>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
               </Grid>
             </CardContent>
           </Card>
@@ -367,7 +363,7 @@ export const PostProperty = () => {
               <Grid container spacing={3} mb={2} gap={2}>
                 <Grid item md={12} mb={2}>
                   <Card>
-                    <img src={e} height={'200px'} width={'200px'} />
+                    <img src={e} height={'200px'} width={'260px'} />
                     <Divider />
                   </Card>
                   <Grid item md={12} display={'flex'} justifyContent={'center'}>

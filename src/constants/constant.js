@@ -53,7 +53,7 @@ export const basicInfo = [
 export const pages = ['Products', 'Pricing', 'Blog'];
 
 export const userSettings = [
-  'Profile', 'Account', 'Dashboard', 'Logout'
+  'Profile', 'Dashboard', 'Logout'
 ];
 
 export const options = [

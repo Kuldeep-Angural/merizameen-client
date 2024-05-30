@@ -25,7 +25,6 @@ const Profile = () => {
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log(file, reader.result , name , file);
         setDataObj({ ...dataObj, 'profilePic': reader.result });
       };
       if (file) {
@@ -55,30 +54,21 @@ const Profile = () => {
       </Grid>
 
       <Grid item md={12} sm={12} xs={12}>
-        <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-          <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-          <Input name="name" fullWidth onChange={handleChange} value={dataObj?.name || ""} autoComplete="name" autoFocus type="text" />
+        <FormControl required variant="standard" fullWidth sx={{ mt: 0 }}>
+          <InputField name="name" placeholder='Name' fullWidth onChange={handleChange} value={dataObj?.name || ""} autoComplete="name" type="text" />
         </FormControl>
       </Grid>
 
       <Grid item md={12} sm={12} xs={12}>
         <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-          <InputLabel htmlFor="standard-adornment-password">email</InputLabel>
-          <Input name="email" fullWidth onChange={handleChange} value={dataObj?.email || ""}  disabled autoComplete="email" autoFocus type="text" />
+          <InputField name="email" placeholder='Email' fullWidth onChange={handleChange} value={dataObj?.email || ""}  disabled autoComplete="email" type="text" />
         </FormControl>
       </Grid>
 
       <Grid item md={12} sm={12} xs={12}>
         <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-          <InputLabel htmlFor="standard-adornment-password">mobile</InputLabel>
-          <Input name="mobile" fullWidth onChange={handleChange} value={dataObj?.mobile || ""} autoComplete="tel" autoFocus type="number" />
+          <InputField name="mobile" placeholder='Mobile' fullWidth onChange={handleChange} value={dataObj?.mobile || ""} autoComplete="tel" type="number" />
         </FormControl>
-      </Grid>
-    {/* using out own Inputfield Componenet Here */}
-      <Grid item md={12} sm={12} xs={12}>
-        
-          <InputField required name="password" onChange={handleChange} value={dataObj.password} label="password" helpertext='Name is required' type="text" />
-        
       </Grid>
     </Grid>
   );
