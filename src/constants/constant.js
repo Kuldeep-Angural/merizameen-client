@@ -47,7 +47,7 @@ export const basicInfo = [
   { name: 'bathRoom', label: 'Bathroom' },
   { name: 'totalArea', label: `Total (Yards)\u00B2` },
   { name: 'carpetArea', label: `Carpet (Yards)\u00B2` },
-  { name: 'propertyAge', label: `Property Age in Years` },
+  { name: 'propertyAge', label: `Age Of Property` },
 ];
 
 export const pages = ['Products', 'Pricing', 'Blog'];

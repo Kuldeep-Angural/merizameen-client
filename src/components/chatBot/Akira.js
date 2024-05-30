@@ -20,7 +20,7 @@ const Akira = (prop) => {
   };
 
   useEffect(() => {
-    addDelay(7000).then(() => {
+    addDelay(100).then(() => {
       setIsSideView(true);
     });
   }, [isSideView]);

@@ -17,6 +17,10 @@ import LoaderButton from '../../components/loadingbutton/LoaderButton';
 
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import PhoneIcon from '@mui/icons-material/Phone';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import { InputField } from '../../components/input/InputField';
 export const SignInForm = ({ route }) => {
   const [loading,setLoading]= useState(false)
   const [showPassword, setShowPassword] = React.useState(false);
@@ -159,42 +163,28 @@ export const SignInForm = ({ route }) => {
         <img src={CompanyLogo} loading="lazy" height={'70px'} />
       </CardContent>
       {isSigninForm && (
-        <Card sx={{ mt: '20px' }}>
+        <Card elevation={5} >
           <CardContent>
             <Typography fontWeight={'600'} sx={{ textAlign: 'center' }}>
               Welcome back! Please authorize to begin the journey.
             </Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-              <FormControl required variant="standard" fullWidth>
-                <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                <Input 
+                <InputField
+                value={credentials.email}
+                label='Email' 
                   autoComplete="email"
                   required
                   name="email"
                   type="email"
                   onChange={handleChange}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <AccountCircleIcon />
-                    </InputAdornment>
-                  }
                 />
-              </FormControl>
-
-              <FormControl required variant="standard" fullWidth sx={{ mt: 5 }}>
-                <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-                <Input fullWidth name="password" required onChange={handleChange} type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
-              </FormControl>
+                <InputField label='Password' value={credentials.password} name="password" required onChange={handleChange} type='password' />
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton type="submit" startIcon={<LoginIcon/>} text={'Sign in'} loading={loginLoading} loadingPosition='start' color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{width: '260px' }} >
-                </LoaderButton>
+                <LoaderButton type="submit" startIcon={<LoginIcon/>} text={'Sign in'} loading={loginLoading} loadingPosition='start' color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{width: '260px' }} />
               </Grid>
-              <Divider></Divider>
-              <Grid mt={2} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton onClick={googleLogin} color="error" variant='contained' startIcon={<img src={GoogleImage} style={{height:'24px'}}/> } text="&nbsp; Sign in with Google" >
-                </LoaderButton>
-                
+              <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
+                <LoaderButton onClick={googleLogin} color="error" variant='contained' startIcon={<img src={GoogleImage} style={{height:'24px'}}/> } text="&nbsp; Sign in with Google" />
               </Grid>
               <Grid container>
                 <Grid item xs>
@@ -216,26 +206,19 @@ export const SignInForm = ({ route }) => {
       )}
 
       {!isSigninForm && (
-        <Card sx={{ mt: '20px' }}>
+        <Card elevation={5}>
           <CardContent>
             <Typography fontWeight={'600'}> Welcome to Merizameen. - to begin create Account Please enter your details.</Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-              <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-                <InputLabel  htmlFor="standard-adornment-password">Name</InputLabel>
-                <Input name="name" onChange={handleChange} autoComplete="name" type="text" />
-              </FormControl>
+                <InputField required icon={<PermIdentityIcon/>} label='Name' value={credentials?.name|| ''} name="name" onChange={handleChange} autoComplete="name" type="text" />
 
-              <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-                <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                <Input name="email" onChange={handleChange} autoComplete="email" required type="email" />
-              </FormControl>
+                <InputField icon={<AlternateEmailIcon/>} value={credentials?.email||''} label='Email' name="email" onChange={handleChange} autoComplete="email" required type="email" />
 
-              <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-                <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
-                <Input
-                  autoComplete="mobile"
+                <InputField
+                label='Mobile'
+                icon={<PhoneIcon/>}
+                value={credentials?.mobile}
                   name="mobile"
-                  id="standard-adornment-password"
                   type="number"
                   onChange={handleChange}
                   inputProps={{
@@ -243,22 +226,15 @@ export const SignInForm = ({ route }) => {
                     'aria-hidden': true,
                   }}
                 />
-              </FormControl>
 
-              <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-                <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-                <Input name="password" onChange={handleChange} fullWidth required type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
-              </FormControl>
+                <InputField name="password" value={credentials?.password || ''} label='Password' onChange={handleChange} required type='password' />
 
               <FormControlLabel sx={{textTransform:'capitalize'}} control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon/>} loadingPosition ='start' color='info' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 3, mb: 2, width: '270px' }}>
-                </LoaderButton>
+                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon/>} loadingPosition ='start' color='info' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 0, mb: 0, width: '270px' }}/>
               </Grid>
-              <Divider></Divider>
-              <Grid mt={2} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-              <LoaderButton onClick={googleLogin} variant='contained' color='error' startIcon={<img src={GoogleImage} style={{height:'25px'}}/> } text="&nbsp; Sign up with Google">
-                </LoaderButton>
+              <Grid mt={0} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
+              <LoaderButton onClick={googleLogin} variant='contained' color='error' startIcon={<img src={GoogleImage} style={{height:'25px'}}/> } text="&nbsp; Sign up with Google"/>
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <Grid md={6} item>

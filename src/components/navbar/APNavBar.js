@@ -31,7 +31,7 @@ import { SignInForm } from '../../pages/authantication/AuthForm';
 import Profile from '../../pages/profile/Profile';
 import Modal from '../modal/Modal';
 import LoaderButton from '../loadingbutton/LoaderButton';
-
+import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -217,7 +217,7 @@ export const APNavBar = () => {
                 textDecoration: 'none',
               }}
             ></Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ flexGrow: 1,flexShrink:2, display: { sm: 'none', md: 'flex' } }}>
               <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Buy" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
               </LoaderButton>
               <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Rent" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
@@ -226,11 +226,7 @@ export const APNavBar = () => {
               </LoaderButton>
               <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Services" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
               </LoaderButton>
-
-              <Tooltip title="Post Property" >
-                <LoaderButton onClick={handlePostPropertyEvent} text='Post Property' variant="contained" className="post-button" sx={{ my: 1, marginLeft: '130px', display: 'block', borderRadius: '30px' }}>
-                </LoaderButton>
-              </Tooltip>
+                <LoaderButton endicon={<AddHomeWorkIcon/>} onClick={handlePostPropertyEvent} text='Post Property' variant="contained" sx={{ marginLeft: {md:'30px'}, margin:1, borderRadius: '50px' }}/>
             </Box>
 
             <Tooltip title="Contact us">

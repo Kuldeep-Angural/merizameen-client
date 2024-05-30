@@ -1,6 +1,6 @@
 import { Grid, Card, Box, CardContent, Button, Badge, Tooltip, Divider, Typography, Chip, Checkbox, FormControlLabel, FormControl, OutlinedInput, InputAdornment, FormHelperText } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HomeWrapper } from '../home/HomeWrapper';
 import imageIcon from '../../ui/images/noImage.webp';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -11,6 +11,8 @@ import { amenities, basicInfo, landMarks, medium, propertyTypes, state } from '.
 import { useDispatch, useSelector } from 'react-redux';
 import { postProperty, selectPostLoading } from './postPropertySlice';
 import { InputField } from '../../components/input/InputField';
+import LoaderButton from '../../components/loadingbutton/LoaderButton';
+import AddHomeIcon from '@mui/icons-material/AddHome';
 
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
@@ -29,6 +31,7 @@ export const PostProperty = () => {
   const [openModal, setOpenModal] = useState(false);
   const loading = useSelector(selectPostLoading);
   const dispatch = useDispatch();
+ 
 
   useEffect(() => {
     setCities(postAdData?.location?.state === 'Punjab' ? punjabCities : himachalCities);
@@ -60,7 +63,7 @@ export const PostProperty = () => {
         reader.readAsDataURL(files[i]);
       }
     } else {
-      setPostAdData({ ...postAdData, [e.target.name]: e.target.value });
+      setPostAdData({ ...postAdData, [e.target.name] : e.target.value });
     }
   };
 
@@ -126,10 +129,9 @@ export const PostProperty = () => {
         formData.append(`propertyImages[${index}]`, image);
       });
     }
-
     dispatch(postProperty(formData)).then((resp) => {});
   };
-
+  
   return (
     <HomeWrapper>
       <Grid container spacing={1} p={0}>
@@ -147,7 +149,7 @@ export const PostProperty = () => {
                   </Tooltip>
                 </Grid>
 
-                {/* properties Images and bisic info */}
+                {/* properties Images and basic info */}
                 <Grid item md={8} sm={6} xs={6} display={'flex'}>
                   <Grid container spacing={2}>
                     <Grid item md={4} xs={12}>
@@ -185,7 +187,7 @@ export const PostProperty = () => {
 
                 {/* Basic Info */}
                 <Grid item md={12}>
-                  <Divider></Divider>
+                      <Divider></Divider>
                   <Grid item md={12}>
                     <Typography fontWeight={'600'} textAlign={'center'}>
                       Basic info
@@ -195,13 +197,16 @@ export const PostProperty = () => {
                         return (
                           <Grid item md={2} xs={6}>
                               <InputField
+                              required
+                              label={item.label}
+                              helpertext='This Field is Required'
                                 onChange={handleBasicInfo}
                                 aria-describedby="outlined-weight-helper-text"
                                 name={item.name}
                                 type="number"
                                 value={postAdData?.basicInfo?.[item?.name] || ''}
                               />
-                              <FormHelperText id="outlined-weight-helper-text">{item.label}</FormHelperText>
+                              {/* <FormHelperText id="outlined-weight-helper-text">{item.label}</FormHelperText> */}
                           </Grid>
                         );
                       })}
@@ -238,22 +243,19 @@ export const PostProperty = () => {
 
                         <Grid item md={4} xs={6} sm={6}>
                           <FormControl fullWidth variant="outlined">
-                            <InputField onChange={handleLocationChange} value={postAdData?.location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
-                            <FormHelperText id="outlined-weight-helper-text">District</FormHelperText>
+                            <InputField required label='District' onChange={handleLocationChange} helpertext='This Field is Required' value={postAdData?.location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
                           </FormControl>
                         </Grid>
 
                         <Grid item md={4} xs={6} sm={6}>
                           <FormControl fullWidth variant="outlined">
-                            <InputField onChange={handleLocationChange} value={postAdData?.location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
-                            <FormHelperText id="outlined-weight-helper-text">Pincode</FormHelperText>
+                            <InputField required label='Pincode' onChange={handleLocationChange} helpertext='This Field is Required' value={postAdData?.location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
                           </FormControl>
                         </Grid>
 
                         <Grid item md={12} xs={12} sm={12}>
                           <FormControl fullWidth variant="outlined">
-                            <InputField onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.description || ''} postAdData name={'description'} type="text" />
-                            <FormHelperText id="outlined-weight-helper-text">Property Description</FormHelperText>
+                            <InputField onChange={handleChange} label='Property Description' required helpertext='Please add Property Description' aria-describedby="outlined-weight-helper-text" value={postAdData?.description || ''} postAdData name={'description'} type="text" />
                           </FormControl>
                         </Grid>
                       </Grid>
@@ -276,8 +278,7 @@ export const PostProperty = () => {
                 </Grid>
                 <Grid item md={12} xs={12} sm={12}>
                   <FormControl fullWidth variant="outlined">
-                    <InputField onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.title || ''} name={'title'} />
-                    <FormHelperText id="outlined-weight-helper-text">Enter title here</FormHelperText>
+                    <InputField label='Title' required helpertext='Please enter Property Title' onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.title || ''} name={'title'} />
                   </FormControl>
                 </Grid>
               </Grid>
@@ -311,6 +312,8 @@ export const PostProperty = () => {
                       <Grid item md={6} xs={12} sm={12}>
                         <FormControl fullWidth>
                           <InputField
+                          required
+                          helpertext='This Field is Required'
                             endAdornment={<InputAdornment position="end">KM</InputAdornment>}
                             type="number"
                             slotProps={false}
@@ -324,7 +327,6 @@ export const PostProperty = () => {
                               style: { '-moz-appearance': 'textfield', '::-webkit-outer-spin-button': { '-webkit-appearance': 'none', margin: 0 }, '::-webkit-inner-spin-button': { '-webkit-appearance': 'none', margin: 0 } },
                             }}
                             />
-                          {/* <FormHelperText id="outlined-weight-helper-text">{item.label}</FormHelperText> */}
                         </FormControl>
                       </Grid>
                     );
@@ -334,8 +336,9 @@ export const PostProperty = () => {
             </CardContent>
           </Card>
           <Box display={'flex'} justifyContent={'space-between'} mt={3}>
-            <FormControl  variant="outlined">
               <InputField
+                label='Price(INR)'
+                required
                 onChange={handleChange}
                 aria-describedby="outlined-weight-helper-text"
                 name={'price'}
@@ -346,11 +349,8 @@ export const PostProperty = () => {
                   'aria-hidden': true, // Hide arrows from screen readers
                 }}
               />
-              <FormHelperText id="outlined-weight-helper-text">{'Price'}</FormHelperText>
-            </FormControl>
-            <Button style={{ minWidth: '200px', maxWidth: '400px' }} variant="outlined" onClick={handlePostButton}>
-              {loading ? 'loading..' : 'post'}
-            </Button>
+            <LoaderButton text='Preview Ad' variant='contained' color='info'/>
+            <LoaderButton startIcon={<AddHomeIcon fontSize='inherit'/>} sx={{mx:'80px'}} text='Post Ad' loading={loading}  variant='contained' onClick={handlePostButton}/> 
           </Box>
         </Grid>
       </Grid>
@@ -363,7 +363,7 @@ export const PostProperty = () => {
               <Grid container spacing={3} mb={2} gap={2}>
                 <Grid item md={12} mb={2}>
                   <Card>
-                    <img src={e} height={'200px'} width={'260px'} />
+                    <img src={e} height={'260px'} width={'300px'} />
                     <Divider />
                   </Card>
                   <Grid item md={12} display={'flex'} justifyContent={'center'}>
