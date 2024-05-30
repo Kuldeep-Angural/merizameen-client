@@ -170,6 +170,7 @@ export const SignInForm = ({ route }) => {
             </Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
                 <InputField
+                icon={<PermIdentityIcon/>}
                 value={credentials.email}
                 label='Email' 
                   autoComplete="email"
