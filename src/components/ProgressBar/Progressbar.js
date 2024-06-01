@@ -1,13 +1,18 @@
 import React from 'react';
-import LinearProgress from '@mui/material/LinearProgress';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import '../../pages/Global.scss';
-import { Box } from '@mui/material';
+
 const Progressbar = ({ LoadingState }) => {
   return LoadingState ? (
-    <Box sx={{ width: '100%', position: 'absolute' }}>
-      <LinearProgress color="info" />
-    </Box>
+    <div>
+      <Backdrop sx={{ color: 'skyblue', zIndex: 10 }} open={LoadingState}>
+        <CircularProgress color="inherit" size={60} />
+      </Backdrop>
+    </div>
   ) : null;
 };
 
 export default Progressbar;
+
+// position: 'absolute',top:'50%',left:'50%'
