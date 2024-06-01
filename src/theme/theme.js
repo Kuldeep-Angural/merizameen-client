@@ -21,7 +21,7 @@ export const theme = createTheme({
       main: orange[300],
     },
     info: {
-      main: blue[100],
+      main: blue[300],
     },
     text: {
       main: '#000000',
