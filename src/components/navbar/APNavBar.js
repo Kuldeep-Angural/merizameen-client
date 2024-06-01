@@ -3,7 +3,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import MenuIcon from '@mui/icons-material/Menu';
 import PhoneIcon from '@mui/icons-material/Phone';
 import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded';
-import { Badge, Card, CardContent, Chip, DialogActions, Divider, FormControl, Grid, Input, InputLabel, Link, TextField } from '@mui/material';
+import { DialogActions, FormControl, Grid, Input, InputLabel, Link, TextField } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -21,17 +21,14 @@ import { GoogleMap } from '../../utils/utility';
 import { APDialog } from '../modal/APDialog';
 import '../../pages/Global.scss';
 import { useNavigate } from 'react-router-dom';
-import { APRoutes, ROUTES } from '../../constants/routes';
-import { SESSION_KEYS, options, settings, userSettings } from '../../constants/constant';
+import { SESSION_KEYS, options, userSettings } from '../../constants/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectUserData } from '../../pages/authantication/authSlice';
-import APModalBox from '../modal/Modal';
-import Auth from '../../pages/authantication/Auth';
-import { SignInForm } from '../../pages/authantication/AuthForm';
 import Profile from '../../pages/profile/Profile';
 import Modal from '../modal/Modal';
 import LoaderButton from '../loadingbutton/LoaderButton';
 import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
+import Progressbar from '../ProgressBar/Progressbar';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -39,6 +36,7 @@ export const APNavBar = () => {
   const [openQueryPannel, setOpenQueryPannel] = React.useState(false);
   const [openCallBack, setOpenCallBack] = React.useState(false);
   const [profileModal, setProfileModal] = React.useState(false);
+  const[state,setState] = React.useState(false)
 
   const USER = useSelector(selectUserData);
   const naviGate = useNavigate();
@@ -109,6 +107,7 @@ export const APNavBar = () => {
 
   const handleUserClick = (eventName) => {
     if (eventName === 'Logout') {
+      setState(true)
       dispatch(logout()).then((resp) => {
         naviGate('/');
       });
@@ -121,6 +120,7 @@ export const APNavBar = () => {
 
   return (
     <>
+    <Progressbar LoadingState={state}/>
       <AppBar elevation={0} position="static" color='transparent'>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
