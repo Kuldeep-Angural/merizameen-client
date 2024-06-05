@@ -36,7 +36,7 @@ export const APNavBar = () => {
   const [openQueryPannel, setOpenQueryPannel] = React.useState(false);
   const [openCallBack, setOpenCallBack] = React.useState(false);
   const [profileModal, setProfileModal] = React.useState(false);
-  const[state,setState] = React.useState(false)
+  const[loadingstate,setLoadingState] = React.useState(false)
 
   const USER = useSelector(selectUserData);
   const naviGate = useNavigate();
@@ -107,10 +107,13 @@ export const APNavBar = () => {
 
   const handleUserClick = (eventName) => {
     if (eventName === 'Logout') {
-      setState(true)
+      setLoadingState(true)
       dispatch(logout()).then((resp) => {
         naviGate('/');
       });
+    }
+    else if(eventName === 'Dashboard'){
+      alert('dash')
     }
     if (eventName === 'Profile') {
       setProfileModal(true);
@@ -120,7 +123,7 @@ export const APNavBar = () => {
 
   return (
     <>
-    <Progressbar LoadingState={state}/>
+    <Progressbar LoadingState={loadingstate}/>
       <AppBar elevation={0} position="static" color='transparent'>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
