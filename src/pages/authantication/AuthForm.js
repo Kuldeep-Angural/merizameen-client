@@ -21,6 +21,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import PhoneIcon from '@mui/icons-material/Phone';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { InputField } from '../../components/input/InputField';
+import Progressbar from '../../components/ProgressBar/Progressbar';
 export const SignInForm = ({ route }) => {
   const [loading,setLoading]= useState(false)
   const [showPassword, setShowPassword] = React.useState(false);
@@ -158,6 +159,7 @@ export const SignInForm = ({ route }) => {
 
   return (
     <Grid>
+      <Progressbar LoadingState={loginLoading || signUpLoading}/>
       <APToaster ref={toastRef} title="" />
       <CardContent sx={{ textAlign: 'center' }}>
         <img src={CompanyLogo} loading="lazy" height={'70px'} />
