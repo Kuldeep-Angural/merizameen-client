@@ -100,10 +100,8 @@ export const SignInForm = ({ route }) => {
 
   const otpSubmission = (event) => {
     event.preventDefault();
-    console.log(otp);
     if (otp) {
       dispatch(verifyOtp(otp)).then((resp) => {
-        console.log(resp);
         if (resp.payload.status === 200) {
           setIsOpen(false);
           setIsSigninForm(true);
@@ -115,7 +113,6 @@ export const SignInForm = ({ route }) => {
   const handleOtpChange = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
-    console.log(name, value);
     setOtp({ ...otp, [name]: value });
   };
 
@@ -140,7 +137,6 @@ export const SignInForm = ({ route }) => {
   };
 
   const submitForgotpasswordRequest = () => {
-    console.log(forgotPasswordData);
     if (forgotPasswordData?.otp && forgotPasswordData.confirmPassword && forgotPasswordData?.password) {
       dispatch(changePassword({ otp: forgotPasswordData?.otp, password: forgotPasswordData.password, id: forgotPasswordData?.id })).then((resp) => {
         toastRef.current.showToast({ messageType: 'warning', messageText: resp?.payload?.message });
