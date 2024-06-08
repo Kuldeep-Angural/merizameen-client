@@ -161,7 +161,7 @@ export const SignInForm = ({ route }) => {
         <img src={CompanyLogo} loading="lazy" height={'70px'} />
       </CardContent>
       {isSigninForm && (
-        <Card elevation={5} >
+        <Card elevation={0}>
           <CardContent>
             <Typography fontWeight={'600'} sx={{ textAlign: 'center' }}>
               Welcome back! Please authorize to begin the journey.
@@ -205,7 +205,7 @@ export const SignInForm = ({ route }) => {
       )}
 
       {!isSigninForm && (
-        <Card elevation={5}>
+        <Card elevation={0}>
           <CardContent>
             <Typography fontWeight={'600'}> Welcome to Merizameen. - to begin create Account Please enter your details.</Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
