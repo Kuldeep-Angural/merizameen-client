@@ -1,7 +1,6 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Avatar, Box, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, FormHelperText, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +8,6 @@ import APToaster from '../../components/Toaster/APToaster';
 import { LinkButton } from '../../components/buttons/LinkButton';
 import { APDialog } from '../../components/modal/APDialog';
 import CompanyLogo from '../../ui/logos/newLogo.png';
-import FaceBookImage from '../../ui/png/facebook.png';
 import GoogleImage from '../../ui/png/google.png';
 import { changePassword, login, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
 import { addDelay, isInValidData } from '../../utils/utility';
@@ -21,9 +19,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import PhoneIcon from '@mui/icons-material/Phone';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { InputField } from '../../components/input/InputField';
-import Progressbar from '../../components/ProgressBar/Progressbar';
 export const SignInForm = ({ route }) => {
-  const [loading,setLoading]= useState(false)
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSigninForm, setIsSigninForm] = useState(true);
   const [isEmailSent, setIsEmailSent] = useState(false);
@@ -155,10 +151,9 @@ export const SignInForm = ({ route }) => {
 
   return (
     <Grid>
-      <Progressbar LoadingState={loginLoading || signUpLoading}/>
       <APToaster ref={toastRef} title="" />
       <CardContent sx={{ textAlign: 'center' }}>
-        <img src={CompanyLogo} loading="lazy" height={'70px'} />
+        <img src={CompanyLogo} alt='logo' loading="lazy" height={'70px'} />
       </CardContent>
       {isSigninForm && (
         <Card elevation={0}>
@@ -168,6 +163,7 @@ export const SignInForm = ({ route }) => {
             </Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
                 <InputField
+                sx={{mb:2}}
                 icon={<PermIdentityIcon/>}
                 value={credentials.email}
                 label='Email' 
@@ -180,10 +176,10 @@ export const SignInForm = ({ route }) => {
                 <InputField label='Password' value={credentials.password} name="password" required onChange={handleChange} type='password' />
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton type="submit" startIcon={<LoginIcon/>} text={'Sign in'} loading={loginLoading} loadingPosition='start' color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{width: '260px' }} />
+                <LoaderButton type="submit" startIcon={<LoginIcon/>} text={'Sign in'} loading={loginLoading} color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{width: '260px' }} />
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton onClick={googleLogin} color="error" variant='contained' startIcon={<img src={GoogleImage} style={{height:'24px'}}/> } text="&nbsp; Sign in with Google" />
+                <LoaderButton onClick={googleLogin} color="error" variant='contained' startIcon={<img src={GoogleImage} alt='img' style={{height:'24px'}}/> } text="&nbsp; Sign in with Google" />
               </Grid>
               <Grid container>
                 <Grid item xs>
@@ -209,11 +205,12 @@ export const SignInForm = ({ route }) => {
           <CardContent>
             <Typography fontWeight={'600'}> Welcome to Merizameen. - to begin create Account Please enter your details.</Typography>
             <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-                <InputField required icon={<PermIdentityIcon/>} label='Name' value={credentials?.name|| ''} name="name" onChange={handleChange} autoComplete="name" type="text" />
+                <InputField sx={{mb:1}} required icon={<PermIdentityIcon/>} label='Name' value={credentials?.name|| ''} name="name" onChange={handleChange} autoComplete="name" type="text" />
 
-                <InputField icon={<AlternateEmailIcon/>} value={credentials?.email||''} label='Email' name="email" onChange={handleChange} autoComplete="email" required type="email" />
+                <InputField sx={{mb:1}} icon={<AlternateEmailIcon/>} value={credentials?.email||''} label='Email' name="email" onChange={handleChange} autoComplete="email" required type="email" />
 
                 <InputField
+                sx={{mb:1}}
                 label='Mobile'
                 icon={<PhoneIcon/>}
                 value={credentials?.mobile}
@@ -226,14 +223,14 @@ export const SignInForm = ({ route }) => {
                   }}
                 />
 
-                <InputField name="password" value={credentials?.password || ''} label='Password' onChange={handleChange} required type='password' />
+                <InputField sx={{mb:1}} name="password" value={credentials?.password || ''} label='Password' onChange={handleChange} required type='password' />
 
               <FormControlLabel sx={{textTransform:'capitalize'}} control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon/>} loadingPosition ='start' color='info' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 0, mb: 0, width: '270px' }}/>
+                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon/>} color='info' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 0, mb: 0, width: '270px' }}/>
               </Grid>
               <Grid mt={0} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-              <LoaderButton onClick={googleLogin} variant='contained' color='error' startIcon={<img src={GoogleImage} style={{height:'25px'}}/> } text="&nbsp; Sign up with Google"/>
+              <LoaderButton onClick={googleLogin} variant='contained' color='error' startIcon={<img src={GoogleImage} alt='img' style={{height:'25px'}}/> } text="&nbsp; Sign up with Google"/>
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <Grid md={6} item>
