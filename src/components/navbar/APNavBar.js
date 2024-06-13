@@ -220,7 +220,7 @@ export const APNavBar = () => {
                 textDecoration: 'none',
               }}
             ></Typography>
-            <Box sx={{ flexGrow: 1,flexShrink:2, display: { sm: 'none', md: 'flex' } }}>
+            <Box sx={{ flexGrow: 1,flexShrink:2, display: { xs:'none',sm: 'none', md: 'flex' } }}>
               <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Buy" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
               </LoaderButton>
               <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Rent" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
