@@ -4,23 +4,8 @@ import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import Skeleton from '@mui/material/Skeleton';
 import '../home/home.scss';
-const filterChips = [
-  { name: 'Flats', value: 'Flats' },
-  { name: 'PG', value: 'PG' },
+import { filterChips } from '../../constants/constant';
 
-  { name: 'Commercial', value: 'Commercial' },
-  { name: 'Residential', value: 'Residential' },
-  { name: 'Plot', value: 'Plot' },
-  { name: 'Rental', value: 'Rental' },
-
-  { name: '1Bhk', value: '1Bhk' },
-  { name: '2Bhk', value: '2Bhk' },
-  { name: '3Bhk', value: '3Bhk' },
-  { name: '3+Bhk', value: '3+Bhk' },
-  { name: 'Villas', value: 'Villas' },
-
-  { name: 'Farm-House', value: 'Farm-House' },
-];
 export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, setSearchParams }) => {
   const [location, setLocation] = useState({});
 
