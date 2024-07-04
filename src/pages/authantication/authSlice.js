@@ -77,7 +77,6 @@ export const authSlice = createSlice({
         state.status = 'done';
         state.loginLoading = false
         state.authData = action.payload;
-        console.log(action?.payload);
         if (action?.payload?.data?.userData) {
           const decodedData = atob(action?.payload?.data?.userData);
           const [userId, name, email, mobile, roles] = decodedData.split(":");
@@ -88,7 +87,6 @@ export const authSlice = createSlice({
             mobile: mobile,
             roles: roles,
           };
-          console.log(user);
           localStorage.setItem(SESSION_KEYS.USER,JSON.stringify(user));
           state.userData = user;
           createSession(action?.payload?.data?.accessToken);
@@ -96,9 +94,7 @@ export const authSlice = createSlice({
       })
       .addCase(googleLogin.fulfilled, (state, action) => {
         state.loginLoading = false
-        console.log(action.payload);
         state.authData = action.payload;
-        console.log(action?.payload);
         if (action?.payload?.data?.userData) {
           const decodedData = atob(action?.payload?.data?.userData);
           const [userId, name, email, mobile, roles] = decodedData.split(":");
@@ -109,7 +105,6 @@ export const authSlice = createSlice({
             mobile: mobile,
             roles: roles,
           };
-          console.log(user);
           localStorage.setItem(SESSION_KEYS.USER,JSON.stringify(user));
           state.userData = user;
           createSession(action?.payload?.data?.accessToken);

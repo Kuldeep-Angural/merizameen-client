@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getUser } from './profileApi';
+import { getUser, updateUserDetails } from './profileApi';
 
 const initialState = {
   loading: false,
@@ -7,9 +7,13 @@ const initialState = {
 };
 
 export const getUserDetails = createAsyncThunk('profile/userDetails', async (credentials) => {
-    console.log(credentials);
   const response = await getUser(credentials);
   return response;
+});
+
+export const updateUser = createAsyncThunk('profile/updateProfile', async (credentials) => {
+const response = await updateUserDetails(credentials);
+return response;
 });
 
 export const profileSlice = createSlice({
@@ -17,7 +21,6 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     setData: (state, action) => {
-        console.log(action.payload);
       state.dataObj = action.payload;
     },
   },
@@ -29,7 +32,15 @@ export const profileSlice = createSlice({
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.dataObj = action?.payload?.data || {};
-      });
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.dataObj = action?.payload?.data || {};
+      })
+      
   },
 });
 export const { setData } = profileSlice.actions;

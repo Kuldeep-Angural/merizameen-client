@@ -51,7 +51,6 @@ export const signUpUser = async (credentials) =>{
   export  const googleLoginApi = async () =>{
     return await  axios.get(process.env.REACT_APP_API_END_POINT+'/auth/google/profile', { withCredentials: true }).then(function (response) {
       if (response.status === 200) {
-        console.log(response);
         return {...response.data}
       }
     }).catch(function (error) {
@@ -75,7 +74,6 @@ export const signUpUser = async (credentials) =>{
 
 
   export const sendEmailForotp = async (credentials) => {
-    console.log(credentials);
     return await axios.post(BASE_ENDPOINT + '/user/otpRequestForPasswordChange', {
       email:credentials
     }, {}).then(function (response) {

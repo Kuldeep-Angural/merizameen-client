@@ -3,7 +3,6 @@ import { SESSION_KEYS } from "../constants/constant";
 export function createSession(token) {
     
     const jwt = parseJwt(token);
-    console.log(jwt);
     if (jwt) {
         const exp = new Date(jwt.exp * 1000);
         localStorage.setItem(SESSION_KEYS.TOKEN, token);
