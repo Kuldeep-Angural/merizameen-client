@@ -76,6 +76,11 @@ export const filterChips = [
   { name: 'Farm-House', value: 'Farm-House' },
 ];
 
+export const dateFormat = {
+  date:'MM/dd/yyyy',
+  dateAndTime:'DD-MM-YYYY, h:mm:ss a'
+}
+
 
 
 export const googleConfig = {
