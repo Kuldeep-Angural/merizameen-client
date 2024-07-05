@@ -7,6 +7,7 @@ import { PostProperty } from '../pages/postAd/PostProperty';
 import { PageNotFound } from '../pages/notFoundPage/PageNotFound';
 import { useSelector } from 'react-redux';
 import {  selectUserData } from '../pages/authantication/authSlice';
+import Dashboard from '../components/Dashboard/Dashboard';
 
 export const APRoutes = () => {
   const ROUTES = [
@@ -15,6 +16,7 @@ export const APRoutes = () => {
     { name: '/home', value: (index) => <Home key={index} updatePageTitle={updatePageTitle} /> },
     { name: '/home/:listId', value: (index) => <Item key={index} updatePageTitle={updatePageTitle} /> },
     { name: '/postAd', value: (index) => (<PostProperty key={index} updatePageTitle={updatePageTitle} /> ) },
+    { name: '/dashboard', value: (index) => (<Dashboard key={index} updatePageTitle={updatePageTitle} /> ) },
   ];
   const isLoggedIn = useSelector(selectUserData);
   const [pageTitle, updatePageTitle] = useState('');

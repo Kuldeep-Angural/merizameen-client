@@ -29,6 +29,7 @@ import Modal from '../modal/Modal';
 import LoaderButton from '../loadingbutton/LoaderButton';
 import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
 import Progressbar from '../ProgressBar/Progressbar';
+import { APRoutes } from '../../constants/routes';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -113,7 +114,7 @@ export const APNavBar = () => {
       });
     }
     else if(eventName === 'Dashboard'){
-      alert('dash')
+      naviGate('/dashboard')
     }
     if (eventName === 'Profile') {
       setProfileModal(true);
@@ -176,12 +177,7 @@ export const APNavBar = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">Buy</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">Rent</Typography>
-                </MenuItem>
+                
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">Agents</Typography>
                 </MenuItem>
@@ -221,10 +217,7 @@ export const APNavBar = () => {
               }}
             ></Typography>
             <Box sx={{ flexGrow: 1,flexShrink:2, display: { xs:'none',sm: 'none', md: 'flex' } }}>
-              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Buy" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
-              </LoaderButton>
-              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Rent" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
-              </LoaderButton>
+              
               <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Agents" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
               </LoaderButton>
               <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Services" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>

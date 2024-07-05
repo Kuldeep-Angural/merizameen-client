@@ -10,7 +10,7 @@ export const HomeWrapper = (props) => {
         <APNavBar />
         {props.children}
         <Footer />
-        <Akira />
+        {/* <Akira /> */}
       </Grid>
     </>
   );
