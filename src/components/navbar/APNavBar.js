@@ -30,6 +30,7 @@ import LoaderButton from '../loadingbutton/LoaderButton';
 import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
 import Progressbar from '../ProgressBar/Progressbar';
 import { APRoutes } from '../../constants/routes';
+import { getUserDetails, selectDataObj } from '../../pages/profile/profileSlice';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -38,6 +39,8 @@ export const APNavBar = () => {
   const [openCallBack, setOpenCallBack] = React.useState(false);
   const [profileModal, setProfileModal] = React.useState(false);
   const[loadingstate,setLoadingState] = React.useState(false)
+  const profileRef = React.useRef();
+  const userData = useSelector(selectDataObj);
 
   const USER = useSelector(selectUserData);
   const naviGate = useNavigate();
@@ -121,6 +124,14 @@ export const APNavBar = () => {
     }
     return handleCloseUserMenu();
   };
+
+  const onSubmitCLick = () => {
+    profileRef?.current?.Update();
+  }
+  React.useEffect(()=>{
+    dispatch(getUserDetails(USER._id));
+  },[])
+
 
   return (
     <>
@@ -241,7 +252,7 @@ export const APNavBar = () => {
               {isLoggedIn() ? (
                 <Tooltip title="Profile settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={USER?.name} src={USER?.profilePic || '/static/images/avatar/2.jpg'} />
+                    <Avatar alt={USER?.name} src={userData?.profilePic || '/static/images/avatar/2.jpg'} />
                   </IconButton>
                 </Tooltip>
               ) : (
@@ -407,8 +418,8 @@ export const APNavBar = () => {
             </>
           }
         />
-        <Modal open={profileModal} onClose={()=>setProfileModal(false)} title="User Profile" style={{minWidth:'200px' , maxWidth:'500px'}}>
-            <Profile/>
+        <Modal open={profileModal} onSubmit={onSubmitCLick} submitButtonTitle={"Update"} onClose={()=>setProfileModal(false)} title="Profile" style={{minWidth:'200px' , maxWidth:'500px'}}>
+            <Profile ref={profileRef} />
         </Modal>      
       </AppBar>
     </>

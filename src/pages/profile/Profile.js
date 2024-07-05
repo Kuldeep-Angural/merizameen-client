@@ -1,54 +1,62 @@
-import { Button, FormControl, Grid, Input, InputLabel, Tooltip } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useImperativeHandle } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserData } from '../authantication/authSlice';
-import { getUserDetails, selectDataObj, setData } from './profileSlice';
-import imageIcon from '../../ui/images/noImage.webp';
-import { InputField } from '../../components/input/InputField';
+import { Grid, Tooltip, Button, FormControl } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
+import { InputField } from '../../components/input/InputField';
+import { selectUserData } from '../authantication/authSlice';
+import { getUserDetails, selectDataObj, selectLoading, setData, updateUser } from './profileSlice';
+import imageIcon from '../../ui/images/noImage.webp';
 
-const Profile = () => {
+const Profile = React.forwardRef((props, ref) => {
   const USER = useSelector(selectUserData);
   const dataObj = useSelector(selectDataObj);
+  const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
-
 
   const setDataObj = (data) => {
     dispatch(setData(data));
-  }
+  };
+
+  useImperativeHandle(ref, () => ({
+    Update: () => dispatch(updateUser(dataObj)).then((resp) => {
+    })
+  }), [dataObj, dispatch]);
 
   const handleChange = (event) => {
-    const {name ,value} = event.target;
-    console.log(name,value);
-    
-    if (name==='profilePic') {
-      const file = event.target.files[0];
+    const { name, value, files } = event.target;
+
+    if (name === 'profilePic' && files.length > 0) {
+      const file = files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        setDataObj({ ...dataObj, 'profilePic': reader.result });
+        setDataObj({ ...dataObj, profilePic: reader.result });
       };
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    }else{
-      setDataObj({...dataObj,[name]:value})
+      reader.readAsDataURL(file);
+    } else {
+      setDataObj({ ...dataObj, [name]: value });
     }
   };
 
-  useEffect(() => {
-    dispatch(getUserDetails(USER._id));
-  },[]);
 
-
-  console.log(dataObj);
   return (
-
-    <Grid container  justifyContent={"center"}>
-      <Grid item md={12} sm={12} xs={12} display={'flex'} justifyContent={'center'}>
-        <Tooltip title="profile picture">
-          <Button  variant="text" component="label" style={{alignItems:'center'}}>
-            <img onClick={() => {}} style={{ cursor: 'pointer', borderRadius: '10px' , borderRadius:'50%' }} src={dataObj.profilePic ? dataObj.profilePic : imageIcon} height={'200px'} width={'100%'} alt="upload image" />
-            <input onChange={handleChange} accept="image/*" name="profilePic" type="file" hidden />
+    <Grid container justifyContent="center">
+      <Grid item md={12} sm={12} xs={12} display="flex" justifyContent="center">
+        <Tooltip title="Profile picture">
+          <Button variant="text" component="label" style={{ alignItems: 'center' }}>
+            <img
+              src={dataObj.profilePic || imageIcon}
+              alt="upload image"
+              height="200px"
+              width="100%"
+              style={{ cursor: 'pointer', borderRadius: '10px' }}
+            />
+            <input
+              type="file"
+              name="profilePic"
+              accept="image/*"
+              hidden
+              onChange={handleChange}
+            />
           </Button>
         </Tooltip>
       </Grid>
@@ -72,6 +80,6 @@ const Profile = () => {
       </Grid>
     </Grid>
   );
-};
+});
 
 export default Profile;

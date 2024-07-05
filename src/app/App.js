@@ -13,7 +13,6 @@ export const App = () => {
 
   useEffect(()=>{
     !isLoggedIn && dispatch(googleLogin()).then((resp)=>{
-      console.log(resp);
     })    
   },[])
   

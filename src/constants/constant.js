@@ -20,7 +20,6 @@ export const propertyTypes = [
   { value: 'Pg', label: 'Pg' },
   { value: 'Plot', label: 'Plot' },
   { value: 'Commercial', label: 'Commercial' },
-  { value: 'Residential', label: 'Residential' },
 ];
 
 export const amenities = [
@@ -61,6 +60,20 @@ export const options = [
   { value: 'Builder', label: 'Builder' },
   { value: 'Individual', label: 'Individual' },
   { value: 'Other', label: 'Other' },
+];
+
+export const filterChips = [
+  { name: 'Flats', value: 'Flats' },
+  { name: 'PG', value: 'PG' },
+  { name: 'Commercial', value: 'Commercial' },
+  { name: 'Plot', value: 'Plot' },
+  { name: 'Rental', value: 'Rental' },
+  { name: '1Bhk', value: '1Bhk' },
+  { name: '2Bhk', value: '2Bhk' },
+  { name: '3Bhk', value: '3Bhk' },
+  { name: '3+Bhk', value: '3+Bhk' },
+  { name: 'Villas', value: 'Villas' },
+  { name: 'Farm-House', value: 'Farm-House' },
 ];
 
 

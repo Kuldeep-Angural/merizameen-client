@@ -7,7 +7,6 @@ const Preview = () => {
   const handleClose = () => setOpen(false);
   return (
     <>
-
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Grid container md={10}>
         <Box  sx={{width:'100%',height:'100%',bgcolor: 'background.paper',p:2}} >

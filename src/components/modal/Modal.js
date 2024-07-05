@@ -9,8 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Icon, Paper, Typography } from '@mui/material';
 
-const Modal = (props) => {
-  const { open: propOpen = false, children, title, subtitle, draggable = false, onClose: propOnClose, onSubmit, style, submitButtonTitle, cancelButtonTitle, hideCreateButton, submitButtonIcon, submitButtonType = 'submit', disabled, loading, closeOnOutsideClick = true } = props;
+const Modal = ({ open: propOpen = false, children, title, subtitle, draggable = false, onClose: propOnClose, onSubmit, style, submitButtonTitle, cancelButtonTitle, hideCreateButton, submitButtonIcon, submitButtonType = 'submit', disabled, loading, closeOnOutsideClick = true }) => {
   const [open, setOpen] = useState(propOpen);
   const [activeDrags, setActiveDrags] = useState(0);
 
@@ -22,7 +21,7 @@ const Modal = (props) => {
 
   const PaperComponent = (innerProps) => (
     <Draggable bounds="parent" onStart={onStart} onStop={onStop} handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
-      <Paper style={props.style ? { ...props.style } : { maxWidth: '100%' }} {...innerProps} />
+      <Paper style={style ? { ...style } : { maxWidth: '100%' }} {...innerProps} />
     </Draggable>
   );
 
@@ -44,7 +43,7 @@ const Modal = (props) => {
       </DialogContent>
 
       <DialogActions sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        {!!props.onClose && (
+        {!!propOnClose && (
           <Button type="button" variant="text" sx={{ color: 'gray', marginRight: '15px' }} onClick={propOnClose}>
             {cancelButtonTitle || 'Cancel'}
           </Button>
