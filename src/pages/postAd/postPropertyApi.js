@@ -17,3 +17,17 @@ export const createObject = async (payload) => {
       return error;
     });
 };
+
+
+export const getAll = async (payload) => {
+  return axios
+    .get(BASE_ENDPOINT+'/post/allPropertys', {})
+    .then(function (response) {
+      if (response.status === 200) {
+        return { ...response.data };
+      }
+    })
+    .catch(function (error) {
+      return error;
+    });
+};

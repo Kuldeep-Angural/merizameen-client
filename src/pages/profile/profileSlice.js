@@ -21,7 +21,7 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     setData: (state, action) => {
-      state.dataObj = action.payload;
+      state.dataObj = action?.payload;
     },
   },
   extraReducers: (builder) => {

@@ -1,13 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createObject } from './postPropertyApi';
+import { createObject, getAll } from './postPropertyApi';
 
 
 const initialState = {
   postLoading:false,
+  loading:false,
+  properties:[],
 };
 
 export const postProperty = createAsyncThunk('/user/addProperty', async (payload) => {
   const response = await createObject(payload);
+  return response;
+});
+
+export const getAllProperties = createAsyncThunk('/user/allProperties', async () => {
+  const response = await getAll();
   return response;
 });
 
@@ -28,9 +35,17 @@ export const postpropertySlice = createSlice({
         state.status = 'done';
         state.postLoading = false;
       })
+      .addCase(getAllProperties.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllProperties.fulfilled, (state, action) => {
+        state.loading = false;
+        state.properties=action?.payload?.data || []
+      })
   },
 });
 
 export const selectPostLoading = (state) => state.post.postLoading;
-
+export const allProperties = (state) => state.post.properties;
+export const selectLoading = (state) => state.post.loading;
 export default postpropertySlice.reducer;

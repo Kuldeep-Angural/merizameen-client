@@ -1,5 +1,4 @@
-import { Grid, Card, Box, CardContent, Button, Badge, Tooltip, Divider, Typography, Chip, Checkbox, FormControlLabel, FormControl, OutlinedInput, InputAdornment, FormHelperText } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { Grid, Card, Box, CardContent, Button, Badge, Tooltip, Divider, Typography, Chip, Checkbox, FormControlLabel, FormControl, OutlinedInput, InputAdornment, FormHelperText, TextField } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { HomeWrapper } from '../home/HomeWrapper';
 import imageIcon from '../../ui/images/noImage.webp';
@@ -7,35 +6,34 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BackupIcon from '@mui/icons-material/Backup';
 import APModal from '../../components/modal/APModal';
 import { himachalCities, punjabCities } from '../../constants/cities';
-import { amenities, basicInfo, landMarks, medium, propertyTypes, state } from '../../constants/constant';
+import {medium, propertyTypes, state } from '../../constants/constant';
 import { useDispatch, useSelector } from 'react-redux';
-import { postProperty, selectPostLoading } from './postPropertySlice';
-import { InputField } from '../../components/input/InputField';
+import { getAllProperties, postProperty, selectPostLoading } from './postPropertySlice';
 import LoaderButton from '../../components/loadingbutton/LoaderButton';
 import AddHomeIcon from '@mui/icons-material/AddHome';
 
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
-  const [postAdData, setPostAdData] = useState({
-    location: {
-      state: 'Punjab',
-      city: 'Pathankot',
-    },
-    basicInfo: {},
-    amenities: {},
-    landMarks: {},
-    propertyType: '2Bhk',
-    postFor: 'Sell',
-    description:''
-  });
+  const [postAdData, setPostAdData] = useState({});
+
+  const [location, setLocation] = useState({
+    state: 'Punjab',
+    city: 'Pathankot',
+  })
+
+  const [basicInfo, setBasicInfo] = useState({});
+  const [amenities, setAmenities] = useState({});
+  const [landMarks, setLandMarks] = useState({});
+
+
+
   const [openModal, setOpenModal] = useState(false);
   const loading = useSelector(selectPostLoading);
   const dispatch = useDispatch();
- 
 
   useEffect(() => {
-    setCities(postAdData?.location?.state === 'Punjab' ? punjabCities : himachalCities);
-  }, [postAdData.location]);
+    setCities(location?.state === 'Punjab' ? punjabCities : himachalCities);
+  }, [location]);
 
   const handleChange = (e) => {
     if (e.target.name === 'mainImage') {
@@ -63,75 +61,87 @@ export const PostProperty = () => {
         reader.readAsDataURL(files[i]);
       }
     } else {
-      setPostAdData({ ...postAdData, [e.target.name] : e.target.value });
+      setPostAdData({ ...postAdData, [e.target.name]: e.target.value });
     }
   };
 
   const handleLocationChange = (event) => {
     const { name, value } = event.target;
-    setPostAdData({
-      ...postAdData,
-      location: {
-        ...postAdData?.location,
-        [name]: value,
-      },
-    });
+    setLocation({ ...location,[name]: value, });
   };
+
+  const handleStateAndCityChange = (event) => {
+    const { name, value } = event.target;
+    if (name==='city') {
+      setLocation({ ...location,'city': value, });
+
+    }else{
+      setLocation({ ...location,'state': value, });
+
+    }
+  }
 
   const handleBasicInfo = (event) => {
     const { name, value } = event.target;
-    setPostAdData({
-      ...postAdData,
-      basicInfo: {
-        ...postAdData?.basicInfo,
-        [name]: value,
-      },
+    setBasicInfo({
+      ...basicInfo,
+      [name]: value,
     });
   };
 
   const handleAmenities = (event) => {
     const { name, checked } = event.target;
-    setPostAdData({
-      ...postAdData,
-      amenities: {
-        ...postAdData?.amenities,
-        [name]: checked === true ? 'Y' : 'N',
-      },
-    });
+    setAmenities({ ...amenities, [name]: checked === true ? 'Y' : 'N'});
   };
 
   const handleLandMarks = (event) => {
     const { name, value } = event.target;
-    setPostAdData({
-      ...postAdData,
-      landMarks: {
-        ...postAdData?.landMarks,
-        [name]: value,
-      },
-    });
+    setLandMarks({ ...landMarks,[name]: value,});
   };
 
+ 
   const handlePostButton = () => {
-    const formData = new FormData();
-    formData.append('mainImage', postAdData?.mainImage);
-    formData.append('amenities', JSON.stringify(postAdData?.amenities));
-    formData.append('basicInfo', JSON.stringify(postAdData?.basicInfo));
-    formData.append('title', postAdData?.title);
-    formData.append('location', JSON.stringify(postAdData?.location));
-    formData.append('landMarks', JSON.stringify(postAdData?.landMarks));
-    formData.append('postFor', postAdData?.postFor);
-    formData.append('propertyType', postAdData?.propertyType);
-    formData.append('description', postAdData?.description);
-    formData.append('price', postAdData?.price);
-
-    if (postAdData?.propertyImages?.length > 0) {
-      postAdData.propertyImages.forEach((image, index) => {
-        formData.append(`propertyImages[${index}]`, image);
-      });
+    const data = {
+      ...postAdData,
+        basicInfo:{...basicInfo},
+        landMarks:{...landMarks},
+        amenities:{...amenities},
+        location:{...location}
     }
-    dispatch(postProperty(formData)).then((resp) => {});
+    dispatch(postProperty(data)).then((resp) => {});
   };
+
+  useEffect(() => {
+    dispatch(getAllProperties());
+  }, []);
+
+   const amenitiesConstant = [
+    { name: 'carParking', label: 'Car parking' },
+    { name: 'maintenance', label: 'Maintenance' },
+    { name: 'vastuCompliant', label: 'Vastu compliant' },
+    { name: 'powerBackup', label: 'Pawer Backup' },
+    { name: 'park', label: 'Park' },
+    { name: 'gym', label: 'Gym' },
+    { name: 'clubHouse', label: 'Club House' },
+  ];
   
+   const landMarksConstant = [
+    { name: 'hospital', label: 'Hospital', erroMessage: '' },
+    { name: 'atm', label: 'Atm', erroMessage: '' },
+    { name: 'bank', label: 'Bank', erroMessage: '' },
+    { name: 'railway', label: 'Railway-Station', erroMessage: '' },
+    { name: 'metro', label: 'Metro-Station', erroMessage: '' },
+    { name: 'airport', label: 'Airport', erroMessage: '' },
+  ];
+  
+   const basicInfoConstant = [
+    { name: 'bedRoom', label: 'Bedroom'  },
+    { name: 'bathRoom', label: 'Bathroom' },
+    { name: 'totalArea', label: `Total (Yards)\u00B2` },
+    { name: 'carpetArea', label: `Carpet (Yards)\u00B2` },
+    { name: 'propertyAge', label: `Age Of Property` },
+  ];
+
   return (
     <HomeWrapper>
       <Grid container spacing={1} p={0}>
@@ -164,9 +174,9 @@ export const PostProperty = () => {
                     </Grid>
 
                     <Grid item md={4} xs={12}>
-                      <TextField fullWidth select defaultValue="2Bhk" value={postAdData?.propertyType || ''} name="propertyType" onChange={handleChange} SelectProps={{ native: true }} helperText="Type of Property" variant="outlined">
+                      <TextField fullWidth select defaultValue="2Bhk" value={basicInfo?.propertyType || ''} name="propertyType" onChange={handleBasicInfo} SelectProps={{ native: true }} helperText="Type of Property" variant="outlined">
                         {propertyTypes.map((option) => (
-                          <option key={option.value} value={option.value}>
+                          <option key={option.label} value={option.value}>
                             {option.label}
                           </option>
                         ))}
@@ -174,7 +184,7 @@ export const PostProperty = () => {
                     </Grid>
 
                     <Grid item md={4} xs={12}>
-                      <TextField fullWidth select defaultValue="Sell" name="postFor" value={postAdData?.postFor || ''} onChange={handleChange} SelectProps={{ native: true }} helperText="Post For Sell/Rent" variant="outlined">
+                      <TextField fullWidth select defaultValue="Sell" name="postFor" value={basicInfo?.postFor || ''} onChange={handleBasicInfo} SelectProps={{ native: true }} helperText="Post For Sell/Rent" variant="outlined">
                         {medium.map((option) => (
                           <option key={option.value} value={option.value}>
                             {option.label}
@@ -187,26 +197,16 @@ export const PostProperty = () => {
 
                 {/* Basic Info */}
                 <Grid item md={12}>
-                      <Divider></Divider>
+                  <Divider></Divider>
                   <Grid item md={12}>
                     <Typography fontWeight={'600'} textAlign={'center'}>
                       Basic info
                     </Typography>
                     <Grid container spacing={2} display={'flex'} justifyContent={'center'}>
-                      {basicInfo.map((item) => {
+                      {basicInfoConstant.map((item) => {
                         return (
-                          <Grid item md={2} xs={6}>
-                              <InputField
-                              required
-                              label={item.label}
-                              helpertext='This Field is Required'
-                                onChange={handleBasicInfo}
-                                aria-describedby="outlined-weight-helper-text"
-                                name={item.name}
-                                type="number"
-                                value={postAdData?.basicInfo?.[item?.name] || ''}
-                              />
-                              {/* <FormHelperText id="outlined-weight-helper-text">{item.label}</FormHelperText> */}
+                          <Grid key={item.label} item md={2} xs={6}>
+                            <TextField required label={item.label} helpertext="This Field is Required" onChange={handleBasicInfo} aria-describedby="outlined-weight-helper-text" name={item?.name}  type="number" value={basicInfo?.[item?.name] || ''} />
                           </Grid>
                         );
                       })}
@@ -214,53 +214,53 @@ export const PostProperty = () => {
                   </Grid>
                 </Grid>
                 {/* Location and area */}
-                  <Grid item md={12} display={'flex'} justifyContent={'center'}>
-                    <Divider></Divider>
-                    <Grid item md={12}>
-                      <Typography fontWeight={'600'} textAlign={'center'}>
-                        Location
-                      </Typography>
-                      <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
-                        <Grid item md={4} xs={6} sm={6}>
-                          <TextField fullWidth select value={postAdData?.location?.state || ''} onChange={handleLocationChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
-                            {state.map((option) => (
-                              <option key={option} value={option}>
-                                {option}
-                              </option>
-                            ))}
-                          </TextField>
-                        </Grid>
+                <Grid item md={12} display={'flex'} justifyContent={'center'}>
+                  <Divider></Divider>
+                  <Grid item md={12}>
+                    <Typography fontWeight={'600'} textAlign={'center'}>
+                      Location
+                    </Typography>
+                    <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
+                      <Grid item md={4} xs={6} sm={6}>
+                        <TextField fullWidth select value={location?.state || ''} onChange={handleStateAndCityChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
+                          {state.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </TextField>
+                      </Grid>
 
-                        <Grid item md={4} xs={6} sm={6}>
-                          <TextField fullWidth select onChange={handleLocationChange} value={postAdData?.location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
-                            {cities.map((option) => (
-                              <option key={option.name} value={option.name}>
-                                {option.name}
-                              </option>
-                            ))}
-                          </TextField>
-                        </Grid>
+                      <Grid item md={4} xs={6} sm={6}>
+                        <TextField fullWidth select onChange={handleStateAndCityChange} value={location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
+                          {cities.map((option) => (
+                            <option key={option.name} value={option.name}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </TextField>
+                      </Grid>
 
-                        <Grid item md={4} xs={6} sm={6}>
-                          <FormControl fullWidth variant="outlined">
-                            <InputField required label='District' onChange={handleLocationChange} helpertext='This Field is Required' value={postAdData?.location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
-                          </FormControl>
-                        </Grid>
+                      <Grid item md={4} xs={6} sm={6}>
+                        <FormControl fullWidth variant="outlined">
+                          <TextField required label="District" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
+                        </FormControl>
+                      </Grid>
 
-                        <Grid item md={4} xs={6} sm={6}>
-                          <FormControl fullWidth variant="outlined">
-                            <InputField required label='Pincode' onChange={handleLocationChange} helpertext='This Field is Required' value={postAdData?.location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
-                          </FormControl>
-                        </Grid>
+                      <Grid item md={4} xs={6} sm={6}>
+                        <FormControl fullWidth variant="outlined">
+                          <TextField required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
+                        </FormControl>
+                      </Grid>
 
-                        <Grid item md={12} xs={12} sm={12}>
-                          <FormControl fullWidth variant="outlined">
-                            <InputField onChange={handleChange} label='Property Description' required helpertext='Please add Property Description' aria-describedby="outlined-weight-helper-text" value={postAdData?.description || ''} postAdData name={'description'} type="text" />
-                          </FormControl>
-                        </Grid>
+                      <Grid item md={12} xs={12} sm={12}>
+                        <FormControl fullWidth variant="outlined">
+                          <TextField onChange={handleBasicInfo} label="Property Description" required helpertext="Please add Property Description" aria-describedby="outlined-weight-helper-text" value={basicInfo?.description || ''}  name={'description'} type="text" />
+                        </FormControl>
                       </Grid>
                     </Grid>
                   </Grid>
+                </Grid>
               </Grid>
             </CardContent>
           </Card>
@@ -278,7 +278,7 @@ export const PostProperty = () => {
                 </Grid>
                 <Grid item md={12} xs={12} sm={12}>
                   <FormControl fullWidth variant="outlined">
-                    <InputField label='Title' required helpertext='Please enter Property Title' onChange={handleChange} aria-describedby="outlined-weight-helper-text" value={postAdData?.title || ''} name={'title'} />
+                    <TextField label="Title" required helpertext="Please enter Property Title" onChange={handleBasicInfo} aria-describedby="outlined-weight-helper-text" value={basicInfo?.title || ''} name={'title'} />
                   </FormControl>
                 </Grid>
               </Grid>
@@ -289,10 +289,10 @@ export const PostProperty = () => {
                   </Typography>
                 </Grid>
                 <Grid container spacing={2}>
-                  {amenities.map((item) => {
+                  {amenitiesConstant.map((item) => {
                     return (
                       <Grid item md={4}>
-                        <FormControlLabel control={<Checkbox value={postAdData?.amenities?.[item?.name] || ''} name={item?.name} />} onClick={handleAmenities} label={item.label} />
+                        <FormControlLabel control={<Checkbox value={amenities?.[item?.name] || ''} name={item?.name} />} onClick={handleAmenities} label={item.label} />
                       </Grid>
                     );
                   })}
@@ -307,18 +307,18 @@ export const PostProperty = () => {
                   </Typography>
                 </Grid>
                 <Grid container spacing={2}>
-                  {landMarks.map((item) => {
+                  {landMarksConstant.map((item) => {
                     return (
                       <Grid item md={6} xs={12} sm={12}>
                         <FormControl fullWidth>
-                          <InputField
-                          required
-                          helpertext='This Field is Required'
+                          <TextField
+                            required
+                            helpertext="This Field is Required"
                             endAdornment={<InputAdornment position="end">KM</InputAdornment>}
                             type="number"
                             slotProps={false}
                             name={item?.name}
-                            value={postAdData?.landMarks?.[item?.name] || ''}
+                            value={landMarks?.[item?.name] || ''}
                             onChange={handleLandMarks}
                             placeholder={item.label}
                             inputProps={{
@@ -326,7 +326,7 @@ export const PostProperty = () => {
                               min: 0,
                               style: { '-moz-appearance': 'textfield', '::-webkit-outer-spin-button': { '-webkit-appearance': 'none', margin: 0 }, '::-webkit-inner-spin-button': { '-webkit-appearance': 'none', margin: 0 } },
                             }}
-                            />
+                          />
                         </FormControl>
                       </Grid>
                     );
@@ -336,21 +336,21 @@ export const PostProperty = () => {
             </CardContent>
           </Card>
           <Box display={'flex'} justifyContent={'space-between'} mt={3}>
-              <InputField
-                label='Price(INR)'
-                required
-                onChange={handleChange}
-                aria-describedby="outlined-weight-helper-text"
-                name={'price'}
-                type="number"
-                value={postAdData?.price || ''}
-                inputProps={{
-                  style: { '-moz-appearance': 'textfield' }, // For Firefox
-                  'aria-hidden': true, // Hide arrows from screen readers
-                }}
-              />
-            <LoaderButton text='Preview Ad' variant='contained' color='info'/>
-            <LoaderButton startIcon={<AddHomeIcon fontSize='inherit'/>} sx={{mx:'80px'}} text='Post Ad' loading={loading}  variant='contained' onClick={handlePostButton}/> 
+            <TextField
+              label="Price(INR)"
+              required
+              onChange={handleBasicInfo}
+              aria-describedby="outlined-weight-helper-text"
+              name={'price'}
+              type="number"
+              value={basicInfo?.price || ''}
+              inputProps={{
+                style: { '-moz-appearance': 'textfield' }, // For Firefox
+                'aria-hidden': true, // Hide arrows from screen readers
+              }}
+            />
+            <LoaderButton text="Preview Ad" variant="contained" color="info" />
+            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px' }} text="Post Ad" loading={loading} variant="contained" onClick={handlePostButton} />
           </Box>
         </Grid>
       </Grid>

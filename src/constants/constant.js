@@ -22,32 +22,7 @@ export const propertyTypes = [
   { value: 'Commercial', label: 'Commercial' },
 ];
 
-export const amenities = [
-  { name: 'carParking', label: 'Car parking' },
-  { name: 'maintenance', label: 'Maintenance' },
-  { name: 'vastuCompliant', label: 'Vastu compliant' },
-  { name: 'powerBackup', label: 'Pawer Backup' },
-  { name: 'park', label: 'Park' },
-  { name: 'gym', label: 'Gym' },
-  { name: 'clubHouse', label: 'Club House' },
-];
 
-export const landMarks = [
-  { name: 'hospital', label: 'Hospital', erroMessage: '' },
-  { name: 'atm', label: 'Atm', erroMessage: '' },
-  { name: 'bank', label: 'Bank', erroMessage: '' },
-  { name: 'railway', label: 'Railway-Station', erroMessage: '' },
-  { name: 'metro', label: 'Metro-Station', erroMessage: '' },
-  { name: 'airport', label: 'Airport', erroMessage: '' },
-];
-
-export const basicInfo = [
-  { name: 'bedRoom', label: 'Bedroom' },
-  { name: 'bathRoom', label: 'Bathroom' },
-  { name: 'totalArea', label: `Total (Yards)\u00B2` },
-  { name: 'carpetArea', label: `Carpet (Yards)\u00B2` },
-  { name: 'propertyAge', label: `Age Of Property` },
-];
 
 export const pages = ['Products', 'Pricing', 'Blog'];
 

@@ -1,6 +1,6 @@
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography,Box } from '@mui/material';
+import { Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography, Box } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { cardsData } from '../../constants/staticData';
@@ -23,23 +23,46 @@ import PowerIcon from '@mui/icons-material/Power';
 import SubwayIcon from '@mui/icons-material/Subway';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import APImageViewer from '../../components/imageViewer/APImageViewer';
+import Groups2Icon from '@mui/icons-material/Groups2';
 import APModal from '../../components/modal/APModal';
+import { useSelector } from 'react-redux';
+import { allProperties } from '../postAd/postPropertySlice';
+import moment from 'moment/moment';
+import { dateFormat } from '../../constants/constant';
+import Modal from '../../components/modal/Modal';
+import { GoogleMap } from '../../components/googleMap/GoogleMap';
 export const Item = () => {
   const [property, setProperty] = useState({});
   const [propertyImages, setPropertyImages] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
-  const [size, setSize] = useState({});
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [locationModal, setLocatiionModal] = useState(false)
   const [imageIndex, setImageIndex] = useState(0);
   const params = useParams();
+  const dataObj = useSelector(allProperties);
 
   useEffect(() => {
-    const foundItem = cardsData.find((item) => item?.id === params?.listId);
+    
+    const foundItem = dataObj.find((item) => item?._id === params?.listId);
     setProperty(foundItem);
-    setPropertyImages(foundItem.images);
-    setImageIndex(0);
-  }, []);
+    let images = [foundItem?.mainImage];
 
+    foundItem?.propertyImages.map((element) => {
+      images.push(element);
+    });
+
+    setPropertyImages(images);
+
+    setImageIndex(0);
+  }, [dataObj]);
+
+
+  useEffect(()=>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant' 
+    });
+  },[])
   const openImageViewer = useCallback((index) => {
     setCurrentImage(index);
     setIsViewerOpen(true);
@@ -65,13 +88,13 @@ export const Item = () => {
 
   return (
     <HomeWrapper>
-      <Grid container spacing={2} mt={1} style={{ padding: '10px' }} >
-        <Grid item md={6} xs={12}>
-          <Box style={{ position: 'relative', display: 'inline-block', }}>
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }} >
-              <div id="imgContainer" style={{ position: 'relative', display: 'inline-block',}}>
-                <img  onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width:'100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer' ,borderRadius:'10px'}} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
-                <IconButton  style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0', transition: 'opacity 0.3s' }} onMouseEnter={(e) => (e.target.style.opacity = '1')} onMouseLeave={(e) => (e.target.style.opacity = '0')} aria-label="View Image" onClick={openImageViewer}>
+      <Grid container spacing={2} mt={1} style={{ padding: '10px' }}>
+        <Grid item md={6} sm={12} xs={12}>
+          <Box style={{ position: 'relative', display: 'inline-block' }}>
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
+              <div id="imgContainer" style={{ position: 'relative', display: 'inline-block' }}>
+                <img onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width: '100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer', borderRadius: '10px' }} id="img" src={property?.mainImage} alt="Property Image" />
+                <IconButton style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0', transition: 'opacity 0.3s' }} onMouseEnter={(e) => (e.target.style.opacity = '1')} onMouseLeave={(e) => (e.target.style.opacity = '0')} aria-label="View Image" onClick={openImageViewer}>
                   <FullscreenIcon />
                 </IconButton>
               </div>
@@ -79,7 +102,7 @@ export const Item = () => {
             </Box>
 
             <CardContent sx={{ display: { xs: 'flex', sm: 'flex', md: 'none' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
-              <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', maxWidth: '100%', minWidth: '350px', maxHeight: '350px', height: '300px',borderRadius:'10px' }} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
+              <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', maxWidth: '100%', minWidth: '350px', maxHeight: '350px', height: '300px', borderRadius: '10px' }} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
               <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
             </CardContent>
           </Box>
@@ -87,7 +110,7 @@ export const Item = () => {
 
         <Grid item md={6} xs={12} sm={12} sx={{ flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
           <Typography textOverflow={'ellipsis'} style={{ marginTop: 2, fontSize: '10px', fontWeight: 500, textAlign: 'end', marginRight: 5 }}>
-            posted on:{property.postedOn}
+            posted At:{moment(property.postedAt).format(dateFormat.dateAndTime)}
           </Typography>
           <Typography style={{ marginTop: 2, fontSize: '19px', paddingLeft: 10, fontWeight: 600 }}>{property.title}</Typography>
           <Typography style={{ marginTop: 2, fontSize: '11px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>Listing Id #{property.id}</Typography>
@@ -98,23 +121,23 @@ export const Item = () => {
               <CardContent sx={{ backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
                 <Grid container mt={2} justifyContent={'center'}>
                   <Grid item md={2}>
-                    <ToolTipButton title={'bedrooms'} icon={<BedroomParentIcon />} text={property?.propertyOverview?.BedRooms + 'Beds'} />
+                    <ToolTipButton title={'bedrooms'} icon={<BedroomParentIcon />} text={property?.basicInfo?.bedRooms || 0 + 'Beds' } />
                   </Grid>
 
                   <Grid item md={2}>
-                    <ToolTipButton title={'bathrooms'} icon={<BathtubIcon />} text={property?.propertyOverview?.BedRooms + 'Baths'} />
+                    <ToolTipButton title={'bathrooms'} icon={<BathtubIcon />} text={property?.basicInfo?.bathRooms || 0 + 'Baths'} />
                   </Grid>
 
                   <Grid item md={2}>
-                    <ToolTipButton title={'BuiltUpArea'} icon={<FullscreenIcon />} text={`${property?.propertyOverview?.BuiltUpArea}  \u00B2 Yards`} />
+                    <ToolTipButton title={'BuiltUpArea'} icon={<FullscreenIcon />} text={`${property?.basicInfo?.totalArea  || 0}  \u00B2 Yards`} />
                   </Grid>
 
                   <Grid item md={2}>
-                    <ToolTipButton title={'CarpetArea'} icon={<CropLandscapeIcon />} text={`${property?.propertyOverview?.CarpetArea}  \u00B2 Yards`} />
+                    <ToolTipButton title={'CarpetArea'} icon={<CropLandscapeIcon />} text={`${property?.basicInfo?.carPetArea || 0}  \u00B2 Yards`} />
                   </Grid>
 
                   <Grid item md={2}>
-                    <ToolTipButton title={'AgeOfProperty'} icon={<HouseIcon />} text={`${property?.propertyOverview?.AgeOfProperty} year`} />
+                    <ToolTipButton title={'AgeOfProperty'} icon={<HouseIcon />} text={`${property?.basicInfo?.ageOfProperty || 0} year`} />
                   </Grid>
                 </Grid>
                 <Grid mt={2}>
@@ -134,7 +157,7 @@ export const Item = () => {
 
                   <Grid item md={3} xs={4}>
                     <Button variant="outlined">
-                      <LocationOnIcon />
+                      <LocationOnIcon  onClick={()=>setLocatiionModal(true)}/>
                     </Button>
                   </Grid>
                 </Grid>
@@ -151,20 +174,22 @@ export const Item = () => {
             <Divider></Divider>
             <Grid container spacing={1}>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.landmark?.[0] || ''} icon={<CarRentalIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[0] || 'n/a'} />
-              </Grid>
-
-              <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[1] || ''} icon={<PowerIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[1] || 'n/a'} />
+                <ToolTipButton title={property?.amenities?.[0] || ''} icon={<CarRentalIcon style={{ fontSize: '35px' , color:property?.amenities?.carParking==='Y' ? 'green': 'grey' }} />} text={'Car Parking'}/>
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[2] || ''} icon={<AllInclusiveIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[2] || 'n/a'} />
+                <ToolTipButton title={property?.amenities?.[1] || ''} icon={<PowerIcon style={{ fontSize: '35px',  color:property?.amenities?.powerBackup==='Y' ? 'green': 'grey' }} />} text={'Power Backup'} />
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[3] || ''} icon={<EngineeringIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[3] || 'n/a'} />
+                <ToolTipButton title={property?.amenities?.[2] || ''} icon={<AllInclusiveIcon style={{ fontSize: '35px', color:property?.amenities?.vastuCompliant==='Y' ? 'green': 'grey' }} />} text={'Vastu Compliant'} />
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<GrassIcon style={{ fontSize: '35px' }} />} text={property?.amenities?.[4] || 'n/a'} />
+                <ToolTipButton title={property?.amenities?.[3] || ''} icon={<EngineeringIcon style={{ fontSize: '35px', color:property?.amenities?.mainMaintenance==='Y' ? 'green': 'grey' }} />} text={'Maintenance'} />
+              </Grid>
+              <Grid item sx={12} md={3}>
+                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<GrassIcon style={{ fontSize: '35px', color:property?.amenities?.gym==='Y' ? 'green': 'grey' }} />} text={'Gym'} />
+              </Grid>
+              <Grid item sx={12} md={3}>
+                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<Groups2Icon style={{ fontSize: '35px', color:property?.amenities?.clubHouse==='Y' ? 'green': 'grey' }} />} text={'Club House'} />
               </Grid>
             </Grid>
             <Divider></Divider>
@@ -179,23 +204,23 @@ export const Item = () => {
             <Divider></Divider>
             <Grid container spacing={1}>
               <Grid item md={3}>
-                <ToolTipButton title={property?.amenities?.Hospitals || ''} icon={<LocalHospitalIcon style={{ fontSize: '35px' }} />} text={`Hospitals ${property?.landmark?.Hospitals}  km` || 'n/a'} />
+                <ToolTipButton icon={<LocalHospitalIcon style={{ fontSize: '35px', color:property?.landMarks?.hospital ? 'green': 'grey'  }} />} text={`Hospital ${property?.landMarks?.hospital || 0}  km` } />
               </Grid>
 
               <Grid item md={3}>
-                <ToolTipButton title={property?.landmark?.Airport || ''} icon={<FlightTakeoffIcon style={{ fontSize: '35px' }} />} text={`Airport ${property?.landmark?.Airport} km` || 'n/a'} />
+                <ToolTipButton  icon={<FlightTakeoffIcon style={{ fontSize: '35px', color:property?.landMarks?.airport ? 'green': 'grey'  }} />} text={`Airport ${property?.landMarks?.airport || 0} km` } />
               </Grid>
 
               <Grid item md={3}>
-                <ToolTipButton title={property?.landmark?.Atm || ''} icon={<LocalAtmIcon style={{ fontSize: '35px' }} />} text={`Atm ${property?.landmark?.Atm} km` || 'n/a'} />
+                <ToolTipButton icon={<LocalAtmIcon style={{ fontSize: '35px', color:property?.landMarks?.atm ? 'green': 'grey'  }} />} text={`Atm ${property?.landMarks?.atm || 0} km` } />
               </Grid>
 
               <Grid item md={3}>
-                <ToolTipButton title={property?.landmark?.RailwayStation || ''} icon={<DirectionsRailwayIcon style={{ fontSize: '35px' }} />} text={`RailwayStation ${property?.landmark?.RailwayStation} km` || 'n/a'} />
+                <ToolTipButton icon={<DirectionsRailwayIcon style={{ fontSize: '35px', color:property?.landMarks?.railway ? 'green': 'grey'  }} />} text={`RailwayStation ${property?.landMarks?.railway || 0} km` } />
               </Grid>
 
               <Grid item md={3}>
-                <ToolTipButton title={property?.landmark?.MetroStation || ''} icon={<SubwayIcon style={{ fontSize: '35px' }} />} text={` MetroStation ${property?.landmark?.MetroStation} km` || 'n/a'} />
+                <ToolTipButton  icon={<SubwayIcon style={{ fontSize: '35px', color:property?.landMarks?.metro ? 'green': 'grey'  }} />} text={` MetroStation ${property?.landMarks?.metro || 0} km` } />
               </Grid>
             </Grid>
             <Divider></Divider>
@@ -203,7 +228,18 @@ export const Item = () => {
         </Grid>
       </Grid>
 
-     
+
+      <Modal open={locationModal} onSubmit={()=>{}} hideCreateButton={true} onClose={()=>setLocatiionModal(false)} title="" style={{minWidth:'500px' , maxWidth:'700px'}}>
+         <Grid container>
+          <Grid item md={12}>
+            <Typography fontWeight={550}>{property?.location?.city  + " ," +property?.location?.state + " ," + property?.location?.pinCode }</Typography>
+           
+          </Grid>
+          <Grid item md={12} sm={12}>
+          <GoogleMap data={{state:property?.location?.state, city:property?.location?.city   ,country:'India', zip:property?.location?.pinCode  }}/>
+          </Grid>
+         </Grid>
+        </Modal>    
     </HomeWrapper>
   );
 };

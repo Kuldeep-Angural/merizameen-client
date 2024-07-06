@@ -6,6 +6,9 @@ import { cardsData } from '../../constants/staticData';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ItemNotFound from '../../ui/json/noDataFOund.json';
 import './Item.scss';
+import { getAll } from '../postAd/postPropertyApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { allProperties, getAllProperties } from '../postAd/postPropertySlice';
 const RenderChips = ({ data }) => {
   const key = Object.keys(data)[0];
   const value = data[key];
@@ -23,6 +26,8 @@ const RenderChips = ({ data }) => {
 
 const ListedItems = ({ filterParams,searchParams }) => {
   const naviGate = useNavigate();
+  const dispatch = useDispatch();
+  const dataObj = useSelector(allProperties);
   const [properties, setProperties] = useState([]);
 
   const openItem = (id) => {
@@ -32,7 +37,7 @@ const ListedItems = ({ filterParams,searchParams }) => {
   const RenderCard = ({ item }) => {
     return (
       <Grid item md={3} sm={6} xs={12}  style={{ cursor: 'pointer' }}>
-        <img style={{ borderRadius: '3%' }} onClick={() => openItem(item.id)} src={item.mainImage} height={'275px'} width={'100%'} />
+        <img style={{ borderRadius: '3%' }} onClick={() => openItem(item._id)} src={item.mainImage} height={'275px'} width={'100%'} />
         <Typography fontWeight={'600'}>{item.title}</Typography>
         <Box display={'flex'}>
           <Typography>Property Type:</Typography>
@@ -52,12 +57,14 @@ const ListedItems = ({ filterParams,searchParams }) => {
   };
 
   useEffect(() => {
-      let data = cardsData.filter((e) => e.type === filterParams);
+      let data = dataObj?.filter((e) => e.propertyType === filterParams);
       setProperties(data);
-  
-  }, [filterParams]);
+  }, [filterParams , dataObj]);
 
  
+  useEffect(()=>{
+    dispatch(getAllProperties())
+  },[])
 
 
   return (
