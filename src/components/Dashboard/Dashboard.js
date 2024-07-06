@@ -37,8 +37,14 @@ const Dashboard = (props) => {
   }, []);
 
 
-  
-
+  const postsRows = postedProperties?.map(post => ({
+    title: post?.title,
+    propertyType: post?.propertyType,
+    price: post?.price,
+    postedAt: moment(post?.postedAt).format(dateFormat.dateAndTime),
+    postFor:post.postFor,
+    link:(<Link to={`/home/${post._id}`}>View</Link>)
+  }));
 
   const rows = userLikes?.map(like => ({
     title: like?.title,
@@ -49,15 +55,47 @@ const Dashboard = (props) => {
     link:(<Link to={`/home/${like._id}`}>View</Link>)
   }));
 
+  const sellerRows = sellerLikes?.map(like => ({
+    title: like?.title,
+    propertyType: like?.propertyType,
+    price: like?.price,
+    postedAt: moment(like?.postedAt).format(dateFormat.dateAndTime),
+    likedAt:moment(like?.userLikes?.likedAt).format(dateFormat.dateAndTime),
+    userName:like?.sellerLikes?.userName,
+    link:(<Link to={`/home/${like._id}`}>View</Link>)
+  }));
+
+
 const headCells = [
   { id: 'title', numeric: false, disablePadding: true, label: 'Title' ,},
   { id: 'propertyType', numeric: true, disablePadding: false, label: 'PropertyType' },
   { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-
   { id: 'postedAt', numeric: true, disablePadding: false, label: 'postedAt' },
-  { id: 'likedAt', numeric: true, disablePadding: false, label: 'LikedAt' },
+  { id: 'likedAt', numeric: true, disablePadding: false, label: 'Liked At' },
   { id: 'link', numeric: true, disablePadding: false, label: 'link' },
 ];
+
+const headCellPosts = [
+  { id: 'title', numeric: false, disablePadding: true, label: 'Title' ,},
+  { id: 'propertyType', numeric: true, disablePadding: false, label: 'PropertyType' },
+  { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
+  { id: 'postedAt', numeric: true, disablePadding: false, label: 'postedAt' },
+  { id: 'postFor', numeric: true, disablePadding: false, label: 'Post For' },
+  { id: 'link', numeric: true, disablePadding: false, label: 'link' },
+]
+
+
+const headCellsSeller = [
+  { id: 'title', numeric: false, disablePadding: true, label: 'Title' ,},
+  { id: 'propertyType', numeric: true, disablePadding: false, label: 'PropertyType' },
+  { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
+  { id: 'postedAt', numeric: true, disablePadding: false, label: 'postedAt' },
+  { id: 'postFor', numeric: true, disablePadding: false, label: 'Post For' },
+  { id: 'userName', numeric: true, disablePadding: false, label: 'Liked By' },
+  { id: 'link', numeric: true, disablePadding: false, label: 'link' },
+]
+
+
 
   return (
     <HomeWrapper>
@@ -89,8 +127,15 @@ const headCells = [
           })}
         </Grid>
 
-        <Grid mt={2} container>{selectedCards === 'likes' && <Grid item md={12} padding={1}>
-        <EnhancedTable showsCheckBox={false} rows={rows} headCells={headCells} title="Likes" />
+        <Grid mt={2} container>
+          {selectedCards === 'likes' && <Grid item md={12} padding={1}>
+        <EnhancedTable showsCheckBox={false} rows={rows} headCells={headCells} title="Properties Liked by You" />
+
+        <EnhancedTable showsCheckBox={false} rows={sellerRows} headCells={headCellsSeller} title="Your Properties Liked By some one" />
+
+        </Grid>}
+        {selectedCards === 'post' && <Grid item md={12} padding={1}>
+        <EnhancedTable showsCheckBox={false} rows={postsRows} headCells={headCellPosts} title="" />
         </Grid>}
         </Grid>
       </Box>

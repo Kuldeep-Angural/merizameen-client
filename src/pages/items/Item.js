@@ -106,11 +106,11 @@ export const Item = () => {
 
         <Grid item md={6} xs={12} sm={12} sx={{ flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
           <Typography textOverflow={'ellipsis'} style={{ marginTop: 2, fontSize: '10px', fontWeight: 500, textAlign: 'end', marginRight: 5 }}>
-            posted At:{moment(property.postedAt).format(dateFormat.dateAndTime)}
+            posted At:{moment(property?.postedAt).format(dateFormat.dateAndTime)}
           </Typography>
-          <Typography style={{ marginTop: 2, fontSize: '19px', paddingLeft: 10, fontWeight: 600 }}>{property.title}</Typography>
-          <Typography style={{ marginTop: 2, fontSize: '11px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>Listing Id #{property.id}</Typography>
-          <Typography style={{ marginTop: 2, fontSize: '15px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>{property.description}</Typography>
+          <Typography style={{ marginTop: 2, fontSize: '19px', paddingLeft: 10, fontWeight: 600 }}>{property?.title}</Typography>
+          <Typography style={{ marginTop: 2, fontSize: '11px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>Listing Id #{property?.id}</Typography>
+          <Typography style={{ marginTop: 2, fontSize: '15px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>{property?.description}</Typography>
 
           <CardContent>
             <Card>
@@ -138,7 +138,7 @@ export const Item = () => {
                 </Grid>
                 <Grid mt={2}>
                   <Typography fontSize={'28px'} color={'primary'} fontWeight={'600'}>
-                    &#8377;:{property.price}
+                    &#8377;:{property?.price}
                   </Typography>
                 </Grid>
 
