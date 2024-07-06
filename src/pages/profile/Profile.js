@@ -1,13 +1,10 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Tooltip, Button, FormControl, Typography, Input } from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email';
-import { InputField } from '../../components/input/InputField';
-import { selectUserData } from '../authantication/authSlice';
-import { getUserDetails, selectDataObj, selectLoading, setData, updateUser } from './profileSlice';
-import imageIcon from '../../ui/images/noImage.webp';
+import { Button, FormControl, Grid, Input, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
+import React, { useImperativeHandle } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { dateFormat } from '../../constants/constant';
+import imageIcon from '../../ui/images/noImage.webp';
+import { selectLoading, updateUser } from './profileSlice';
 
 const Profile = React.forwardRef(({ dataObj, setDataObj }, ref) => {
   const loading = useSelector(selectLoading);

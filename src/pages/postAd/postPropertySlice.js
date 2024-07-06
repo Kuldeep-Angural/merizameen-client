@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createObject, getAll } from './postPropertyApi';
+import { createObject, getAll, like } from './postPropertyApi';
 
 
 const initialState = {
@@ -17,6 +17,12 @@ export const getAllProperties = createAsyncThunk('/user/allProperties', async ()
   const response = await getAll();
   return response;
 });
+
+export const likeproperty =  createAsyncThunk('/user/like', async (data) => {
+  const response = await like(data);
+  return response;
+});
+
 
 
 export const postpropertySlice = createSlice({
@@ -42,10 +48,12 @@ export const postpropertySlice = createSlice({
         state.loading = false;
         state.properties=action?.payload?.data || []
       })
+      
   },
 });
 
 export const selectPostLoading = (state) => state.post.postLoading;
 export const allProperties = (state) => state.post.properties;
 export const selectLoading = (state) => state.post.loading;
+
 export default postpropertySlice.reducer;

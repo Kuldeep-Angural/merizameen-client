@@ -11,11 +11,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllProperties, postProperty, selectPostLoading } from './postPropertySlice';
 import LoaderButton from '../../components/loadingbutton/LoaderButton';
 import AddHomeIcon from '@mui/icons-material/AddHome';
+import Progressbar from '../../components/ProgressBar/Progressbar';
+import APToaster from '../../components/Toaster/APToaster';
 
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
   const [postAdData, setPostAdData] = useState({});
-
+  const toastRef = useRef();
   const [location, setLocation] = useState({
     state: 'Punjab',
     city: 'Pathankot',
@@ -108,7 +110,11 @@ export const PostProperty = () => {
         amenities:{...amenities},
         location:{...location}
     }
-    dispatch(postProperty(data)).then((resp) => {});
+    dispatch(postProperty(data)).then((resp) => {
+      if (resp?.payload?.message) {
+        toastRef.current.showToast({ messageType: 'warning', messageText: resp?.payload?.message });
+      }
+    });
   };
 
   useEffect(() => {
@@ -144,6 +150,8 @@ export const PostProperty = () => {
 
   return (
     <HomeWrapper>
+        <APToaster ref={toastRef} title="" />
+      <Progressbar LoadingState={loading}/>
       <Grid container spacing={1} p={0}>
         <Grid item md={6} xs={12}>
           <Card>
