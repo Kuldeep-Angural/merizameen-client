@@ -1,14 +1,12 @@
-import { Card, Grid, Typography, Box, IconButton } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Box, Card, Grid, IconButton, Typography } from '@mui/material';
 import Lottie from 'lottie-react';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { cardsData } from '../../constants/staticData';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ItemNotFound from '../../ui/json/noDataFOund.json';
-import './Item.scss';
-import { getAll } from '../postAd/postPropertyApi';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import ItemNotFound from '../../ui/json/noDataFOund.json';
 import { allProperties, getAllProperties } from '../postAd/postPropertySlice';
+import './Item.scss';
 const RenderChips = ({ data }) => {
   const key = Object.keys(data)[0];
   const value = data[key];
