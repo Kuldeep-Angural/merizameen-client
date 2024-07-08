@@ -4,25 +4,13 @@ import Lottie from 'lottie-react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import Progressbar from '../../components/ProgressBar/Progressbar';
 import ItemNotFound from '../../ui/json/noDataFOund.json';
+import { addDelay } from '../../utils/utility';
 import { allProperties, getAllProperties, likeproperty, selectLoading } from '../postAd/postPropertySlice';
 import './Item.scss';
-import Progressbar from '../../components/ProgressBar/Progressbar';
-import { addDelay } from '../../utils/utility';
-const RenderChips = ({ data }) => {
-  const key = Object.keys(data)[0];
-  const value = data[key];
-  return (
-    <>
-      <Typography fontWeight={'600'} mt={2} lineHeight={'0.8'} fontSize={'12px'} color={'InfoText'}>
-        {String(key).toUpperCase()}
-        <Typography fontWeight={'500'} fontSize={'12px'} color={'InfoText'}>
-          {value}
-        </Typography>
-      </Typography>
-    </>
-  );
-};
+
+
 
 const ListedItems = ({ filterParams, searchParams }) => {
   const naviGate = useNavigate();
@@ -37,8 +25,7 @@ const ListedItems = ({ filterParams, searchParams }) => {
   };
 
   const doLike = (id) => {
-    dispatch(likeproperty({ id: id })).then((resp) => {
-    });
+    dispatch(likeproperty({ id: id })).then((resp) => {});
   };
 
   const RenderCard = ({ item }) => {
@@ -73,13 +60,12 @@ const ListedItems = ({ filterParams, searchParams }) => {
   }, [filterParams, dataObj]);
 
   useEffect(() => {
-    setAppLoading(loading);
     dispatch(getAllProperties());
   }, []);
 
   return (
     <>
-      <Progressbar LoadingState={apLoading} />
+      <Progressbar LoadingState={loading || apLoading} />
       <Card sx={{ marginTop: '10px', padding: '10px' }}>
         {properties.length > 0 ? (
           <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
@@ -94,7 +80,6 @@ const ListedItems = ({ filterParams, searchParams }) => {
             </Grid>
             <Grid item md={12} xs={12}>
               <Typography fontSize={'20px'} fontWeight={600} textAlign={'center'}>
-                {' '}
                 sorry we don't have any {filterParams} in your Area{' '}
               </Typography>
             </Grid>

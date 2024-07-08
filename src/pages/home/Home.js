@@ -1,35 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { HomeWrapper } from './HomeWrapper';
-import { Box, Button } from '@mui/material';
-import { LocationAndFilter } from './LocationAndFilter';
-import { HighLightCards } from './HighLightCards';
+import { Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import ListedItems from '../items/ListedItem';
-import UserDashboard from '../../components/Dashboard/Dashboard';
-import { Dashboard } from '@mui/icons-material';
+import { HighLightCards } from './HighLightCards';
+import { LocationAndFilter } from './LocationAndFilter';
+import { Wrapper } from './Wrapper';
 
 export const Home = ({ updatePageTitle }) => {
-  const toastRef = useRef();
   const [filterParams, setFilterParams] = useState('3Bhk');
   const [searchParams, setSearchParams] = useState('');
+
   useEffect(() => {
     updatePageTitle('Merizameen Home');
   }, []);
 
-  // Use of APToaster
-  const handleClick = () => {
-    toastRef.current.showToaster({
-      messageType: 'success',
-      message: 'Work done',
-      position: 'top right',
-    });
-  };
   return (
     <Box>
-      <HomeWrapper>
+      <Wrapper>
         <LocationAndFilter setFilterParams={setFilterParams} filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} />
         <HighLightCards />
         <ListedItems filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} />
-      </HomeWrapper>
+      </Wrapper>
     </Box>
   );
 };

@@ -2,6 +2,7 @@ import { Button, FormControl, Grid, Input, Tooltip, Typography } from '@mui/mate
 import moment from 'moment';
 import React, { useImperativeHandle } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Progressbar from '../../components/ProgressBar/Progressbar';
 import { dateFormat } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
 import { selectLoading, updateUser } from './profileSlice';
@@ -34,41 +35,46 @@ const Profile = React.forwardRef(({ dataObj, setDataObj }, ref) => {
     setDataObj({ ...dataObj, [name]: value });
   };
 
+  console.log(loading);
+
   return (
-    <Grid container justifyContent="center">
-      <Grid item md={12} sm={12} xs={12} display="flex" justifyContent="center">
-        <Tooltip title="Profile picture">
-          <Button variant="text" component="label" style={{ alignItems: 'center' }}>
-            <img src={dataObj?.profilePic || imageIcon} alt="upload image" height="200px" width="100%" style={{ cursor: 'pointer', borderRadius: '10px' }} />
-            <input type="file" name="profilePic" accept="image/*" hidden onChange={handleChange} />
-          </Button>
-        </Tooltip>
-      </Grid>
+    <>
+      <Progressbar LoadingState={loading} />
+      <Grid container justifyContent="center">
+        <Grid item md={12} sm={12} xs={12} display="flex" justifyContent="center">
+          <Tooltip title="Profile picture">
+            <Button variant="text" component="label" style={{ alignItems: 'center' }}>
+              <img src={dataObj?.profilePic || imageIcon} alt="upload image" height="200px" width="100%" style={{ cursor: 'pointer', borderRadius: '10px' }} />
+              <input type="file" name="profilePic" accept="image/*" hidden onChange={handleChange} />
+            </Button>
+          </Tooltip>
+        </Grid>
 
-      <Grid item md={12} sm={12} xs={12}>
-        <FormControl required variant="standard" fullWidth sx={{ mt: 0 }}>
-          <Input name="name" placeholder="Name" fullWidth onChange={handleInputChange} value={dataObj?.name || ""} type="text" />
-        </FormControl>
-      </Grid>
+        <Grid item md={12} sm={12} xs={12}>
+          <FormControl required variant="standard" fullWidth sx={{ mt: 0 }}>
+            <Input name="name" placeholder="Name" fullWidth onChange={handleInputChange} value={dataObj?.name || ''} type="text" />
+          </FormControl>
+        </Grid>
 
-      <Grid item md={12} sm={12} xs={12}>
-        <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-          <Input name="email" placeholder="Email" fullWidth onChange={handleInputChange} value={dataObj?.email || ""} disabled autoComplete="email" type="text" />
-        </FormControl>
-      </Grid>
+        <Grid item md={12} sm={12} xs={12}>
+          <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
+            <Input name="email" placeholder="Email" fullWidth onChange={handleInputChange} value={dataObj?.email || ''} disabled autoComplete="email" type="text" />
+          </FormControl>
+        </Grid>
 
-      <Grid item md={12} sm={12} xs={12}>
-        <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
-          <Input name="mobile" placeholder="Mobile" fullWidth onChange={handleInputChange} value={dataObj?.mobile||""} type="number" />
-        </FormControl>
-      </Grid>
+        <Grid item md={12} sm={12} xs={12}>
+          <FormControl required variant="standard" fullWidth sx={{ mt: 1 }}>
+            <Input name="mobile" placeholder="Mobile" fullWidth onChange={handleInputChange} value={dataObj?.mobile || ''} type="number" />
+          </FormControl>
+        </Grid>
 
-      <Grid item md={12} sm={12} xs={12} mt={2}>
-        <Typography fontSize={'10px'} color={'red'} align={'left'}>
-          Last Updated: {moment(dataObj?.updatedAt||"").format(dateFormat.dateAndTime)}
-        </Typography>
+        <Grid item md={12} sm={12} xs={12} mt={2}>
+          <Typography fontSize={'10px'} color={'red'} align={'left'}>
+            Last Updated: {moment(dataObj?.updatedAt || '').format(dateFormat.dateAndTime)}
+          </Typography>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 });
 

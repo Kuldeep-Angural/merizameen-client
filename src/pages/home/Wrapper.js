@@ -1,9 +1,8 @@
 import { Grid } from '@mui/material';
 import { Footer } from '../../components/footer/Footer';
 import { APNavBar } from '../../components/navbar/APNavBar';
-import Akira from '../../components/chatBot/Akira';
 
-export const HomeWrapper = (props) => {
+export const Wrapper = (props) => {
   return (
     <>
       <Grid sx={{ backgroundColor: 'rgba(169, 184, 183,)' }}>

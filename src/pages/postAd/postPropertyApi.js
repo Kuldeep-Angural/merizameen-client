@@ -36,7 +36,7 @@ export const like = async (payload) => {
 
 export const getAll = async (payload) => {
   return axios
-    .get(BASE_ENDPOINT+'/post/allPropertys', {})
+    .get(BASE_ENDPOINT+'/post/allPropertys',{ headers: HEADERS.AUTHENTIC()}, {})
     .then(function (response) {
       if (response.status === 200) {
         return { ...response.data };

@@ -24,7 +24,7 @@ import { GoogleMap } from '../../components/googleMap/GoogleMap';
 import APImageViewer from '../../components/imageViewer/APImageViewer';
 import Modal from '../../components/modal/Modal';
 import { dateFormat } from '../../constants/constant';
-import { HomeWrapper } from '../home/HomeWrapper';
+import { Wrapper } from '../home/Wrapper';
 import '../items/Item.scss';
 import { allProperties } from '../postAd/postPropertySlice';
 export const Item = () => {
@@ -83,7 +83,7 @@ export const Item = () => {
   };
 
   return (
-    <HomeWrapper>
+    <Wrapper>
       <Grid container spacing={2} mt={1} style={{ padding: '10px' }}>
         <Grid item md={6} sm={12} xs={12}>
           <Box style={{ position: 'relative', display: 'inline-block' }}>
@@ -236,6 +236,6 @@ export const Item = () => {
           </Grid>
          </Grid>
         </Modal>    
-    </HomeWrapper>
+    </Wrapper>
   );
 };

@@ -31,6 +31,7 @@ import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
 import Progressbar from '../ProgressBar/Progressbar';
 import { APRoutes } from '../../constants/routes';
 import { getUserDetails, selectDataObj, setData } from '../../pages/profile/profileSlice';
+import { useEffect } from 'react';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -129,7 +130,7 @@ export const APNavBar = () => {
     profileRef?.current?.Update();
   }
 
-  React.useEffect(()=>{
+  useEffect(()=>{
     dispatch(getUserDetails(USER._id));
   },[])
 

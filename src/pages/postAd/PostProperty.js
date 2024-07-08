@@ -1,18 +1,18 @@
-import { Grid, Card, Box, CardContent, Button, Badge, Tooltip, Divider, Typography, Chip, Checkbox, FormControlLabel, FormControl, OutlinedInput, InputAdornment, FormHelperText, TextField } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
-import { HomeWrapper } from '../home/HomeWrapper';
-import imageIcon from '../../ui/images/noImage.webp';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import BackupIcon from '@mui/icons-material/Backup';
-import APModal from '../../components/modal/APModal';
-import { himachalCities, punjabCities } from '../../constants/cities';
-import {medium, propertyTypes, state } from '../../constants/constant';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllProperties, postProperty, selectPostLoading } from './postPropertySlice';
-import LoaderButton from '../../components/loadingbutton/LoaderButton';
 import AddHomeIcon from '@mui/icons-material/AddHome';
+import BackupIcon from '@mui/icons-material/Backup';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Badge, Box, Button, Card, CardContent, Checkbox, Chip, Divider, FormControl, FormControlLabel, Grid, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import LoaderButton from '../../components/loadingbutton/LoaderButton';
+import APModal from '../../components/modal/APModal';
 import Progressbar from '../../components/ProgressBar/Progressbar';
 import APToaster from '../../components/Toaster/APToaster';
+import { himachalCities, punjabCities } from '../../constants/cities';
+import { medium, propertyTypes, state } from '../../constants/constant';
+import imageIcon from '../../ui/images/noImage.webp';
+import { Wrapper } from '../home/Wrapper';
+import { getAllProperties, postProperty, selectPostLoading } from './postPropertySlice';
 
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
@@ -149,7 +149,7 @@ export const PostProperty = () => {
   ];
 
   return (
-    <HomeWrapper>
+    <Wrapper>
         <APToaster ref={toastRef} title="" />
       <Progressbar LoadingState={loading}/>
       <Grid container spacing={1} p={0}>
@@ -399,6 +399,6 @@ export const PostProperty = () => {
           </Button>
         </Grid>
       </APModal>
-    </HomeWrapper>
+    </Wrapper>
   );
 };

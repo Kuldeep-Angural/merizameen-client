@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllpostedProperties, getUser, sellerLikes, updateUserDetails, userLikes } from './profileApi';
+import { getAllpostedProperties, getUserDetail, sellerLikes, setpropertyAsSold, updateUserDetails, userLikes } from './profileApi';
 
 const initialState = {
   loading: false,
@@ -11,7 +11,7 @@ const initialState = {
 };
 
 export const getUserDetails = createAsyncThunk('profile/userDetails', async (credentials) => {
-  const response = await getUser(credentials);
+  const response = await getUserDetail({id:credentials});
   return response;
 });
 
@@ -33,6 +33,12 @@ export const getSellerLikes =  createAsyncThunk('/user/sellerlike', async (data)
 
 export const getPostedproperties =  createAsyncThunk('/user/postedproperties', async (data) => {
   const response = await getAllpostedProperties(data);
+  return response;
+});
+
+
+export const setSoldProperty = createAsyncThunk('/user/setSold', async (data) => {
+  const response = await setpropertyAsSold(data);
   return response;
 });
 
@@ -84,13 +90,19 @@ export const profileSlice = createSlice({
         state.likesLoading = false;
         state.postedProperties=action?.payload?.data || []
       })
+      .addCase(setSoldProperty.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setSoldProperty.fulfilled, (state, action) => {
+        state.loading = false;
+      })
       
   },
 });
 export const { setData } = profileSlice.actions;
 
 export const selectDataObj = (state) => state.profile.dataObj;
-export const selectLoading = (state) => state.profile.loginLoading;
+export const selectLoading = (state) => state.profile.loading;
 export const selectUserLikes = (state) => state.profile.userLikes;
 export const selectSellerLikes = (state) => state.profile.sellerLikes;
 export const selectlikesLoading = (state) => state.profile.likesLoading;
