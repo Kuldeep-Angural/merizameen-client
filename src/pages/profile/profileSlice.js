@@ -67,7 +67,7 @@ export const profileSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.dataObj = action?.payload?.data || {};
+        // state.dataObj = action?.payload?.data || {};
       })
       .addCase(getUserLikes.pending, (state) => {
         state.likesLoading = true;

@@ -1,6 +1,7 @@
 import { Button, Card, Chip, Grid, Typography } from '@mui/material';
 
 import '../../pages/Global.scss';
+import { PropertyView } from '../items/PropertyView';
 export const HighLightCards = () => {
   const itemsCount = [
     {

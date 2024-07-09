@@ -18,47 +18,52 @@ import SubwayIcon from '@mui/icons-material/Subway';
 import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import moment from 'moment/moment';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { GoogleMap } from '../../components/googleMap/GoogleMap';
 import APImageViewer from '../../components/imageViewer/APImageViewer';
 import Modal from '../../components/modal/Modal';
+import Spinner from '../../components/ProgressBar/Progressbar';
 import { dateFormat } from '../../constants/constant';
 import { Wrapper } from '../home/Wrapper';
 import '../items/Item.scss';
-import { allProperties } from '../postAd/postPropertySlice';
-export const Item = () => {
+import { getSpecificProperty, selectLoading } from '../postAd/postPropertySlice';
+
+export const PropertyView = () => {
   const [property, setProperty] = useState({});
   const [propertyImages, setPropertyImages] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [locationModal, setLocatiionModal] = useState(false)
+  const [locationModal, setLocatiionModal] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const params = useParams();
-  const dataObj = useSelector(allProperties);
+  const loading = useSelector(selectLoading);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    
-    const foundItem = dataObj.find((item) => item?._id === params?.listId);
-    setProperty(foundItem);
-    let images = [foundItem?.mainImage];
-
-    foundItem?.propertyImages.map((element) => {
-      images.push(element);
+    dispatch(getSpecificProperty({ id: params?.listId })).then((resp) => {
+      if (resp.payload.data) {
+        const foundItem = resp.payload.data;
+        setProperty(foundItem);
+        let images = [foundItem?.mainImage];
+        foundItem &&
+          foundItem?.propertyImages.map((element) => {
+            images.push(element);
+          });
+        setPropertyImages(images);
+        setImageIndex(0);
+      }
     });
+  }, []);
 
-    setPropertyImages(images);
-
-    setImageIndex(0);
-  }, [dataObj]);
-
-
-  useEffect(()=>{
+  useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'instant' 
+      behavior: 'instant',
     });
-  },[])
+  }, []);
+
   const openImageViewer = useCallback((index) => {
     setCurrentImage(index);
     setIsViewerOpen(true);
@@ -84,6 +89,7 @@ export const Item = () => {
 
   return (
     <Wrapper>
+      <Spinner LoadingState={loading} />
       <Grid container spacing={2} mt={1} style={{ padding: '10px' }}>
         <Grid item md={6} sm={12} xs={12}>
           <Box style={{ position: 'relative', display: 'inline-block' }}>
@@ -117,7 +123,7 @@ export const Item = () => {
               <CardContent sx={{ backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
                 <Grid container mt={2} justifyContent={'center'}>
                   <Grid item md={2}>
-                    <ToolTipButton title={'bedrooms'} icon={<BedroomParentIcon />} text={property?.basicInfo?.bedRooms || 0 + 'Beds' } />
+                    <ToolTipButton title={'bedrooms'} icon={<BedroomParentIcon />} text={property?.basicInfo?.bedRooms || 0 + 'Beds'} />
                   </Grid>
 
                   <Grid item md={2}>
@@ -125,7 +131,7 @@ export const Item = () => {
                   </Grid>
 
                   <Grid item md={2}>
-                    <ToolTipButton title={'BuiltUpArea'} icon={<FullscreenIcon />} text={`${property?.basicInfo?.totalArea  || 0}  \u00B2 Yards`} />
+                    <ToolTipButton title={'BuiltUpArea'} icon={<FullscreenIcon />} text={`${property?.basicInfo?.totalArea || 0}  \u00B2 Yards`} />
                   </Grid>
 
                   <Grid item md={2}>
@@ -153,7 +159,7 @@ export const Item = () => {
 
                   <Grid item md={3} xs={4}>
                     <Button variant="outlined">
-                      <LocationOnIcon  onClick={()=>setLocatiionModal(true)}/>
+                      <LocationOnIcon onClick={() => setLocatiionModal(true)} />
                     </Button>
                   </Grid>
                 </Grid>
@@ -170,22 +176,22 @@ export const Item = () => {
             <Divider></Divider>
             <Grid container spacing={1}>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[0] || ''} icon={<CarRentalIcon style={{ fontSize: '35px' , color:property?.amenities?.carParking==='Y' ? 'green': 'grey' }} />} text={'Car Parking'}/>
+                <ToolTipButton title={property?.amenities?.[0] || ''} icon={<CarRentalIcon style={{ fontSize: '35px', color: property?.amenities?.carParking === 'Y' ? 'green' : 'grey' }} />} text={'Car Parking'} />
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[1] || ''} icon={<PowerIcon style={{ fontSize: '35px',  color:property?.amenities?.powerBackup==='Y' ? 'green': 'grey' }} />} text={'Power Backup'} />
+                <ToolTipButton title={property?.amenities?.[1] || ''} icon={<PowerIcon style={{ fontSize: '35px', color: property?.amenities?.powerBackup === 'Y' ? 'green' : 'grey' }} />} text={'Power Backup'} />
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[2] || ''} icon={<AllInclusiveIcon style={{ fontSize: '35px', color:property?.amenities?.vastuCompliant==='Y' ? 'green': 'grey' }} />} text={'Vastu Compliant'} />
+                <ToolTipButton title={property?.amenities?.[2] || ''} icon={<AllInclusiveIcon style={{ fontSize: '35px', color: property?.amenities?.vastuCompliant === 'Y' ? 'green' : 'grey' }} />} text={'Vastu Compliant'} />
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[3] || ''} icon={<EngineeringIcon style={{ fontSize: '35px', color:property?.amenities?.mainMaintenance==='Y' ? 'green': 'grey' }} />} text={'Maintenance'} />
+                <ToolTipButton title={property?.amenities?.[3] || ''} icon={<EngineeringIcon style={{ fontSize: '35px', color: property?.amenities?.mainMaintenance === 'Y' ? 'green' : 'grey' }} />} text={'Maintenance'} />
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<GrassIcon style={{ fontSize: '35px', color:property?.amenities?.gym==='Y' ? 'green': 'grey' }} />} text={'Gym'} />
+                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<GrassIcon style={{ fontSize: '35px', color: property?.amenities?.gym === 'Y' ? 'green' : 'grey' }} />} text={'Gym'} />
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<Groups2Icon style={{ fontSize: '35px', color:property?.amenities?.clubHouse==='Y' ? 'green': 'grey' }} />} text={'Club House'} />
+                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<Groups2Icon style={{ fontSize: '35px', color: property?.amenities?.clubHouse === 'Y' ? 'green' : 'grey' }} />} text={'Club House'} />
               </Grid>
             </Grid>
             <Divider></Divider>
@@ -200,23 +206,23 @@ export const Item = () => {
             <Divider></Divider>
             <Grid container spacing={1}>
               <Grid item md={3}>
-                <ToolTipButton icon={<LocalHospitalIcon style={{ fontSize: '35px', color:property?.landMarks?.hospital ? 'green': 'grey'  }} />} text={`Hospital ${property?.landMarks?.hospital || 0}  km` } />
+                <ToolTipButton icon={<LocalHospitalIcon style={{ fontSize: '35px', color: property?.landMarks?.hospital ? 'green' : 'grey' }} />} text={`Hospital ${property?.landMarks?.hospital || 0}  km`} />
               </Grid>
 
               <Grid item md={3}>
-                <ToolTipButton  icon={<FlightTakeoffIcon style={{ fontSize: '35px', color:property?.landMarks?.airport ? 'green': 'grey'  }} />} text={`Airport ${property?.landMarks?.airport || 0} km` } />
+                <ToolTipButton icon={<FlightTakeoffIcon style={{ fontSize: '35px', color: property?.landMarks?.airport ? 'green' : 'grey' }} />} text={`Airport ${property?.landMarks?.airport || 0} km`} />
               </Grid>
 
               <Grid item md={3}>
-                <ToolTipButton icon={<LocalAtmIcon style={{ fontSize: '35px', color:property?.landMarks?.atm ? 'green': 'grey'  }} />} text={`Atm ${property?.landMarks?.atm || 0} km` } />
+                <ToolTipButton icon={<LocalAtmIcon style={{ fontSize: '35px', color: property?.landMarks?.atm ? 'green' : 'grey' }} />} text={`Atm ${property?.landMarks?.atm || 0} km`} />
               </Grid>
 
               <Grid item md={3}>
-                <ToolTipButton icon={<DirectionsRailwayIcon style={{ fontSize: '35px', color:property?.landMarks?.railway ? 'green': 'grey'  }} />} text={`RailwayStation ${property?.landMarks?.railway || 0} km` } />
+                <ToolTipButton icon={<DirectionsRailwayIcon style={{ fontSize: '35px', color: property?.landMarks?.railway ? 'green' : 'grey' }} />} text={`RailwayStation ${property?.landMarks?.railway || 0} km`} />
               </Grid>
 
               <Grid item md={3}>
-                <ToolTipButton  icon={<SubwayIcon style={{ fontSize: '35px', color:property?.landMarks?.metro ? 'green': 'grey'  }} />} text={` MetroStation ${property?.landMarks?.metro || 0} km` } />
+                <ToolTipButton icon={<SubwayIcon style={{ fontSize: '35px', color: property?.landMarks?.metro ? 'green' : 'grey' }} />} text={` MetroStation ${property?.landMarks?.metro || 0} km`} />
               </Grid>
             </Grid>
             <Divider></Divider>
@@ -224,18 +230,16 @@ export const Item = () => {
         </Grid>
       </Grid>
 
-
-      <Modal open={locationModal} onSubmit={()=>{}} hideCreateButton={true} onClose={()=>setLocatiionModal(false)} title="" style={{minWidth:'500px' , maxWidth:'700px'}}>
-         <Grid container>
+      <Modal open={locationModal} onSubmit={() => {}} hideCreateButton={true} onClose={() => setLocatiionModal(false)} title="" style={{ minWidth: '500px', maxWidth: '700px' }}>
+        <Grid container>
           <Grid item md={12}>
-            <Typography fontWeight={550}>{property?.location?.city  + " ," +property?.location?.state + " ," + property?.location?.pinCode }</Typography>
-           
+            <Typography fontWeight={550}>{property?.location?.city + ' ,' + property?.location?.state + ' ,' + property?.location?.pinCode}</Typography>
           </Grid>
           <Grid item md={12} sm={12}>
-          <GoogleMap data={{state:property?.location?.state, city:property?.location?.city   ,country:'India', zip:property?.location?.pinCode  }}/>
+            <GoogleMap data={{ state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
           </Grid>
-         </Grid>
-        </Modal>    
+        </Grid>
+      </Modal>
     </Wrapper>
   );
 };

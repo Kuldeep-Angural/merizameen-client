@@ -1,9 +1,9 @@
-import React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import React from 'react';
 import '../../pages/Global.scss';
 
-const Progressbar = ({ LoadingState }) => {
+const Spinner = ({ LoadingState }) => {
   return LoadingState ? (
     <div>
       <Backdrop sx={{ color: 'skyblue', zIndex: 10 }} open={LoadingState}>
@@ -13,6 +13,5 @@ const Progressbar = ({ LoadingState }) => {
   ) : null;
 };
 
-export default Progressbar;
+export default Spinner;
 
-// position: 'absolute',top:'50%',left:'50%'

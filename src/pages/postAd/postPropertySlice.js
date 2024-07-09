@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createObject, getAll, like } from './postPropertyApi';
+import { createObject, getAll, getProperty, like } from './postPropertyApi';
+import { ReplyAll } from '@mui/icons-material';
 
 
 const initialState = {
@@ -10,6 +11,11 @@ const initialState = {
 
 export const postProperty = createAsyncThunk('/user/addProperty', async (payload) => {
   const response = await createObject(payload);
+  return response;
+});
+
+export const getSpecificProperty = createAsyncThunk('/user/getproperty', async (payload) => {
+  const response = await getProperty(payload);
   return response;
 });
 
@@ -47,6 +53,12 @@ export const postpropertySlice = createSlice({
       .addCase(getAllProperties.fulfilled, (state, action) => {
         state.loading = false;
         state.properties=action?.payload?.data || []
+      })
+      .addCase(getSpecificProperty.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getSpecificProperty.fulfilled, (state, action) => {
+        state.loading = false;
       })
       
   },

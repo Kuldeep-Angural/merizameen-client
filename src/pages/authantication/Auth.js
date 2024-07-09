@@ -13,7 +13,7 @@ const Auth = ({ updatePageTitle }) => {
   const forgotPasswordLoading = useSelector(selectForgotPasswordLoading);
 
   useEffect(() => {
-    updatePageTitle('Merizameen Auth');
+    updatePageTitle('Merizameen');
   }, []);
 
   return (

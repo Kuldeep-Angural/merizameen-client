@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import Auth from '../pages/authantication/Auth';
-import { Home } from '../pages/home/Home';
-import { Item } from '../pages/items/Item';
-import { PostProperty } from '../pages/postAd/PostProperty';
-import { PageNotFound } from '../pages/notFoundPage/PageNotFound';
 import { useSelector } from 'react-redux';
-import {  selectUserData } from '../pages/authantication/authSlice';
+import { Route, Routes } from 'react-router-dom';
 import Dashboard from '../components/Dashboard/Dashboard';
+import Auth from '../pages/authantication/Auth';
+import { selectUserData } from '../pages/authantication/authSlice';
+import { Home } from '../pages/home/Home';
+import { PropertyView } from '../pages/items/PropertyView';
+import { PageNotFound } from '../pages/notFoundPage/PageNotFound';
+import { PostProperty } from '../pages/postAd/PostProperty';
 
 export const APRoutes = () => {
   const ROUTES = [
     { name: '/', value: (index) => ( <Home key={index} updatePageTitle={updatePageTitle} />) },
     { name: '/auth', value: (index) => (<Auth key={index} updatePageTitle={updatePageTitle} />) },
     { name: '/home', value: (index) => <Home key={index} updatePageTitle={updatePageTitle} /> },
-    { name: '/home/:listId', value: (index) => <Item key={index} updatePageTitle={updatePageTitle} /> },
+    { name: '/home/:listId', value: (index) => <PropertyView key={index} updatePageTitle={updatePageTitle} /> },
     { name: '/postAd', value: (index) => (<PostProperty key={index} updatePageTitle={updatePageTitle} /> ) },
     { name: '/dashboard', value: (index) => (<Dashboard key={index} updatePageTitle={updatePageTitle} /> ) },
   ];

@@ -35,7 +35,6 @@ const Profile = React.forwardRef(({ dataObj, setDataObj }, ref) => {
     setDataObj({ ...dataObj, [name]: value });
   };
 
-  console.log(loading);
 
   return (
     <>
