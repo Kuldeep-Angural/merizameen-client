@@ -27,7 +27,7 @@ export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, 
   const getExactLocation = async (latitude, longitude) => {
     try {
       const api_key = process.env.REACT_APP_LOCATION_API_KEY;
-      const url = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&appid=${api_key}`;
+      const url = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&appid=${api_key}`;
       
       const response = await fetch(url);
       
