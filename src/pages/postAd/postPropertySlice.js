@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createObject, getAll, getProperty, like } from './postPropertyApi';
+import { createObject, deleteSpecificProperty, getAll, getProperty, like } from './postPropertyApi';
 import { ReplyAll } from '@mui/icons-material';
 
 
@@ -28,6 +28,13 @@ export const likeproperty =  createAsyncThunk('/user/like', async (data) => {
   const response = await like(data);
   return response;
 });
+
+
+export const deleteProperty =  createAsyncThunk('/user/deleteProperty', async (data) => {
+  const response = await deleteSpecificProperty(data);
+  return response;
+});
+
 
 
 

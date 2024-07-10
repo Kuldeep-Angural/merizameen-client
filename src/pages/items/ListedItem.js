@@ -9,6 +9,7 @@ import ItemNotFound from '../../ui/json/noDataFOund.json';
 import { addDelay } from '../../utils/utility';
 import { allProperties, getAllProperties, likeproperty, selectLoading } from '../postAd/postPropertySlice';
 import './Item.scss';
+import { logout } from '../authantication/authSlice';
 
 
 
@@ -50,17 +51,29 @@ const ListedItems = ({ filterParams, searchParams }) => {
     );
   };
 
+
+
+
   useEffect(() => {
     setAppLoading(true);
-    let data = dataObj?.filter((e) => e.propertyType === filterParams);
+    let data = ![null,undefined,''].includes(filterParams) ?  dataObj?.filter((e) => e.propertyType === filterParams) : dataObj;
     addDelay(2000).then(() => {
       setAppLoading(false);
       setProperties(data);
     });
   }, [filterParams, dataObj]);
 
+
+
   useEffect(() => {
-    dispatch(getAllProperties());
+    dispatch(getAllProperties()).then((resp)=>{
+      console.log(resp?.payload?.response?.status===403);
+      if (resp?.payload?.response?.status===403) {
+        dispatch(logout()).then((resp)=>{
+          naviGate('/');
+        });
+      }
+    });
   }, []);
 
   return (

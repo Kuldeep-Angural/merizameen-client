@@ -53,7 +53,9 @@ export const filterChips = [
 
 export const dateFormat = {
   date:'MM/dd/yyyy',
-  dateAndTime:'DD-MM-YYYY, h:mm:ss a'
+  dateAndTime:'DD-MM-YYYY, h:mm:ss a',
+  dateAndTime2:'DD-MM-YYYY, hh:mm'
+
 }
 
 

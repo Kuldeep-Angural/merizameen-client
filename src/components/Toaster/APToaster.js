@@ -8,8 +8,8 @@ const APToaster = forwardRef(({ title, x, y, type }, ref) => {
   useImperativeHandle(
     ref,
     () => ({
-      showToast: (props) => {
-        setmessageData(props);
+      showToast: ({messageText , messageType}) => {
+        setmessageData(messageText , messageType);
         setOpen(true);
       },
     }),

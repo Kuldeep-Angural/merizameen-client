@@ -6,7 +6,7 @@ import { LocationAndFilter } from './LocationAndFilter';
 import { Wrapper } from './Wrapper';
 
 export const Home = ({ updatePageTitle }) => {
-  const [filterParams, setFilterParams] = useState('3Bhk');
+  const [filterParams, setFilterParams] = useState('');
   const [searchParams, setSearchParams] = useState('');
 
   useEffect(() => {
