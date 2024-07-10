@@ -144,7 +144,7 @@ export const PropertyView = () => {
                 </Grid>
                 <Grid mt={2}>
                   <Typography fontSize={'28px'} color={'primary'} fontWeight={'600'}>
-                    &#8377;:{property?.price}
+                    &#8377;:{property?.price}  /-
                   </Typography>
                 </Grid>
 
@@ -235,7 +235,7 @@ export const PropertyView = () => {
           <Grid item md={12}>
             <Typography fontWeight={550}>{property?.location?.city + ' ,' + property?.location?.state + ' ,' + property?.location?.pinCode}</Typography>
           </Grid>
-          <Grid item md={12} sm={12}>
+          <Grid item md={12} sm={12} xs={12}>
             <GoogleMap data={{ state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
           </Grid>
         </Grid>

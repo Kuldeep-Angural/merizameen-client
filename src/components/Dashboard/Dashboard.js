@@ -179,7 +179,7 @@ export const Dashboard = () => {
         <Box display="flex" alignItems="center">
           <Typography fontSize="15px">Price:</Typography>
           <Typography display="flex" fontSize="15px" color="primary" fontWeight="600">
-            {item.price}
+            {item.price} /- &#8377;
           </Typography>
           <Tooltip title={item.isActive ? 'Active' : 'Inactive'}>
             <CircleIcon style={{ marginLeft: '10px', color: item.isActive ? '#00cc00' : '#ff0000' }} className="like-Button" />
@@ -207,7 +207,7 @@ export const Dashboard = () => {
               <Box display="flex" alignItems="center">
                 <Typography fontSize="15px">Price:</Typography>
                 <Typography display="flex" fontSize="15px" color="primary" fontWeight="600">
-                  {item.price}
+                  {item.price} /- &#8377;
                 </Typography>
               </Box>
 

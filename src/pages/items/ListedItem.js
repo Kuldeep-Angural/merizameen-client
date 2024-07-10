@@ -41,7 +41,7 @@ const ListedItems = ({ filterParams, searchParams }) => {
         <Box display={'flex'} alignItems="center">
           <Typography fontSize={'15px'}>{'Price'}:</Typography>
           <Typography display={'flex'} fontSize={'15px'} color={'primary'} fontWeight={'600'}>
-            {item.price}
+            {item.price} /- &#8377;
           </Typography>
           <IconButton sx={{ marginLeft: '40px' }} aria-label="Add to Cart" onClick={() => {}}>
             <FavoriteBorderIcon onClick={() => doLike(item._id)} className="like-Button" />

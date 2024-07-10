@@ -21,13 +21,11 @@ export const PostProperty = () => {
   const [location, setLocation] = useState({
     state: 'Punjab',
     city: 'Pathankot',
-  })
+  });
 
   const [basicInfo, setBasicInfo] = useState({});
   const [amenities, setAmenities] = useState({});
   const [landMarks, setLandMarks] = useState({});
-
-
 
   const [openModal, setOpenModal] = useState(false);
   const loading = useSelector(selectPostLoading);
@@ -69,19 +67,17 @@ export const PostProperty = () => {
 
   const handleLocationChange = (event) => {
     const { name, value } = event.target;
-    setLocation({ ...location,[name]: value, });
+    setLocation({ ...location, [name]: value });
   };
 
   const handleStateAndCityChange = (event) => {
     const { name, value } = event.target;
-    if (name==='city') {
-      setLocation({ ...location,'city': value, });
-
-    }else{
-      setLocation({ ...location,'state': value, });
-
+    if (name === 'city') {
+      setLocation({ ...location, city: value });
+    } else {
+      setLocation({ ...location, state: value });
     }
-  }
+  };
 
   const handleBasicInfo = (event) => {
     const { name, value } = event.target;
@@ -93,23 +89,22 @@ export const PostProperty = () => {
 
   const handleAmenities = (event) => {
     const { name, checked } = event.target;
-    setAmenities({ ...amenities, [name]: checked === true ? 'Y' : 'N'});
+    setAmenities({ ...amenities, [name]: checked === true ? 'Y' : 'N' });
   };
 
   const handleLandMarks = (event) => {
     const { name, value } = event.target;
-    setLandMarks({ ...landMarks,[name]: value,});
+    setLandMarks({ ...landMarks, [name]: value });
   };
 
- 
   const handlePostButton = () => {
     const data = {
       ...postAdData,
-        basicInfo:{...basicInfo},
-        landMarks:{...landMarks},
-        amenities:{...amenities},
-        location:{...location}
-    }
+      basicInfo: { ...basicInfo },
+      landMarks: { ...landMarks },
+      amenities: { ...amenities },
+      location: { ...location },
+    };
     dispatch(postProperty(data)).then((resp) => {
       if (resp?.payload?.message) {
         toastRef.current.showToast({ messageType: 'warning', messageText: resp?.payload?.message });
@@ -121,7 +116,7 @@ export const PostProperty = () => {
     dispatch(getAllProperties());
   }, []);
 
-   const amenitiesConstant = [
+  const amenitiesConstant = [
     { name: 'carParking', label: 'Car parking' },
     { name: 'maintenance', label: 'Maintenance' },
     { name: 'vastuCompliant', label: 'Vastu compliant' },
@@ -130,8 +125,8 @@ export const PostProperty = () => {
     { name: 'gym', label: 'Gym' },
     { name: 'clubHouse', label: 'Club House' },
   ];
-  
-   const landMarksConstant = [
+
+  const landMarksConstant = [
     { name: 'hospital', label: 'Hospital', erroMessage: '' },
     { name: 'atm', label: 'Atm', erroMessage: '' },
     { name: 'bank', label: 'Bank', erroMessage: '' },
@@ -139,9 +134,9 @@ export const PostProperty = () => {
     { name: 'metro', label: 'Metro-Station', erroMessage: '' },
     { name: 'airport', label: 'Airport', erroMessage: '' },
   ];
-  
-   const basicInfoConstant = [
-    { name: 'bedRoom', label: 'Bedroom'  },
+
+  const basicInfoConstant = [
+    { name: 'bedRoom', label: 'Bedroom' },
     { name: 'bathRoom', label: 'Bathroom' },
     { name: 'totalArea', label: `Total (Yards)\u00B2` },
     { name: 'carpetArea', label: `Carpet (Yards)\u00B2` },
@@ -150,8 +145,8 @@ export const PostProperty = () => {
 
   return (
     <Wrapper>
-        <APToaster ref={toastRef} title="" />
-      <Progressbar LoadingState={loading}/>
+      <APToaster ref={toastRef} title="" />
+      <Progressbar LoadingState={loading} />
       <Grid container spacing={1} p={0}>
         <Grid item md={6} xs={12}>
           <Card>
@@ -214,7 +209,7 @@ export const PostProperty = () => {
                       {basicInfoConstant.map((item) => {
                         return (
                           <Grid key={item.label} item md={2} xs={6}>
-                            <TextField required label={item.label} helpertext="This Field is Required" onChange={handleBasicInfo} aria-describedby="outlined-weight-helper-text" name={item?.name}  type="number" value={basicInfo?.[item?.name] || ''} />
+                            <TextField required label={item.label} helpertext="This Field is Required" onChange={handleBasicInfo} aria-describedby="outlined-weight-helper-text" name={item?.name} type="number" value={basicInfo?.[item?.name] || ''} />
                           </Grid>
                         );
                       })}
@@ -229,7 +224,7 @@ export const PostProperty = () => {
                       Location
                     </Typography>
                     <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
-                      <Grid item md={4} xs={6} sm={6}>
+                      <Grid item md={6} xs={6} sm={6}>
                         <TextField fullWidth select value={location?.state || ''} onChange={handleStateAndCityChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
                           {state.map((option) => (
                             <option key={option} value={option}>
@@ -239,7 +234,7 @@ export const PostProperty = () => {
                         </TextField>
                       </Grid>
 
-                      <Grid item md={4} xs={6} sm={6}>
+                      <Grid item md={6} xs={6} sm={6}>
                         <TextField fullWidth select onChange={handleStateAndCityChange} value={location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
                           {cities.map((option) => (
                             <option key={option.name} value={option.name}>
@@ -249,13 +244,13 @@ export const PostProperty = () => {
                         </TextField>
                       </Grid>
 
-                      <Grid item md={4} xs={6} sm={6}>
+                      <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
                           <TextField required label="District" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
                         </FormControl>
                       </Grid>
 
-                      <Grid item md={4} xs={6} sm={6}>
+                      <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
                           <TextField required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
                         </FormControl>
@@ -263,8 +258,24 @@ export const PostProperty = () => {
 
                       <Grid item md={12} xs={12} sm={12}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField onChange={handleBasicInfo} label="Property Description" required helpertext="Please add Property Description" aria-describedby="outlined-weight-helper-text" value={basicInfo?.description || ''}  name={'description'} type="text" />
+                          <TextField onChange={handleBasicInfo} label="Property Description" required helpertext="Please add Property Description" aria-describedby="outlined-weight-helper-text" value={basicInfo?.description || ''} name={'description'} type="text" />
                         </FormControl>
+                      </Grid>
+
+                      <Grid item md={12} xs={12} sm={12}>
+                        <TextField
+                          label="Price(INR)"
+                          required
+                          onChange={handleBasicInfo}
+                          aria-describedby="outlined-weight-helper-text"
+                          name={'price'}
+                          type="number"
+                          value={basicInfo?.price || ''}
+                          inputProps={{
+                            style: { '-moz-appearance': 'textfield' }, // For Firefox
+                            'aria-hidden': true, // Hide arrows from screen readers
+                          }}
+                        />
                       </Grid>
                     </Grid>
                   </Grid>
@@ -344,19 +355,6 @@ export const PostProperty = () => {
             </CardContent>
           </Card>
           <Box display={'flex'} justifyContent={'space-between'} mt={3}>
-            <TextField
-              label="Price(INR)"
-              required
-              onChange={handleBasicInfo}
-              aria-describedby="outlined-weight-helper-text"
-              name={'price'}
-              type="number"
-              value={basicInfo?.price || ''}
-              inputProps={{
-                style: { '-moz-appearance': 'textfield' }, // For Firefox
-                'aria-hidden': true, // Hide arrows from screen readers
-              }}
-            />
             <LoaderButton text="Preview Ad" variant="contained" color="info" />
             <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px' }} text="Post Ad" loading={loading} variant="contained" onClick={handlePostButton} />
           </Box>
