@@ -27,18 +27,23 @@ export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, 
   const getExactLocation = async (latitude, longitude) => {
     try {
       const api_key = process.env.REACT_APP_LOCATION_API_KEY;
-      const response = await fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&appid=${api_key}`);
+      const url = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&appid=${api_key}`;
+      
+      const response = await fetch(url);
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const data = await response.json();
       const { country, state, name } = data[0] || {};
-      setLocation({ country: country, state: state, city: name });
+      
+      setLocation({ country, state, city: name });
     } catch (error) {
       console.error('Error:', error);
     }
   };
+  
 
   useEffect(() => {
     getLocationParams();
