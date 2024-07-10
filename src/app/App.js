@@ -7,6 +7,11 @@ import { googleLogin, selectUserData } from '../pages/authantication/authSlice';
 import { theme } from '../theme/theme';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+if (process.env.REACT_APP_IS_PRODCTION_ENV) {
+  console.log = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+}
 export const App = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectUserData);
