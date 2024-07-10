@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { Dashboard } from '../components/dashboard/Dashboard';
 import Auth from '../pages/authantication/Auth';
 import { selectUserData } from '../pages/authantication/authSlice';
 import { Home } from '../pages/home/Home';
 import { PropertyView } from '../pages/items/PropertyView';
 import { PageNotFound } from '../pages/notFoundPage/PageNotFound';
 import { PostProperty } from '../pages/postAd/PostProperty';
-import { Dashboard } from '../components/dashboard/Dashboard';
 
 export const APRoutes = () => {
   const ROUTES = [
