@@ -34,7 +34,7 @@ const headCellsSeller = [
   { id: 'link', numeric: true, disablePadding: false, label: 'Link' },
 ];
 
-export const Dashboard = () => {
+const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userLikes = useSelector(selectUserLikes);
@@ -312,3 +312,4 @@ export const Dashboard = () => {
     </Wrapper>
   );
 };
+export default Dashboard;
