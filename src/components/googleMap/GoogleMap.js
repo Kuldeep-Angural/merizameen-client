@@ -17,8 +17,8 @@ export const GoogleMap = ({data}) => {
         ></iframe>
       </div>
       <style>{`
-        .mapouter { position: relative; text-align: right; width: 100%; height: 200px;}
-        .gmap_canvas { overflow: hidden; background: none!important; width: 100%; height: 200px; }
+        .mapouter { position: relative; text-align: right; width: 100%; height: 400px;}
+        .gmap_canvas { overflow: hidden; background: none!important; width: 100%; height: 400px; }
         .gmap_iframe { width: 100% !important; height: 400px !important; }
         .gmnoprint .gm-style-mtc { right: 10px !important; left: auto !important;}
       `}</style>

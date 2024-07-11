@@ -236,7 +236,7 @@ export const PropertyView = () => {
             <Typography fontWeight={550}>{property?.location?.city + ' ,' + property?.location?.state + ' ,' + property?.location?.pinCode}</Typography>
           </Grid>
           <Grid item md={12} sm={12} xs={12}>
-          <CardMedia sx={{ height: 300, position: 'relative' }}>
+          <CardMedia sx={{ height: '400px', position: 'relative' }}>
             <GoogleMap data={{ state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
           </CardMedia>
           </Grid>
