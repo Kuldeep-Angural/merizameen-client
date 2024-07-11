@@ -87,3 +87,24 @@ export const setpropertyAsSold = async (payload) => {
       return error;
     });
 };
+
+
+
+export const buyPlan = async (payload) => {
+
+  return axios
+  .post(BASE_ENDPOINT+'/user/buyPlan', payload, {
+    headers: HEADERS.AUTHENTIC(),
+  })
+  .then(function (response) {
+    if (response.status === 200) {
+      return { ...response.data };
+    }
+  })
+  .catch(function (error) {
+    return error;
+  });
+};
+
+
+

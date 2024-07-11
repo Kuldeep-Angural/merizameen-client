@@ -90,7 +90,6 @@ const Dashboard = () => {
   };
 
   const handleDeleteProperty = (id) => {
-    console.log(id);
     dispatch(deleteProperty({ id: id })).then((resp) => {
       if (resp.payload.status === 200) {
         setLoading(true);

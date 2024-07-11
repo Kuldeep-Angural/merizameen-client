@@ -67,7 +67,6 @@ const ListedItems = ({ filterParams, searchParams }) => {
 
   useEffect(() => {
     dispatch(getAllProperties()).then((resp)=>{
-      console.log(resp?.payload?.response?.status===403);
       if (resp?.payload?.response?.status===403) {
         dispatch(logout()).then((resp)=>{
           naviGate('/');

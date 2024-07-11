@@ -1,23 +1,22 @@
 import { Button, FormControl, Grid, Input, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
-import React, { useImperativeHandle } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Progressbar from '../../components/ProgressBar/Progressbar';
 import { dateFormat } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
-import { selectLoading, updateUser } from './profileSlice';
+import { selectDataObj, selectInitialState, selectLoading, setData, updateUser } from './profileSlice';
+import { isBothObjectEqual } from '../../utils/utility';
 
-const Profile = React.forwardRef(({ dataObj, setDataObj }, ref) => {
+const Profile = React.forwardRef((ref) => {
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
+  const dataObj = useSelector(selectDataObj);
+  const initialData = useSelector(selectInitialState);
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      Update: () => dispatch(updateUser(dataObj)).then((resp) => {}),
-    }),
-    []
-  );
+  const setDataObj = (data) => {
+    dispatch(setData(data));
+  };
 
   const handleChange = (event) => {
     const { name, value, files } = event.target;
@@ -31,10 +30,13 @@ const Profile = React.forwardRef(({ dataObj, setDataObj }, ref) => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    event.preventDefault();
     setDataObj({ ...dataObj, [name]: value });
   };
 
+  const onSubmitCLick = () => {
+    dispatch(updateUser(dataObj)).then((resp) => {
+    });
+  };
 
   return (
     <>
@@ -71,6 +73,10 @@ const Profile = React.forwardRef(({ dataObj, setDataObj }, ref) => {
           <Typography fontSize={'10px'} color={'red'} align={'left'}>
             Last Updated: {moment(dataObj?.updatedAt || '').format(dateFormat.dateAndTime)}
           </Typography>
+        </Grid>
+
+        <Grid>
+          <Button variant='outlined' onClick={onSubmitCLick}> Update </Button>
         </Grid>
       </Grid>
     </>

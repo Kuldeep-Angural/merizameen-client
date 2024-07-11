@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllpostedProperties, getUserDetail, sellerLikes, setpropertyAsSold, updateUserDetails, userLikes } from './profileApi';
+import { buyPlan, getAllpostedProperties, getUserDetail, sellerLikes, setpropertyAsSold, updateUserDetails, userLikes } from './profileApi';
 
 const initialState = {
   loading: false,
@@ -8,6 +8,7 @@ const initialState = {
   sellerLikes:[],
   postedProperties:[],
   dataObj: {},
+  initialState:{}
 };
 
 export const getUserDetails = createAsyncThunk('profile/userDetails', async (credentials) => {
@@ -43,6 +44,12 @@ export const setSoldProperty = createAsyncThunk('/user/setSold', async (data) =>
 });
 
 
+export const updateMemberShip = createAsyncThunk('/user/buyPlan', async (data) => {
+  const response = await buyPlan(data);
+  return response;
+});
+
+
 
 
 export const profileSlice = createSlice({
@@ -61,13 +68,14 @@ export const profileSlice = createSlice({
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.dataObj = action?.payload?.data || {};
+        state.initialState = action?.payload?.data || {};
       })
       .addCase(updateUser.pending, (state) => {
         state.loading = true;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
-        // state.dataObj = action?.payload?.data || {};
+        state.dataObj = action?.payload?.data || {};
       })
       .addCase(getUserLikes.pending, (state) => {
         state.likesLoading = true;
@@ -96,12 +104,22 @@ export const profileSlice = createSlice({
       .addCase(setSoldProperty.fulfilled, (state, action) => {
         state.loading = false;
       })
+      .addCase(updateMemberShip.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateMemberShip.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+
+      
       
   },
 });
 export const { setData } = profileSlice.actions;
 
 export const selectDataObj = (state) => state.profile.dataObj;
+export const selectInitialState = (state) => state.profile.initialState;
+
 export const selectLoading = (state) => state.profile.loading;
 export const selectUserLikes = (state) => state.profile.userLikes;
 export const selectSellerLikes = (state) => state.profile.sellerLikes;

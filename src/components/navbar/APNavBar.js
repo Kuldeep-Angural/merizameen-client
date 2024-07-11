@@ -32,6 +32,7 @@ import { APRoutes } from '../../constants/routes';
 import { getUserDetails, selectDataObj, setData } from '../../pages/profile/profileSlice';
 import { useEffect } from 'react';
 import { GoogleMap } from '../googleMap/GoogleMap';
+import MemberShip from '../../pages/memberShip/MemberShip';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -39,6 +40,8 @@ export const APNavBar = () => {
   const [openQueryPannel, setOpenQueryPannel] = React.useState(false);
   const [openCallBack, setOpenCallBack] = React.useState(false);
   const [profileModal, setProfileModal] = React.useState(false);
+  const [planModal, setPlanModal] = React.useState(false);
+
   const[loadingstate,setLoadingState] = React.useState(false)
   const profileRef = React.useRef();
   const dataObj = useSelector(selectDataObj);
@@ -123,6 +126,9 @@ export const APNavBar = () => {
     if (eventName === 'Profile') {
       setProfileModal(true);
     }
+    if (eventName === 'Plans') {
+      setPlanModal(true);
+    }
     return handleCloseUserMenu();
   };
 
@@ -135,9 +141,7 @@ export const APNavBar = () => {
   },[])
 
 
-  const setDataObj = (data) => {
-    dispatch(setData(data));
-  };
+ 
 
 
   return (
@@ -425,8 +429,12 @@ export const APNavBar = () => {
             </>
           }
         />
-        <Modal open={profileModal} onSubmit={onSubmitCLick} submitButtonTitle={"Update"} onClose={()=>setProfileModal(false)} title="Profile" style={{minWidth:'200px' , maxWidth:'500px'}}>
-            <Profile dataObj={dataObj} setDataObj={setDataObj} ref={profileRef}/>
+        <Modal open={profileModal}   hideCancelButton={true} hideCreateButton={true} submitButtonTitle={"Update"} onClose={()=>setProfileModal(false)} title="" style={{minWidth:'150px' , maxWidth:'360px'}}>
+            <Profile dataObj={dataObj}  ref={profileRef}/>
+        </Modal>
+
+        <Modal open={planModal} hideCreateButton={true} hideCancelButton={true} draggable={false} title="" onClose={()=>setPlanModal(false)} >
+            <MemberShip />
         </Modal>      
       </AppBar>
     </>
