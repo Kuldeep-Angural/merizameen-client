@@ -242,6 +242,7 @@ export const PropertyView = () => {
           </Grid>
         </Grid>
       </Modal>
+      
     </Wrapper>
   );
 };
