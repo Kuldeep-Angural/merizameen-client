@@ -28,7 +28,7 @@ import { dateFormat } from '../../constants/constant';
 import { Wrapper } from '../home/Wrapper';
 import '../items/Item.scss';
 import { getSpecificProperty, selectLoading } from '../postAd/postPropertySlice';
-
+import CardMedia from '@mui/material/CardMedia';
 export const PropertyView = () => {
   const [property, setProperty] = useState({});
   const [propertyImages, setPropertyImages] = useState([]);
@@ -236,7 +236,9 @@ export const PropertyView = () => {
             <Typography fontWeight={550}>{property?.location?.city + ' ,' + property?.location?.state + ' ,' + property?.location?.pinCode}</Typography>
           </Grid>
           <Grid item md={12} sm={12} xs={12}>
+          <CardMedia sx={{ height: 300, position: 'relative' }}>
             <GoogleMap data={{ state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
+          </CardMedia>
           </Grid>
         </Grid>
       </Modal>
