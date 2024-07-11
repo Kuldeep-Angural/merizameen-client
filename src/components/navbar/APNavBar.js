@@ -17,7 +17,6 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import CompanyLogo from '../../ui/logos/newLogo.png';
-import { GoogleMap } from '../../utils/utility';
 import { APDialog } from '../modal/APDialog';
 import '../../pages/Global.scss';
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +31,7 @@ import Progressbar from '../ProgressBar/Progressbar';
 import { APRoutes } from '../../constants/routes';
 import { getUserDetails, selectDataObj, setData } from '../../pages/profile/profileSlice';
 import { useEffect } from 'react';
+import { GoogleMap } from '../googleMap/GoogleMap';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -319,7 +319,7 @@ export const APNavBar = () => {
                   </Button>
                 </Tooltip>
               </Grid>
-              {GoogleMap()}
+              {GoogleMap({ city:'pathankot', country:'India', state:'Punjab', zip:'145001'})}
               <Box justifyContent={'space-around'} display={'flex'} textAlign={'center'} mt={1}>
                 <Button variant="outlined" onClick={() => openQuery()} textAlign={'center'}>
                   click here to share your query
