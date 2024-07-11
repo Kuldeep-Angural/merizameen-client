@@ -230,7 +230,7 @@ export const PropertyView = () => {
         </Grid>
       </Grid>
 
-      <Modal open={locationModal} onSubmit={() => {}} hideCreateButton={true} onClose={() => setLocatiionModal(false)} title="" style={{ minWidth: '500px', maxWidth: '700px' }}>
+      <Modal open={locationModal} onSubmit={() => {}} hideCreateButton={true} onClose={() => setLocatiionModal(false)} title="" >
         <Grid container>
           <Grid item md={12}>
             <Typography fontWeight={550}>{property?.location?.city + ' ,' + property?.location?.state + ' ,' + property?.location?.pinCode}</Typography>
