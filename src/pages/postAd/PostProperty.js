@@ -14,7 +14,7 @@ import imageIcon from '../../ui/images/noImage.webp';
 import { Wrapper } from '../home/Wrapper';
 import { getAllProperties, postProperty, selectPostLoading } from './postPropertySlice';
 
-export const PostProperty = () => {
+export const PostProperty = ({editData}) => {
   const [cities, setCities] = useState([]);
   const [postAdData, setPostAdData] = useState({});
   const toastRef = useRef();
@@ -34,6 +34,17 @@ export const PostProperty = () => {
   useEffect(() => {
     setCities(location?.state === 'Punjab' ? punjabCities : himachalCities);
   }, [location]);
+
+  useEffect(()=>{
+    console.log(editData);
+    if (editData) {
+      setBasicInfo()
+      setLocation()
+      setAmenities()
+      setLandMarks()
+
+    }
+  },[editData])
 
   const handleChange = (e) => {
     if (e.target.name === 'mainImage') {

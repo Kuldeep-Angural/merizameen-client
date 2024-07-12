@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { buyPlan, getAllpostedProperties, getUserDetail, sellerLikes, setpropertyAsSold, updateUserDetails, userLikes } from './profileApi';
+import { buyPlan, getAllpostedProperties, getUserDetail, sellerLikes, setPropertyActive, setpropertyAsSold, updateUserDetails, userLikes } from './profileApi';
 
 const initialState = {
   loading: false,
@@ -42,6 +42,13 @@ export const setSoldProperty = createAsyncThunk('/user/setSold', async (data) =>
   const response = await setpropertyAsSold(data);
   return response;
 });
+
+export const setActiveProperty = createAsyncThunk('/user/setSold', async (data) => {
+  const response = await setPropertyActive(data);
+  return response;
+});
+
+
 
 
 export const updateMemberShip = createAsyncThunk('/user/buyPlan', async (data) => {

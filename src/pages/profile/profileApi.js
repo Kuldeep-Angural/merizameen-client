@@ -88,6 +88,21 @@ export const setpropertyAsSold = async (payload) => {
     });
 };
 
+export const setPropertyActive = async (payload) => {
+  return axios
+  .post(BASE_ENDPOINT+'/user/setActiveProperty', payload, {
+    headers: HEADERS.AUTHENTIC(),
+  })
+  .then(function (response) {
+    if (response.status === 200) {
+      return { ...response.data };
+    }
+  })
+  .catch(function (error) {
+    return error;
+  });
+};
+
 
 
 export const buyPlan = async (payload) => {

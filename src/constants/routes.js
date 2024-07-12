@@ -31,7 +31,7 @@ export const APRoutes = () => {
   return (
     <Routes>
       {ROUTES.map((route, index) => (
-        <Route path={route.name} element={ isLoggedIn ? route.value(index) :<Auth key={index} updatePageTitle={updatePageTitle} /> } key={route.name} /> 
+        <Route path={route.name} element={ isLoggedIn ? route.value(index) : <Auth key={index} updatePageTitle={updatePageTitle} /> } key={route.name} /> 
       ))}
       <Route path="*" element={<PageNotFound updatePageTitle={updatePageTitle} />} /> {/* Catch-all route */}
     </Routes>
