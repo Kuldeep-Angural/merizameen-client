@@ -1,7 +1,7 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Box, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkButton } from '../../components/buttons/LinkButton';
 import LoaderButton from '../../components/loadingbutton/LoaderButton';
@@ -145,9 +145,11 @@ export const SignInForm = ({ route }) => {
   const onSuccess = (resp) => {
     setloading(true)
     if (resp?.credential) {
-      dispatch(loginWithGoogle({credentials:resp?.credential})).then((resp)=>{
+      dispatch(loginWithGoogle({
+        credentials:
+        resp?.credential })).then((resp)=>{
         if (resp.payload.status===200) {
-            console.log(resp);
+          
         }
         setloading(false)
       })
@@ -159,13 +161,6 @@ export const SignInForm = ({ route }) => {
 
   }
 
-  const googleLogin = () => {
-    return (
-
-      <></>
-    )
-    // window.open(process.env.REACT_APP_API_END_POINT + '/auth/google/callback', '_self');
-  }
 
   const googleLogout = () => {
     <googleLogout
