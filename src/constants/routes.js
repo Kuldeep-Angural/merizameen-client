@@ -17,6 +17,7 @@ export const APRoutes = () => {
     { name: '/home', value: (index) => <Home key={index} updatePageTitle={updatePageTitle} /> },
     { name: '/home/:listId', value: (index) => <PropertyView key={index} updatePageTitle={updatePageTitle} /> },
     { name: '/postAd', value: (index) => (<PostProperty key={index} updatePageTitle={updatePageTitle} /> ) },
+    { name: '/edit/property/:id', value: (index) => (<PostProperty key={index} updatePageTitle={updatePageTitle} /> ) },
     { name: '/dashboard', value: (index) => (<Dashboard key={index} updatePageTitle={updatePageTitle} /> ) },
   ];
   const isLoggedIn = useSelector(selectUserData);

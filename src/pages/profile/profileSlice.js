@@ -43,7 +43,7 @@ export const setSoldProperty = createAsyncThunk('/user/setSold', async (data) =>
   return response;
 });
 
-export const setActiveProperty = createAsyncThunk('/user/setSold', async (data) => {
+export const setActiveProperty = createAsyncThunk('/user/setActive', async (data) => {
   const response = await setPropertyActive(data);
   return response;
 });
@@ -115,6 +115,12 @@ export const profileSlice = createSlice({
         state.loading = true;
       })
       .addCase(updateMemberShip.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(setActiveProperty.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(setActiveProperty.fulfilled, (state, action) => {
         state.loading = false;
       })
 

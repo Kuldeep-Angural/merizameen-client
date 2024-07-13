@@ -1,40 +1,25 @@
+import { Circle as CircleIcon, FavoriteBorder as FavoriteBorderIcon, MoreVert as MoreVertIcon, Notifications as NotificationsIcon, PostAdd as PostAddIcon, Sell as SellIcon } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import { Box, Button, Card, CardContent, Fade, Grid, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import moment from 'moment';
-import { Box, Button, Card, CardContent, Fade, Grid, Menu, MenuItem, Tooltip, Typography, IconButton } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import { FavoriteBorder as FavoriteBorderIcon, Notifications as NotificationsIcon, PostAdd as PostAddIcon, Sell as SellIcon, Circle as CircleIcon, MoreVert as MoreVertIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import { dateFormat } from '../../constants/constant';
 import { Wrapper } from '../../pages/home/Wrapper';
-import { getPostedproperties, getSellerLikes, getUserLikes, selectPostedProperties, selectSellerLikes, selectUserLikes, setSoldProperty } from '../../pages/profile/profileSlice';
-import EnhancedTable from '../table/EnhancedTable';
-import Spinner from '../ProgressBar/Progressbar';
+import { deleteProperty } from '../../pages/postAd/postPropertySlice';
+import { getPostedproperties, getSellerLikes, getUserLikes, selectPostedProperties, selectSellerLikes, selectUserLikes, setActiveProperty, setSoldProperty } from '../../pages/profile/profileSlice';
 import { addDelay } from '../../utils/utility';
 import Emptyview from '../emptyView/Emptyview';
-import { deleteProperty } from '../../pages/postAd/postPropertySlice';
-import DeleteIcon from '@mui/icons-material/Delete';
-
-const headCells = [
-  { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
-  { id: 'propertyType', numeric: true, disablePadding: false, label: 'PropertyType' },
-  { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-  { id: 'postedAt', numeric: true, disablePadding: false, label: 'Posted At' },
-  { id: 'likedAt', numeric: true, disablePadding: false, label: 'Liked At' },
-  { id: 'link', numeric: true, disablePadding: false, label: 'Link' },
-];
-
-const headCellsSeller = [
-  { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
-  { id: 'propertyType', numeric: true, disablePadding: false, label: 'PropertyType' },
-  { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-  { id: 'postedAt', numeric: true, disablePadding: false, label: 'Posted At' },
-  { id: 'postFor', numeric: true, disablePadding: false, label: 'Post For' },
-  { id: 'userName', numeric: true, disablePadding: false, label: 'Liked By' },
-  { id: 'link', numeric: true, disablePadding: false, label: 'Link' },
-];
+import Spinner from '../ProgressBar/Progressbar';
+import { PostProperty } from '../../pages/postAd/PostProperty';
+import Modal from '../modal/Modal';
 
 const Dashboard = () => {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userLikes = useSelector(selectUserLikes);
@@ -45,14 +30,19 @@ const Dashboard = () => {
   const [menuState, setMenuState] = useState({ anchorEl: null, propertyId: null });
   const [activeProperties, setActiveProperties] = useState([]);
   const [soldProperties, setSoldProperties] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [inActiveProperties, setInactiveProperties] = useState([]);
+  const [selectedproperties, setSelectedProperties] = useState([]);
+  const [openEditingModal, setOpenEditingModal] = useState(false)
 
+  const [loading, setLoading] = useState(false);
   const open = Boolean(menuState.anchorEl);
 
   const refetchData = () => {
+    setLoading(true)
     dispatch(getUserLikes());
     dispatch(getSellerLikes());
     dispatch(getPostedproperties());
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -66,7 +56,9 @@ const Dashboard = () => {
   useEffect(() => {
     setActiveProperties(postedProperties?.filter((p) => p?.isActive));
     setSoldProperties(postedProperties?.filter((p) => p?.isSold === true));
+    setInactiveProperties(postedProperties?.filter((p) => !p?.isSold && !p?.isActive));
   }, [postedProperties]);
+
 
   const handleClick = (event, id) => {
     setMenuState({ anchorEl: event.currentTarget, propertyId: id });
@@ -76,6 +68,10 @@ const Dashboard = () => {
     setMenuState({ anchorEl: null, propertyId: null });
   };
 
+  const handleOpenPropertyview = (id) => {
+    return navigate('/home/' + id);
+  };
+
   const handleClickSold = () => {
     dispatch(setSoldProperty({ propertyId: menuState.propertyId })).then((resp) => {
       if (resp.payload.status === 200) {
@@ -83,10 +79,6 @@ const Dashboard = () => {
       }
     });
     handleClose();
-  };
-
-  const handleOpenPropertyview = (id) => {
-    return navigate('/home/' + id);
   };
 
   const handleDeleteProperty = (id) => {
@@ -109,66 +101,78 @@ const Dashboard = () => {
     });
   };
 
+  const handleEditClick = (event , id) => {
+    return navigate('/edit/property/' + id);
+
+  }
+
+  const handleClickActive = () => {
+    dispatch(setActiveProperty({ propertyId: menuState.propertyId })).then((resp) => {
+      if (resp.payload.status === 200) {
+        refetchData();
+      }
+    });
+    handleClose();
+  }
+
   const useAnalyticsCards = (userLikes, sellerLikes, soldProperties, postedProperties, activeProperties) => {
     return useMemo(() => {
       const cardData = [
         {
-          name: 'likes',
-          title: 'Liked Property',
-          text: 'Properties liked ',
-          color: 'rgba(224, 119, 196,0.5)',
-          count: `${userLikes?.length}` || 0,
-          icon: <FavoriteBorderIcon fontSize="large" style={{ fontSize: '70px' }} />,
+          name: 'likes', title: 'Liked Property',text: 'Properties liked ',   color: 'rgba(224, 119, 196,0.5)',
+          count: userLikes?.length || 0, icon: <FavoriteBorderIcon fontSize="large" style={{ fontSize: '70px' }} />,
         },
         {
-          name: 'solds',
-          title: 'Sold Property',
-          text: 'Properties Sold by You so far.',
-          color: 'rgba(0, 89, 232 , 0.5)',
-          count: soldProperties?.length || 0,
-          icon: <SellIcon fontSize="large" style={{ fontSize: '70px' }} />,
+          name: 'solds', title: 'Sold Property', text: 'Properties Sold by You so far.',color: 'rgba(0, 89, 232 , 0.5)',
+          count: soldProperties?.length || 0,icon: <SellIcon fontSize="large" style={{ fontSize: '70px' }} />,
         },
         {
-          name: 'post',
-          title: 'Posted Property',
-          text: 'Properties Posted by You.',
-          color: 'rgba(214, 44, 32 , 0.5)',
-          count: postedProperties?.length || 0,
-          icon: <PostAddIcon fontSize="large" style={{ fontSize: '70px' }} />,
+          name: 'post', title: 'Posted Property', text: 'Properties Posted by You.', color: 'rgba(214, 44, 32 , 0.5)',
+          count: postedProperties?.length || 0, icon: <PostAddIcon fontSize="large" style={{ fontSize: '70px' }} />,
         },
         {
-          name: 'active',
-          title: 'Active Property',
-          text: 'Active Properties by You.',
-          color: 'rgba(255, 166, 0, 0.5)',
-          count: activeProperties?.length || 0,
-          icon: <NotificationsIcon fontSize="large" style={{ fontSize: '70px' }} />,
+          name: 'active', title: 'Active Property', text: 'Active Properties by You.', color: 'rgba(255, 166, 0, 0.5)',
+          count: activeProperties?.length || 0,  icon: <NotificationsIcon fontSize="large" style={{ fontSize: '70px' }} />,
+        },
+        {
+          name: 'inActive', title: 'In-Active Property', text: 'Your In-Active Properties.', color: 'rgba(215, 16, 207, 0.5)',
+          count: inActiveProperties?.length || 0,  icon: <NotificationsOffIcon fontSize="large" style={{ fontSize: '70px' }} />,
         },
       ];
 
       return cardData;
-    }, [userLikes, sellerLikes, soldProperties, postedProperties, activeProperties]);
+    }, [userLikes, sellerLikes, soldProperties, postedProperties, activeProperties, inActiveProperties]);
   };
 
-  const renderPropertyCard = (item) => {
+  const renderPropertyCard = (item, prop) => {
     return (
       <Grid item md={3} sm={6} xs={12} style={{ cursor: 'pointer' }} className={item?.isSold ? 'container-disabled' : 'container'}>
-        {!item?.isSold ? (
-          <Tooltip title="Edit">
-            <Button id="fade-button" sx={{ position: 'absolute' }} aria-controls={open ? 'fade-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={(event) => handleClick(event, item._id)}>
-              <MoreVertIcon style={{ color: '#5A5A5A' }} />
-            </Button>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Delete">
-            <Button id="fade-button" sx={{ position: 'absolute' }} onClick={(event) => handleDeleteProperty(item._id)}>
-              <DeleteIcon style={{ color: '#5A5A5A' }} />
-            </Button>
-          </Tooltip>
-        )}
-        <Menu id="fade-menu" MenuListProps={{ 'aria-labelledby': 'fade-button' }} anchorEl={menuState.anchorEl} open={open} onClose={handleClose} TransitionComponent={Fade}>
-          <MenuItem onClick={handleClickSold}>Mark as Sold</MenuItem>
-        </Menu>
+        <Box display='flex' sx={{ position: 'absolute', justifyContent: 'space-between' }}>
+          {prop === 'post' && !item.isSold  && (
+            <Tooltip title="Edit">
+              <Button id="fade-button" aria-controls={open ? 'fade-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={(event) => handleEditClick(event, item._id)}>
+                <EditNoteIcon style={{ color: 'white' }} />
+              </Button>
+            </Tooltip>
+          )}
+
+          {!item?.isSold ? (
+            <Tooltip title="Menu">
+              <Button id="fade-button" aria-controls={open ? 'fade-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={(event) => handleClick(event, item._id)}>
+                <MoreVertIcon style={{ color: 'white' }} />
+              </Button>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Delete">
+              <Button id="fade-button" onClick={(event) => handleDeleteProperty(item._id)}>
+                <DeleteIcon style={{ color: 'white' }} sx={{ '&:hover': { color: 'white' } }} />
+              </Button>
+            </Tooltip>
+          )}
+        </Box>
+        { !item?.isSold && <Menu id="fade-menu" MenuListProps={{ 'aria-labelledby': 'fade-button' }} anchorEl={menuState.anchorEl} open={open} onClose={handleClose} TransitionComponent={Fade}>
+         { prop!=='inactive' ?  <MenuItem onClick={handleClickSold}>Mark as Sold</MenuItem> : <MenuItem onClick={handleClickActive}>Set Active</MenuItem>}
+        </Menu>}
         <img loading="lazy" style={{ borderRadius: '3%' }} src={item.mainImage} height="200px" width="100%" alt="Property" onClick={() => handleOpenPropertyview(item._id)} />
         <Typography fontWeight="600">{item.title}</Typography>
         <Box display="flex">
@@ -189,36 +193,38 @@ const Dashboard = () => {
   };
 
   const renderPropertyLikesCard = (item) => {
+    const { userName, likedAt, property, } = item;
+    const { _id, mainImage, propertyType, isActive, isSold, price, title } = property || {}
     return (
-      <Grid item md={6} sm={6} xs={12} style={{ cursor: 'pointer' }} className={item?.isSold ? 'container-disabled' : 'container'}>
+      <Grid item md={6} sm={6} xs={12} style={{ cursor: 'pointer' }}>
         <Card>
           <Grid container spacing={2}>
             <Grid item md={6} xs={12}>
-              <img loading="lazy" style={{ borderRadius: '3%' }} src={item.mainImage} height="200px" width="100%" alt="Property" onClick={() => handleOpenPropertyview(item._id)} />
+              <img loading="lazy" style={{ borderRadius: '3%' }} src={mainImage} height="200px" width="100%" alt="Property" onClick={() => handleOpenPropertyview(_id)} />
             </Grid>
             <Grid item md={6} xs={12}>
-              <Typography fontWeight="600">{item.title}</Typography>
+              <Typography fontWeight="600">{title}</Typography>
               <Box display="flex">
                 <Typography>Property Type:</Typography>
-                <Typography>{item.type}</Typography>
+                <Typography>{propertyType}</Typography>
               </Box>
 
               <Box display="flex" alignItems="center">
                 <Typography fontSize="15px">Price:</Typography>
                 <Typography display="flex" fontSize="15px" color="primary" fontWeight="600">
-                  {item.price} /- &#8377;
+                  {price} /- &#8377;
                 </Typography>
               </Box>
 
               <Box display="flex">
-                <Typography>{item?.sellerLikes ? 'Liked On' : 'Liked At'}:</Typography>
-                <Typography>{moment(item?.userLikes?.likedAt).format(dateFormat.dateAndTime2)}</Typography>
+                <Typography>{userName ? 'Liked On' : 'Liked At'}:</Typography>
+                <Typography>{moment(likedAt).format(dateFormat.dateAndTime2)}</Typography>
               </Box>
 
-              {item?.sellerLikes && (
+              {userName && (
                 <Box display="flex">
                   <Typography>{'Liked by'}:</Typography>
-                  <Typography>{item?.sellerLikes?.userName}</Typography>
+                  <Typography>{userName}</Typography>
                 </Box>
               )}
             </Grid>
@@ -234,21 +240,10 @@ const Dashboard = () => {
       <Box width="100%" height="100vh" sx={{ backgroundColor: grey[50] }}>
         <Grid container p="5px" spacing="10px">
           {useAnalyticsCards(userLikes, sellerLikes, soldProperties, postedProperties, activeProperties).map(({ name, title, text, color, icon, count }) => (
-            <Grid item mt={2} xs={12} sm={6} md={3} key={name}>
+            <Grid item mt={2} xs={12} sm={6} md={2.4} key={name}>
               <Card
                 onClick={() => handleCardCLick(name)}
-                sx={{
-                  border: selectedCards === name ? '3px solid green' : '',
-                  minHeight: '160px',
-                  maxHeight: '160px',
-                  overflow: 'hidden',
-                  backgroundColor: color,
-                  borderRadius: '16px',
-                  transform: 'all',
-                  cursor: 'pointer',
-                  '&:hover': { boxShadow: 3 },
-                }}
-              >
+                sx={{  border: selectedCards === name ? '3px solid green' : '', minHeight: '160px', maxHeight: '160px',overflow: 'hidden', backgroundColor: color, borderRadius: '16px', transform: 'all', cursor: 'pointer', '&:hover': { boxShadow: 3 }, }}>
                 <CardContent>
                   <Grid container>
                     <Grid item xs={4} md={4} sm={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
@@ -279,8 +274,8 @@ const Dashboard = () => {
               <Grid container spacing={2}>
                 {userLikes?.length > 0 ? userLikes?.map((item) => renderPropertyLikesCard(item)) : <Emptyview text={"You haven't liked any properties."} />}
               </Grid>
-              <Typography>Someone likes your properties.</Typography>
-              <Grid item md={12} mt={2}>
+              <Typography mt={3}>Someone likes your properties.</Typography>
+              <Grid container spacing={2}>
                 {sellerLikes?.length > 0 ? sellerLikes?.map((item) => renderPropertyLikesCard(item)) : <Emptyview text={' No one has liked your properties.'} />}
               </Grid>
             </>
@@ -288,7 +283,7 @@ const Dashboard = () => {
           {selectedCards === 'post' && (
             <Grid item md={12} padding={1}>
               <Grid container spacing={2}>
-                {postedProperties?.length > 0 ? postedProperties?.map((item) => renderPropertyCard(item)) : <Emptyview text={'No properties are currently posted.'} />}
+                {postedProperties?.length > 0 ? postedProperties?.map((item) => renderPropertyCard(item, 'post')) : <Emptyview text={'No properties are currently posted.'} />}
               </Grid>
             </Grid>
           )}
@@ -303,6 +298,14 @@ const Dashboard = () => {
             <Grid item md={12} padding={1}>
               <Grid container spacing={2}>
                 {soldProperties?.length > 0 ? soldProperties?.map((item) => renderPropertyCard(item)) : <Emptyview text={'You currently have no sold properties.'} />}
+              </Grid>
+            </Grid>
+          )}
+
+          {selectedCards === 'inActive' && (
+            <Grid item md={12} padding={1}>
+              <Grid container spacing={2}>
+                {inActiveProperties?.length > 0 ? inActiveProperties?.map((item) => renderPropertyCard(item,'inactive')) : <Emptyview text={'You currently have no sold properties.'} />}
               </Grid>
             </Grid>
           )}

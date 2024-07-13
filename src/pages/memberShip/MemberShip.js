@@ -1,5 +1,5 @@
 import LoyaltyIcon from '@mui/icons-material/Loyalty';
-import { Avatar, Button, Card, Grid, Typography } from '@mui/material';
+import { Avatar, Button, Card, Grid, Typography, Box } from '@mui/material';
 import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,10 +33,10 @@ const MemberShip = () => {
       }
     });
   };
+
   return (
     <>
       <Spinner LoadingState={loading} />
-
       <Grid container spacing={2} mt={0}>
         <Grid item xs={12}>
           <Grid container spacing={2}>
@@ -44,9 +44,9 @@ const MemberShip = () => {
               <Titleheader align="center" title="Current Plan & Usage" />
 
               {user?.memberShip?.type === MemberShips.Standard_Access && (
-                <Card sx={{ padding: 2 }}>
+                <Card sx={{ padding: 2, background: 'linear-gradient(135deg, #f3ec78, #af4261)', color: '#fff' }}>
                   <Typography align="center" lineHeight={1.5}>
-                    Plan :{user.memberShip.type}
+                    Plan: {user.memberShip.type}
                   </Typography>
 
                   <Typography fontWeight={500} lineHeight={1}>
@@ -54,53 +54,53 @@ const MemberShip = () => {
                   </Typography>
 
                   <Typography mt={1} align="center" lineHeight={1.5}>
-                    Usage :{'Total Properties'}
+                    Usage
                   </Typography>
 
                   <Typography fontWeight={500} lineHeight={1}>
-                    {'' + user?.usage.posts || 0} Properties Posted
+                    {'' + (user?.usage.posts || 0)} Properties Posted
                   </Typography>
                 </Card>
               )}
 
               {user?.memberShip?.type === MemberShips.Premium_Access && (
-                <Card sx={{ padding: 2 }}>
+                <Card sx={{ padding: 2, background: 'linear-gradient(135deg, #89f7fe, #66a6ff)', color: '#fff' }}>
                   <Typography align="center" lineHeight={1.5}>
-                    Plan :{user.memberShip.type}
+                    Plan: {user.memberShip.type}
                   </Typography>
 
                   <Typography fontWeight={500} lineHeight={1}>
-                    {'Start Date  : ' + moment(user?.memberShip?.startDate).format(dateFormat.date) || 'n/a'}
+                    {'Start Date: ' + moment(user?.memberShip?.startDate).format(dateFormat.date) || 'n/a'}
                   </Typography>
 
                   <Typography fontWeight={500} mt={1} lineHeight={1}>
-                    {'Start Date  : ' + moment(user?.memberShip?.endDate).format(dateFormat.date) || 'n/a'}
+                    {'End Date: ' + moment(user?.memberShip?.endDate).format(dateFormat.date) || 'n/a'}
                   </Typography>
 
                   <Typography mt={1} align="center" lineHeight={1.5}>
-                    Usage :{'Total Properties'}
+                    Usage
                   </Typography>
 
                   <Typography fontWeight={500} lineHeight={1}>
-                    {'' + user?.usage.posts || 0} Properties Posted
+                    {'' + (user?.usage.posts || 0)} Properties Posted
                   </Typography>
                 </Card>
               )}
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <Titleheader align="center" title={'Features'} />
+              <Titleheader align="center" title="Features" />
               {user?.memberShip?.type === MemberShips.Standard_Access && (
-                <Card sx={{ padding: 2 }}>
+                <Card sx={{ padding: 2, background: 'linear-gradient(135deg, #f3ec78, #af4261)', color: '#fff' }}>
                   <Typography align="center" lineHeight={1.5}>
-                    Posts :{Standard_Access.posts.post}{' '}
+                    Posts: {Standard_Access.posts.post}{' '}
                   </Typography>
                   <Typography fontWeight={500} lineHeight={1}>
                     {Standard_Access.posts.info}
                   </Typography>
 
                   <Typography align="center" mt={2} lineHeight={1.5}>
-                    Masking :Yes
+                    Masking: Yes
                   </Typography>
                   <Typography fontWeight={500} lineHeight={1}>
                     {Standard_Access.masking.locationMasking}
@@ -115,16 +115,16 @@ const MemberShip = () => {
               )}
 
               {user?.memberShip?.type === MemberShips.Premium_Access && (
-                <Card sx={{ padding: 2 }}>
+                <Card sx={{ padding: 2, background: 'linear-gradient(135deg, #89f7fe, #66a6ff)', color: '#fff' }}>
                   <Typography align="center" lineHeight={1.5}>
-                    Posts :{Premium_Access.posts.post}{' '}
+                    Posts: {Premium_Access.posts.post}{' '}
                   </Typography>
                   <Typography fontWeight={500} lineHeight={1}>
                     {Premium_Access.posts.info}
                   </Typography>
 
                   <Typography align="center" mt={2} lineHeight={1.5}>
-                    Masking :No
+                    Masking: No
                   </Typography>
                   <Typography fontWeight={500} lineHeight={1}>
                     {Premium_Access.masking.locationMasking}
@@ -146,27 +146,24 @@ const MemberShip = () => {
             <Grid container>
               <Grid item md={12}>
                 <Grid container>
-                  <Grid item md={4} sm={4} xs={12}>
-                    <Avatar sx={{ width: 64, height: 64 }}>
-                      <LoyaltyIcon />
+                  <Grid item md={12} sm={12} xs={12}>
+                    <Box display={'flex'} justifyContent={'center'}>
+                    <Avatar sx={{ width: 64, height: 64, background: '#ff9800' }}>
+                      <LoyaltyIcon sx={{ color: '#fff' }} />
                     </Avatar>
-
-                    <Button sx={{ mt: 5 }} fullWidth variant="outlined" onClick={buyMemberShip}>
-                      {' '}
-                      Buy
-                    </Button>
+                    </Box>
                   </Grid>
 
-                  <Grid item md={8}>
+                  <Grid item md={12} mt={2}>
                     <Typography align="center" lineHeight={1.5}>
-                      Posts :{Premium_Access.posts.post}{' '}
+                      Posts: {Premium_Access.posts.post}{' '}
                     </Typography>
                     <Typography fontWeight={500} lineHeight={1}>
                       {Premium_Access.posts.info}
                     </Typography>
 
                     <Typography align="center" mt={2} lineHeight={1.5}>
-                      Masking :No
+                      Masking: No
                     </Typography>
                     <Typography fontWeight={500} lineHeight={1}>
                       {Premium_Access.masking.locationMasking}
@@ -178,12 +175,22 @@ const MemberShip = () => {
                       {Premium_Access.masking.likes}
                     </Typography>
                   </Grid>
+                  <Button
+                      sx={{
+                        mt: 5,
+                        backgroundColor: '#ff9800',
+                        color: '#fff',
+                        '&:hover': { backgroundColor: '#e68900' },
+                        transition: 'background-color 0.3s',
+                      }}
+                      fullWidth
+                      variant="contained"
+                      onClick={buyMemberShip}
+                    >
+                      Buy
+                    </Button>
                 </Grid>
               </Grid>
-
-              <Grid item md={12}></Grid>
-
-              <Grid item md={12}></Grid>
             </Grid>
           </Card>
         </Grid>

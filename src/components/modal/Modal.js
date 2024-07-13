@@ -7,39 +7,9 @@ import DialogActions from '@mui/material/DialogActions';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, makeStyles, styled, Paper, Typography } from '@mui/material';
+import { Button, Paper, Typography } from '@mui/material';
 
-
-const useStyles = styled({
-  root: {
-    '& css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
-      color: 'white',
-      maxWidth: '100%',
-      width:'100%'
-
-    },
-  },
-
-});
-const Modal = ({
-  open: propOpen = false,
-  children,
-  title,
-  subtitle,
-  draggable = false,
-  onClose: propOnClose,
-  onSubmit,
-  style,
-  submitButtonTitle,
-  cancelButtonTitle,
-  hideCreateButton,
-  hideCloseButton = false,
-  hideCancelButton = false,
-  submitButtonType = 'submit',
-  disabled,
-  loading,
-  ...rest
-}) => {
+const Modal = ({ open: propOpen = false,children,title,subtitle,draggable = false,onClose: propOnClose,onSubmit,style,submitButtonTitle,cancelButtonTitle,hideCreateButton,hideCloseButton = false,hideCancelButton  = false,submitButtonType = 'submit',disabled,loading,}) => {
   const [open, setOpen] = useState(propOpen);
   const [activeDrags, setActiveDrags] = useState(0);
 
@@ -47,41 +17,15 @@ const Modal = ({
     setOpen(propOpen);
   }, [propOpen]);
 
-  const onStart = () => { setActiveDrags({ activeDrags: ++activeDrags }) };
-  const onStop = () => { setActiveDrags({ activeDrags: --activeDrags }) };
 
-
-
-
-
-  const PaperComponent = (innerProps) => {
-    const dragHandlers = { onStart: onStart, onStop: onStop };
-    const classes = useStyles();
-    return (
-      <Draggable bounds="parent"  {...dragHandlers} handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
-        <Paper sx={{ '& .MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
-             maxWidth:'100%'
-            },}} className={classes?.root} style={style ? { ...style } : { maxWidth: '100%' }}  {...rest} />
-      </Draggable>
-    );
-  }
-
-  const paperComp = ()=>(
-    <Paper sx={{ '& .MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm css-1t1j96h-MuiPaper-root-MuiDialog-paper': {
-      maxWidth:'100%'
-     },}}  style={style ? { ...style } : { maxWidth: '100%' }}  {...rest} />
-  )
+  const PaperComponent = (innerProps) => (
+    <Draggable bounds="parent" handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'} >
+      <Paper style={style ? { ...style } : { maxWidth: '100%' }} {...innerProps} />
+    </Draggable>
+  );
 
   return (
-    <Dialog
-      open={open}
-      disableEnforceFocus
-      disableEscapeKeyDown
-      // PaperComponent={draggable ? PaperComponent : paperComp}
-      // onClose={closeOnOutsideClick ? propOnClose : undefined}
-      aria-labelledby="draggable-dialog-title"
-      style={{ ...style }}
-    >
+    <Dialog open={open} disableEnforceFocus disableEscapeKeyDown PaperComponent={draggable ? PaperComponent : Paper} aria-labelledby="draggable-dialog-title" >
       <DialogTitle id="draggable-dialog-title" style={{ cursor: draggable ? 'move' : 'default' }}>
         <Typography fontWeight={600} fontSize={'20px'}>
           {title}

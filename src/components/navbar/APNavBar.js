@@ -429,11 +429,11 @@ export const APNavBar = () => {
             </>
           }
         />
-        <Modal open={profileModal}   hideCancelButton={true} hideCreateButton={true} submitButtonTitle={"Update"} onClose={()=>setProfileModal(false)} title="" style={{minWidth:'150px' , maxWidth:'360px'}}>
+        <Modal open={profileModal}   hideCancelButton={true} draggable={true} hideCreateButton={true} submitButtonTitle={"Update"} onClose={()=>setProfileModal(false)} title="" style={{minWidth:'150px' , maxWidth:'360px'}}>
             <Profile dataObj={dataObj}  ref={profileRef}/>
         </Modal>
 
-        <Modal open={planModal} hideCreateButton={true} hideCancelButton={true} draggable={false} title="" onClose={()=>setPlanModal(false)} >
+        <Modal open={planModal} hideCreateButton={true} hideCancelButton={true} draggable={true} title="" style={{maxWidth:'600px'}} onClose={()=>setPlanModal(false)} >
             <MemberShip />
         </Modal>      
       </AppBar>

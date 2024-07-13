@@ -4,6 +4,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Badge, Box, Button, Card, CardContent, Checkbox, Chip, Divider, FormControl, FormControlLabel, Grid, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import LoaderButton from '../../components/loadingbutton/LoaderButton';
 import APModal from '../../components/modal/APModal';
 import Progressbar from '../../components/ProgressBar/Progressbar';
@@ -12,9 +13,9 @@ import { himachalCities, punjabCities } from '../../constants/cities';
 import { medium, propertyTypes, state } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
 import { Wrapper } from '../home/Wrapper';
-import { getAllProperties, postProperty, selectPostLoading } from './postPropertySlice';
+import { getAllProperties, getSpecificProperty, postProperty, selectPostLoading } from './postPropertySlice';
 
-export const PostProperty = ({editData}) => {
+export const PostProperty = () => {
   const [cities, setCities] = useState([]);
   const [postAdData, setPostAdData] = useState({});
   const toastRef = useRef();
@@ -30,21 +31,29 @@ export const PostProperty = ({editData}) => {
   const [openModal, setOpenModal] = useState(false);
   const loading = useSelector(selectPostLoading);
   const dispatch = useDispatch();
+  const params = useParams();
 
   useEffect(() => {
     setCities(location?.state === 'Punjab' ? punjabCities : himachalCities);
   }, [location]);
 
   useEffect(()=>{
-    console.log(editData);
-    if (editData) {
-      setBasicInfo()
-      setLocation()
-      setAmenities()
-      setLandMarks()
+    if (params) {
+      dispatch(getSpecificProperty(params)).then((resp)=>{
+        const data = resp.payload.data || {}
+        if (resp.payload.data) {
+          setBasicInfo({...data.basicInfo , title:data.title, description:data.description ,price:data.price ,   })
+          setAmenities(data.amenities)
+          setLandMarks(data.landMarks)
+          setPostAdData({
+            propertyImages:data.propertyImages,
+            mainImage:data.mainImage,
+          })
 
+        }
+      })
     }
-  },[editData])
+  },[params])
 
   const handleChange = (e) => {
     if (e.target.name === 'mainImage') {
@@ -122,6 +131,10 @@ export const PostProperty = ({editData}) => {
       }
     });
   };
+
+  const handleUpdateProperty = () => {
+
+  }
 
   useEffect(() => {
     dispatch(getAllProperties());
@@ -220,7 +233,7 @@ export const PostProperty = ({editData}) => {
                       {basicInfoConstant.map((item) => {
                         return (
                           <Grid key={item.label} item md={2} xs={6}>
-                            <TextField required label={item.label} helpertext="This Field is Required" onChange={handleBasicInfo} aria-describedby="outlined-weight-helper-text" name={item?.name} type="number" value={basicInfo?.[item?.name] || ''} />
+                            <TextField required label={item.label} helpertext="This Field is Required" onChange={handleBasicInfo} aria-describedby="outlined-weight-helper-text" name={item?.name} type="number" value={Number(basicInfo?.[item?.name]) || ''} />
                           </Grid>
                         );
                       })}
@@ -236,7 +249,7 @@ export const PostProperty = ({editData}) => {
                     </Typography>
                     <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
                       <Grid item md={6} xs={6} sm={6}>
-                        <TextField fullWidth select value={location?.state || ''} onChange={handleStateAndCityChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
+                        <TextField disabled={params} fullWidth select value={location?.state || ''} onChange={handleStateAndCityChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
                           {state.map((option) => (
                             <option key={option} value={option}>
                               {option}
@@ -246,7 +259,7 @@ export const PostProperty = ({editData}) => {
                       </Grid>
 
                       <Grid item md={6} xs={6} sm={6}>
-                        <TextField fullWidth select onChange={handleStateAndCityChange} value={location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
+                        <TextField fullWidth disabled={params} select onChange={handleStateAndCityChange} value={location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
                           {cities.map((option) => (
                             <option key={option.name} value={option.name}>
                               {option.name}
@@ -257,13 +270,13 @@ export const PostProperty = ({editData}) => {
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField required label="District" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
+                          <TextField disabled={params} required label="District" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
                         </FormControl>
                       </Grid>
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
+                          <TextField disabled={params} required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
                         </FormControl>
                       </Grid>
 
@@ -322,7 +335,7 @@ export const PostProperty = ({editData}) => {
                   {amenitiesConstant.map((item) => {
                     return (
                       <Grid item md={4}>
-                        <FormControlLabel control={<Checkbox value={amenities?.[item?.name] || ''} name={item?.name} />} onClick={handleAmenities} label={item.label} />
+                        <FormControlLabel control={<Checkbox checked={amenities?.[item?.name]==='Y'} value={amenities?.[item?.name] || '' } name={item?.name} />} onClick={handleAmenities} label={item.label} />
                       </Grid>
                     );
                   })}
@@ -365,9 +378,8 @@ export const PostProperty = ({editData}) => {
               </Grid>
             </CardContent>
           </Card>
-          <Box display={'flex'} justifyContent={'space-between'} mt={3}>
-            <LoaderButton text="Preview Ad" variant="contained" color="info" />
-            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px' }} text="Post Ad" loading={loading} variant="contained" onClick={handlePostButton} />
+          <Box display={'flex'} justifyContent={'center'} mt={3} mb={3}>
+            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px' , width:'250px' }} text="Post Ad" loading={loading} variant="contained" onClick={!params ?  handlePostButton : handleUpdateProperty} />
           </Box>
         </Grid>
       </Grid>
