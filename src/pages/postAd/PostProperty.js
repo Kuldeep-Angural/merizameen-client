@@ -379,7 +379,7 @@ export const PostProperty = () => {
             </CardContent>
           </Card>
           <Box display={'flex'} justifyContent={'center'} mt={3} mb={3}>
-            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px' , width:'250px' }} text="Post Ad" loading={loading} variant="contained" onClick={!params ?  handlePostButton : handleUpdateProperty} />
+            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px' , width:'250px' }} text="Post Ad" loading={loading} variant="contained" onClick={!params?.listId ?  handlePostButton : handleUpdateProperty} />
           </Box>
         </Grid>
       </Grid>
