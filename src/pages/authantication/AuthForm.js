@@ -9,7 +9,7 @@ import APToaster from '../../components/Toaster/APToaster';
 import CompanyLogo from '../../ui/logos/newLogo.png';
 import GoogleImage from '../../ui/png/google.png';
 import { addDelay, isInValidData } from '../../utils/utility';
-import { changePassword, login, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
+import { changePassword, login, loginWithGoogle, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import LoginIcon from '@mui/icons-material/Login';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
@@ -18,6 +18,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import { InputField } from '../../components/input/InputField';
 import Modal from '../../components/modal/Modal';
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
+import Spinner from '../../components/ProgressBar/Progressbar';
 
 export const SignInForm = ({ route }) => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -28,6 +29,7 @@ export const SignInForm = ({ route }) => {
   const [forgotPasswordData, setForgotPasswordData] = useState({});
 
   const [isOpenForgotPassword, setIsOpenForgotPassword] = useState(false);
+  const [loading, setloading] = useState(false)
 
   const [isOpen, setIsOpen] = useState(false);
   const [otp, setOtp] = useState({
@@ -141,7 +143,15 @@ export const SignInForm = ({ route }) => {
   };
 
   const onSuccess = (resp) => {
-    console.log(resp);
+    setloading(true)
+    if (resp?.credential) {
+      dispatch(loginWithGoogle({credentials:resp?.credential})).then((resp)=>{
+        if (resp.payload.status===200) {
+            console.log(resp);
+        }
+        setloading(false)
+      })
+    }
   }
 
   const onFailure = (error) => {
@@ -183,6 +193,7 @@ export const SignInForm = ({ route }) => {
 
   return (
     <Grid>
+      <Spinner LoadingState={loading}/>
       <APToaster ref={toastRef} title="" />
       <CardContent sx={{ textAlign: 'center' }}>
         <img src={CompanyLogo} alt='logo' loading="lazy" height={'70px'} />

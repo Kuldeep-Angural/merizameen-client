@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { forgotPassword, googleLoginApi, loginUser, logoutUser, sendEmailForotp, signUpUser, verify } from './authApi';
+import { forgotPassword, googleLoginApi, loginGoogle, loginUser, logoutUser, sendEmailForotp, signUpUser, verify } from './authApi';
 import { createSession, invalidateSession } from '../../configuration/session';
 import { SESSION_KEYS } from '../../constants/constant';
 
@@ -15,6 +15,11 @@ const initialState = {
 
 export const googleLogin = createAsyncThunk('auth/googleLogin', async () => {
   const response = await googleLoginApi();
+  return response;
+});
+
+export const loginWithGoogle = createAsyncThunk('auth/googleLogin', async (payload) => {
+  const response = await loginGoogle(payload);
   return response;
 });
 

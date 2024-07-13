@@ -10,23 +10,25 @@ import { addDelay } from '../../utils/utility';
 import { allProperties, getAllProperties, likeproperty, selectLoading } from '../postAd/postPropertySlice';
 import './Item.scss';
 import { logout } from '../authantication/authSlice';
+import Titleheader from '../../components/header/Titleheader';
 
 
 
-const ListedItems = ({ filterParams, searchParams }) => {
+const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
   const naviGate = useNavigate();
   const dispatch = useDispatch();
   const dataObj = useSelector(allProperties);
   const loading = useSelector(selectLoading);
   const [properties, setProperties] = useState([]);
   const [apLoading, setAppLoading] = useState(false);
+  const [currentCitiesData, setCurrentCitiesData] = useState([])
 
   const openItem = (id) => {
     naviGate(`/home/${id}`);
   };
 
   const doLike = (id) => {
-    dispatch(likeproperty({ id: id })).then((resp) => {});
+    dispatch(likeproperty({ id: id })).then((resp) => { });
   };
 
   const RenderCard = ({ item }) => {
@@ -43,7 +45,7 @@ const ListedItems = ({ filterParams, searchParams }) => {
           <Typography display={'flex'} fontSize={'15px'} color={'primary'} fontWeight={'600'}>
             {item.price} /- &#8377;
           </Typography>
-          <IconButton sx={{ marginLeft: '40px' }} aria-label="Add to Cart" onClick={() => {}}>
+          <IconButton sx={{ marginLeft: '40px' }} aria-label="Add to Cart" onClick={() => { }}>
             <FavoriteBorderIcon onClick={() => doLike(item._id)} className="like-Button" />
           </IconButton>
         </Box>
@@ -56,35 +58,61 @@ const ListedItems = ({ filterParams, searchParams }) => {
 
   useEffect(() => {
     setAppLoading(true);
-    let data = ![null,undefined,''].includes(filterParams) ?  dataObj?.filter((e) => e.propertyType === filterParams) : dataObj;
+    console.log(location);
+    let data = ![null, undefined, ''].includes(filterParams) ? dataObj?.filter((e) => e.propertyType === filterParams) : dataObj;
+    let citiesData = [];
+
+    if (![null, undefined, ''].includes(filterParams)) {
+      citiesData = dataObj?.filter((e) =>
+        e.propertyType === filterParams && location?.city.includes(e.location.city)
+      );
+    }
+
+    console.log(data);
     addDelay(2000).then(() => {
-      setAppLoading(false);
       setProperties(data);
+      setCurrentCitiesData(citiesData);
+      setAppLoading(false);
     });
   }, [filterParams, dataObj]);
 
 
 
   useEffect(() => {
-    dispatch(getAllProperties()).then((resp)=>{
-      if (resp?.payload?.response?.status===403) {
-        dispatch(logout()).then((resp)=>{
+    dispatch(getAllProperties()).then((resp) => {
+      if (resp?.payload?.response?.status === 403) {
+        dispatch(logout()).then((resp) => {
           naviGate('/');
         });
       }
     });
   }, []);
 
+  console.log(currentCitiesData);
+
   return (
     <>
       <Progressbar LoadingState={loading || apLoading} />
       <Card sx={{ marginTop: '10px', padding: '10px' }}>
         {properties.length > 0 ? (
-          <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
-            {properties.map((item, index) => (
-              <RenderCard key={index} item={item} />
-            ))}
-          </Grid>
+          <>
+            <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
+              {properties.map((item, index) => (
+                <RenderCard key={index} item={item} />
+              ))}
+            </Grid>
+
+            {
+              <>
+                <Titleheader title={currentCitiesData?.length > 0 ? 'Properties pposted in your city' : ""} />
+                <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
+                  {currentCitiesData?.length > 0 && currentCitiesData?.map((item, index) => (
+                    <RenderCard key={index} item={item} />
+                  ))}
+                </Grid>
+              </>
+            }
+          </>
         ) : (
           <Grid container md={12} xs={12} display={'flex'} justifyContent={'center'}>
             <Grid item md={12} xs={12}>

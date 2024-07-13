@@ -8,6 +8,8 @@ import { Wrapper } from './Wrapper';
 export const Home = ({ updatePageTitle }) => {
   const [filterParams, setFilterParams] = useState('');
   const [searchParams, setSearchParams] = useState('');
+  const [location, setLocation] = useState({});
+
 
   useEffect(() => {
     updatePageTitle('Merizameen Home');
@@ -16,9 +18,9 @@ export const Home = ({ updatePageTitle }) => {
   return (
     <Box>
       <Wrapper>
-        <LocationAndFilter setFilterParams={setFilterParams} filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} />
+        <LocationAndFilter setFilterParams={setFilterParams} filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} setLocation={setLocation} location={location}/>
         <HighLightCards />
-        <ListedItems filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} />
+        <ListedItems filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams}  setLocation={setLocation} location={location}/>
       </Wrapper>
     </Box>
   );

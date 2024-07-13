@@ -6,8 +6,7 @@ import Skeleton from '@mui/material/Skeleton';
 import '../home/home.scss';
 import { filterChips } from '../../constants/constant';
 
-export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, setSearchParams }) => {
-  const [location, setLocation] = useState({});
+export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, setSearchParams , location , setLocation}) => {
 
   const setSelectedChip = (name) => {
     setFilterParams(name);
