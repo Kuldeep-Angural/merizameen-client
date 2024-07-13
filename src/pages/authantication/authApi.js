@@ -49,7 +49,7 @@ export const signUpUser = async (credentials) =>{
 
 
   export const loginGoogle  = async (payload) =>{
-    return await  axios.get(process.env.REACT_APP_API_END_POINT+'/auth/googleLogin', payload).then(function (response) {
+    return await  axios.post(process.env.REACT_APP_API_END_POINT+'/auth/googleLogin', payload).then(function (response) {
       if (response.status === 200) {
         return {...response.data}
       }
@@ -58,7 +58,7 @@ export const signUpUser = async (credentials) =>{
     });
   }
 
-  
+
   export  const googleLoginApi = async () =>{
     return await  axios.get(process.env.REACT_APP_API_END_POINT+'/auth/google/profile', { withCredentials: true }).then(function (response) {
       if (response.status === 200) {
