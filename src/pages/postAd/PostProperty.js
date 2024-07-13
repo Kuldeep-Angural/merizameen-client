@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import LoaderButton from '../../components/loadingbutton/LoaderButton';
-import APModal from '../../components/modal/APModal';
+import Modal from '../../components/modal/Modal';
 import Progressbar from '../../components/ProgressBar/Progressbar';
 import APToaster from '../../components/Toaster/APToaster';
 import { himachalCities, punjabCities } from '../../constants/cities';
@@ -38,7 +38,7 @@ export const PostProperty = () => {
   }, [location]);
 
   useEffect(()=>{
-    if (params) {
+    if (params?.listId) {
       dispatch(getSpecificProperty(params)).then((resp)=>{
         const data = resp.payload.data || {}
         if (resp.payload.data) {
@@ -53,7 +53,7 @@ export const PostProperty = () => {
         }
       })
     }
-  },[params])
+  },[params , dispatch])
 
   const handleChange = (e) => {
     if (e.target.name === 'mainImage') {
@@ -74,7 +74,7 @@ export const PostProperty = () => {
         reader.onload = (e) => {
           imagesArray.push(e.target.result);
           if (imagesArray.length === files.length) {
-            setPostAdData({ ...postAdData, ['propertyImages']: imagesArray });
+            setPostAdData({ ...postAdData, propertyImages: imagesArray });
           }
           setOpenModal(true);
         };
@@ -138,7 +138,7 @@ export const PostProperty = () => {
 
   useEffect(() => {
     dispatch(getAllProperties());
-  }, []);
+  }, [dispatch]);
 
   const amenitiesConstant = [
     { name: 'carParking', label: 'Car parking' },
@@ -180,7 +180,7 @@ export const PostProperty = () => {
                 <Grid item md={4} sm={6} xs={6}>
                   <Tooltip title="Upload Main Image">
                     <Button variant="text" component="label">
-                      <img onClick={() => {}} style={{ cursor: 'pointer', borderRadius: '10px' }} src={postAdData.mainImage ? postAdData.mainImage : imageIcon} height={'150px'} width={'100%'} alt="upload image" />
+                      <img onClick={() => {}} style={{ cursor: 'pointer', borderRadius: '10px' }} src={postAdData.mainImage ? postAdData.mainImage : imageIcon} height={'150px'}  width={'100%'} alt="upload" />
                       <input onChange={handleChange} accept="image/*" name="mainImage" type="file" hidden />
                     </Button>
                   </Tooltip>
@@ -249,7 +249,7 @@ export const PostProperty = () => {
                     </Typography>
                     <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
                       <Grid item md={6} xs={6} sm={6}>
-                        <TextField disabled={params} fullWidth select value={location?.state || ''} onChange={handleStateAndCityChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
+                        <TextField disabled={params?.listId} fullWidth select value={location?.state || ''} onChange={handleStateAndCityChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
                           {state.map((option) => (
                             <option key={option} value={option}>
                               {option}
@@ -259,7 +259,7 @@ export const PostProperty = () => {
                       </Grid>
 
                       <Grid item md={6} xs={6} sm={6}>
-                        <TextField fullWidth disabled={params} select onChange={handleStateAndCityChange} value={location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
+                        <TextField fullWidth disabled={params?.listId} select onChange={handleStateAndCityChange} value={location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
                           {cities.map((option) => (
                             <option key={option.name} value={option.name}>
                               {option.name}
@@ -270,13 +270,13 @@ export const PostProperty = () => {
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField disabled={params} required label="District" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
+                          <TextField disabled={params?.listId} required label="District" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
                         </FormControl>
                       </Grid>
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField disabled={params} required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
+                          <TextField disabled={params?.listId} required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
                         </FormControl>
                       </Grid>
 
@@ -384,7 +384,7 @@ export const PostProperty = () => {
         </Grid>
       </Grid>
 
-      <APModal open={openModal} setOpen={setOpenModal}>
+      <Modal open={openModal} onClose={()=>setOpenModal()}>
         <Box>
           {postAdData?.propertyImages?.map((e) => {
             const index = postAdData.propertyImages.findIndex((i) => i === e);
@@ -392,7 +392,7 @@ export const PostProperty = () => {
               <Grid container spacing={3} mb={2} gap={2}>
                 <Grid item md={12} mb={2}>
                   <Card>
-                    <img src={e} height={'260px'} width={'300px'} />
+                    <img src={e} height={'260px'} width={'300px'} alt='propertyImages'/>
                     <Divider />
                   </Card>
                   <Grid item md={12} display={'flex'} justifyContent={'center'}>
@@ -402,7 +402,7 @@ export const PostProperty = () => {
                       onClick={() => {
                         const updatedImages = [...postAdData.propertyImages];
                         updatedImages.length > 1 && updatedImages.splice(index, 1);
-                        setPostAdData({ ...postAdData, ['propertyImages']: updatedImages });
+                        setPostAdData({ ...postAdData, propertyImages: updatedImages });
                       }}
                     >
                       <DeleteForeverIcon />
@@ -419,7 +419,7 @@ export const PostProperty = () => {
             <Chip className="nav-hover" style={{ cursor: 'pointer', '&:hover': { backgroundColor: '#07b0ed' } }} variant="outlined" sx={{ mt: 2, borderRadius: '20px' }} label="ADD" />
           </Button>
         </Grid>
-      </APModal>
+      </Modal>
     </Wrapper>
   );
 };

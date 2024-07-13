@@ -1,64 +1,108 @@
-import React, { useState, useEffect } from 'react';
-import Draggable from 'react-draggable';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, Paper, Typography } from '@mui/material';
-
-const Modal = ({ open: propOpen = false,children,title,subtitle,draggable = false,onClose: propOnClose,onSubmit,style,submitButtonTitle,cancelButtonTitle,hideCreateButton,hideCloseButton = false,hideCancelButton  = false,submitButtonType = 'submit',disabled,loading,}) => {
-  const [open, setOpen] = useState(propOpen);
-  const [activeDrags, setActiveDrags] = useState(0);
-
-  useEffect(() => {
-    setOpen(propOpen);
-  }, [propOpen]);
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Paper } from '@mui/material';
+import React, { Component } from 'react';
+import Draggable from 'react-draggable';
 
 
-  const PaperComponent = (innerProps) => (
-    <Draggable bounds="parent" handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'} >
-      <Paper style={style ? { ...style } : { maxWidth: '100%' }} {...innerProps} />
-    </Draggable>
-  );
+export default class Modal extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: this.isControlled() ? this.props.open : false, 
+      activeDrags: 0,};
+  }
+
+  onStart = () => { this.setState({activeDrags: ++this.state.activeDrags})};
+  onStop = () => { this.setState({activeDrags: --this.state.activeDrags})};
+  isControlled = () => this.props.open !== undefined;
+  open = () => this.setState({ open: true });
+  close = () => this.setState({ open: false });
+  isOpen = () => this.state.open;
+
+  
+  PaperComponent = (props) => {
+  const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
+    return (
+      <Draggable bounds="parent"  {...dragHandlers} handle="#draggable-dialog-title"  cancel={'[class*="MuiDialogContent-root"]'}>
+        <Paper style={this.props.style?{...this.props.style}:{maxWidth:'100%'}}  {...props} />
+      </Draggable>
+    );
+  }
+
+  render() {
+    const { children, title, subtitle, disableClose, draggable = true } = this.props;
+    const { open } = this.state;
+    const isOpen = this.isControlled() ? this.props.open : open;
+
+    return (
+        <Dialog open={isOpen}disableEnforceFocus  disableEscapeKeyDown={true}
+          // onClose={disableClose ? disableClose : !this.props.closeOnOutsideClick || this.close}
+          PaperComponent={this.PaperComponent } aria-labelledby="draggable-dialog-title">
+
+          <Modal.Title draggable> {title && title} </Modal.Title>
+          <Modal.Content>
+            {subtitle && <Modal.Subtitle>{subtitle}</Modal.Subtitle>}
+            {!disableClose && <Modal.Close onClick={this.props.onClose || this.close} />}
+            {children}
+          </Modal.Content>
+        </Dialog>
+    );
+  };
+}
+
+Modal.Title = (props) => {
+  return (
+    <DialogTitle id="draggable-dialog-title" style={{ cursor: props.draggable ? 'move' : 'default' }}>
+      {props.children}
+    </DialogTitle>
+  )
+};
+
+
+Modal.Content = (props) => {
+  return (<DialogContent >{props.children} </DialogContent>)
+};
+
+Modal.Subtitle = (props) => {
+  const { children } = props;
+  return (<Box style={{ fontSize: '16px', lineHeight: '1.5', margin: '0 0 10px 0', color: 'rgba(0, 0, 0, 0.8)' }} dangerouslySetInnerHTML={{ __html: children }} /> )
+};
+
+
+Modal.Footer = (props) => {
+  const { onClose, onSubmit, style, submitButtonTitle, cancelButtonTitle, hideCreateButton, submitButtonIcon, submitButtonType = 'submit', disabled, loading } = props;
 
   return (
-    <Dialog open={open} disableEnforceFocus disableEscapeKeyDown PaperComponent={draggable ? PaperComponent : Paper} aria-labelledby="draggable-dialog-title" >
-      <DialogTitle id="draggable-dialog-title" style={{ cursor: draggable ? 'move' : 'default' }}>
-        <Typography fontWeight={600} fontSize={'20px'}>
-          {title}
-        </Typography>
-        {!hideCloseButton && (
-          <IconButton
-            onClick={propOnClose}
-            sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
-          >
-            <CloseIcon />
-          </IconButton>
-        )}
-      </DialogTitle>
-      <DialogContent>
-        {subtitle && (
-          <Box style={{ fontSize: '16px', lineHeight: '1.5', margin: '0 0 10px 0', color: 'rgba(0, 0, 0, 0.8)' }} dangerouslySetInnerHTML={{ __html: subtitle }} />
-        )}
-        {children}
-      </DialogContent>
-      <DialogActions sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-        {!!propOnClose && !hideCancelButton && (
-          <Button type="button" variant="text" sx={{ color: 'gray', marginRight: '15px' }} onClick={propOnClose}>
-            {cancelButtonTitle || 'Cancel'}
-          </Button>
-        )}
-        {!hideCreateButton && (
-          <Button type={submitButtonType} variant="outlined" disabled={disabled} onClick={onSubmit} style={{ marginLeft: '10px' }}>
-            {submitButtonTitle || 'Create'}
-          </Button>
-        )}
-      </DialogActions>
-    </Dialog>
+    <DialogActions sx={{display:'flex' , justifyContent:'flex-end' , mt:2}}>
+      {!!onClose && (
+        <Button type='button' variant="outlined"  className='-gray -text' onClick={onClose}>{cancelButtonTitle || 'Cancel'}</Button>
+      )}
+      {!hideCreateButton && (
+        <Button type={submitButtonType} loading={loading} disabled={disabled} onClick={onSubmit} style={{ marginLeft: '10px' }}>
+          {submitButtonTitle || 'Create'}
+        </Button>
+      )}
+    </DialogActions>
   );
 };
 
-export default Modal;
+
+
+Modal.Close = (props) => {
+  return (
+    <IconButton aria-label="close" onClick={props.onClick} sx={{ position: 'absolute', right: 8, top: 8, color: theme => theme.palette.grey[500] }}>
+      <CloseIcon /></IconButton>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+

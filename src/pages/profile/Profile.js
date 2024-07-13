@@ -1,25 +1,23 @@
 import { Button, FormControl, Grid, Input, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Progressbar from '../../components/ProgressBar/Progressbar';
 import { dateFormat } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
-import { selectDataObj, selectInitialState, selectLoading, setData, updateUser } from './profileSlice';
-import { isBothObjectEqual } from '../../utils/utility';
+import { selectDataObj, selectLoading, setData, updateUser } from './profileSlice';
 
 const Profile = React.forwardRef((ref) => {
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   const dataObj = useSelector(selectDataObj);
-  const initialData = useSelector(selectInitialState);
 
   const setDataObj = (data) => {
     dispatch(setData(data));
   };
 
   const handleChange = (event) => {
-    const { name, value, files } = event.target;
+    const { files } = event.target;
     const file = files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -35,6 +33,9 @@ const Profile = React.forwardRef((ref) => {
 
   const onSubmitCLick = () => {
     dispatch(updateUser(dataObj)).then((resp) => {
+      if (resp.payload.status===200) {
+          console.log(resp.payload.message);
+      }
     });
   };
 
@@ -45,7 +46,7 @@ const Profile = React.forwardRef((ref) => {
         <Grid item md={12} sm={12} xs={12} display="flex" justifyContent="center">
           <Tooltip title="Profile picture">
             <Button variant="text" component="label" style={{ alignItems: 'center' }}>
-              <img src={dataObj?.profilePic || imageIcon} alt="upload image" height="200px" width="100%" style={{ cursor: 'pointer', borderRadius: '10px' }} />
+              <img src={dataObj?.profilePic || imageIcon} alt="upload " height="200px" width="200px" style={{ cursor: 'pointer', borderRadius: '50%' }} />
               <input type="file" name="profilePic" accept="image/*" hidden onChange={handleChange} />
             </Button>
           </Tooltip>

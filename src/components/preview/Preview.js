@@ -1,5 +1,6 @@
-import { Box, Grid, Modal, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import Modal from '../modal/Modal';
 
 const Preview = () => {
     

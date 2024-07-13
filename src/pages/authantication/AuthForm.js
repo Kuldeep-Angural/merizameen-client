@@ -1,24 +1,24 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Box, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import APToaster from '../../components/Toaster/APToaster';
 import { LinkButton } from '../../components/buttons/LinkButton';
-import { APDialog } from '../../components/modal/APDialog';
+import LoaderButton from '../../components/loadingbutton/LoaderButton';
+import APToaster from '../../components/Toaster/APToaster';
 import CompanyLogo from '../../ui/logos/newLogo.png';
 import GoogleImage from '../../ui/png/google.png';
-import { changePassword, login, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
 import { addDelay, isInValidData } from '../../utils/utility';
-import LoaderButton from '../../components/loadingbutton/LoaderButton';
-
-import LoginIcon from '@mui/icons-material/Login';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import { changePassword, login, selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading, sentOtprequest, signUp, verifyOtp } from './authSlice';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import PhoneIcon from '@mui/icons-material/Phone';
+import LoginIcon from '@mui/icons-material/Login';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import PhoneIcon from '@mui/icons-material/Phone';
 import { InputField } from '../../components/input/InputField';
+import Modal from '../../components/modal/Modal';
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
+
 export const SignInForm = ({ route }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isSigninForm, setIsSigninForm] = useState(true);
@@ -35,14 +35,10 @@ export const SignInForm = ({ route }) => {
   });
 
   const dispatch = useDispatch();
-  const naviGate = useNavigate();
   const toastRef = useRef();
-  const otpVerificationModal = useRef();
 
   const loginLoading = useSelector(selectLoginLoading);
   const signUpLoading = useSelector(selectSignUpLoading);
-  const otpLoading = useSelector(selectOtpLoading);
-  const forgotPasswordLoading = useSelector(selectForgotPasswordLoading);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -57,7 +53,7 @@ export const SignInForm = ({ route }) => {
 
   const onSubmit = (e, input) => {
     e.preventDefault();
-    const { email, password,mobile,name } = credentials;
+    const { email, password, mobile, name } = credentials;
     if (input === 'login') {
       if (isInValidData(email) || isInValidData(password)) {
         toastRef.current.showToast({ messageType: 'warning', messageText: 'Email or Password required' });
@@ -84,8 +80,8 @@ export const SignInForm = ({ route }) => {
           } else if (resp?.payload?.message) {
             toastRef.current.showToast(resp?.payload?.message);
             setOtp({ id: resp?.payload?.data?.id });
-            resp.payload.message.messageType === 'success' && ( 
-               addDelay(2000).then(() => {
+            resp.payload.message.messageType === 'success' && (
+              addDelay(2000).then(() => {
                 setIsOpen(true);
               }))
           }
@@ -144,9 +140,45 @@ export const SignInForm = ({ route }) => {
     }
   };
 
+  const onSuccess = (resp) => {
+    console.log(resp);
+  }
+
+  const onFailure = (error) => {
+    console.log(error);
+
+  }
 
   const googleLogin = () => {
-    window.open(process.env.REACT_APP_API_END_POINT+'/auth/google/callback', '_self');
+    return (
+
+      <></>
+    )
+    // window.open(process.env.REACT_APP_API_END_POINT + '/auth/google/callback', '_self');
+  }
+
+  const googleLogout = () => {
+    <googleLogout
+      clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+      buttonText="Login with Google"
+      onSuccess={onSuccess}
+      onFailure={onFailure}
+      cookiePolicy={'single_host_origin'}
+      isSignedIn={true}
+    />
+  }
+
+  const googleSignUp = () => {
+    //   return (
+    //     <Google
+    //     clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+    //     buttonText="Login with Google"
+    //     onSuccess={onSuccess}
+    //     onFailure={onFailure}
+    //     cookiePolicy={'single_host_origin'}
+    //     isSignedIn={true}
+    //   />
+    //   )
   }
 
   return (
@@ -161,30 +193,37 @@ export const SignInForm = ({ route }) => {
             <Typography fontWeight={'600'} sx={{ textAlign: 'center' }}>
               Welcome back! Please authorize to begin the journey.
             </Typography>
-            <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-                <InputField
-                sx={{mb:2}}
-                icon={<PermIdentityIcon/>}
+            <Box component="form" noValidate mt={3} onSubmit={() => { }}>
+              <InputField
+                sx={{ mb: 2 }}
+                icon={<PermIdentityIcon />}
                 value={credentials.email}
-                label='Email' 
-                  autoComplete="email"
-                  required
-                  name="email"
-                  type="email"
-                  onChange={handleChange}
-                />
-                <InputField label='Password' value={credentials.password} name="password" required onChange={handleChange} type='password' />
-              <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-              <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton type="submit" startIcon={<LoginIcon/>} text={'Sign in'} loading={loginLoading} color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{width: '260px' }} />
+                label='Email'
+                autoComplete="email"
+                required
+                name="email"
+                type="email"
+                onChange={handleChange}
+              />
+              <InputField label='Password' value={credentials.password} name="password" required onChange={handleChange} type='password' />
+              {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
+              <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'} mt={2}>
+                <LoaderButton type="submit" startIcon={<LoginIcon />} text={'Sign in'} loading={loginLoading} color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{ width: '260px' }} />
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton onClick={googleLogin} color="error" variant='contained' startIcon={<img src={GoogleImage} alt='img' style={{height:'24px'}}/> } text="&nbsp; Sign in with Google" />
+                <GoogleLogin
+                  clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+                  buttonText="Login with Google"
+                  onSuccess={onSuccess}
+                  onFailure={onFailure}
+                  cookiePolicy={'single_host_origin'}
+                  isSignedIn={true}
+                />
               </Grid>
               <Grid container>
                 <Grid item xs>
                   <LinkButton
-                    style={{textTransform:'capitalize', fontWeight: '600' }}
+                    style={{ textTransform: 'capitalize', fontWeight: '600' }}
                     onClick={() => {
                       setIsOpenForgotPassword(true);
                     }}
@@ -192,7 +231,7 @@ export const SignInForm = ({ route }) => {
                   />
                 </Grid>
                 <Grid item>
-                  <LinkButton  style={{textTransform:'capitalize', fontWeight: '600' }} onClick={() => setIsSigninForm(false)} text={"Don't have an account? Sign Up"} />
+                  <LinkButton style={{ textTransform: 'capitalize', fontWeight: '600' }} onClick={() => setIsSigninForm(false)} text={"Don't have an account? Sign Up"} />
                 </Grid>
               </Grid>
             </Box>
@@ -204,37 +243,37 @@ export const SignInForm = ({ route }) => {
         <Card elevation={0}>
           <CardContent>
             <Typography fontWeight={'600'}> Welcome to Merizameen. - to begin create Account Please enter your details.</Typography>
-            <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-                <InputField sx={{mb:1}} required icon={<PermIdentityIcon/>} label='Name' value={credentials?.name|| ''} name="name" onChange={handleChange} autoComplete="name" type="text" />
+            <Box component="form" noValidate mt={3} onSubmit={() => { }}>
+              <InputField sx={{ mb: 1 }} required icon={<PermIdentityIcon />} label='Name' value={credentials?.name || ''} name="name" onChange={handleChange} autoComplete="name" type="text" />
 
-                <InputField sx={{mb:1}} icon={<AlternateEmailIcon/>} value={credentials?.email||''} label='Email' name="email" onChange={handleChange} autoComplete="email" required type="email" />
+              <InputField sx={{ mb: 1 }} icon={<AlternateEmailIcon />} value={credentials?.email || ''} label='Email' name="email" onChange={handleChange} autoComplete="email" required type="email" />
 
-                <InputField
-                sx={{mb:1}}
+              <InputField
+                sx={{ mb: 1 }}
                 label='Mobile'
-                icon={<PhoneIcon/>}
+                icon={<PhoneIcon />}
                 value={credentials?.mobile}
-                  name="mobile"
-                  type="number"
-                  onChange={handleChange}
-                  inputProps={{
-                    style: { '-moz-appearance': 'textfield' },
-                    'aria-hidden': true,
-                  }}
-                />
+                name="mobile"
+                type="number"
+                onChange={handleChange}
+                inputProps={{
+                  style: { '-moz-appearance': 'textfield' },
+                  'aria-hidden': true,
+                }}
+              />
 
-                <InputField sx={{mb:1}} name="password" value={credentials?.password || ''} label='Password' onChange={handleChange} required type='password' />
+              <InputField sx={{ mb: 1 }} name="password" value={credentials?.password || ''} label='Password' onChange={handleChange} required type='password' />
 
-              <FormControlLabel sx={{textTransform:'capitalize'}} control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
+              <FormControlLabel sx={{ textTransform: 'capitalize' }} control={<Checkbox value="termsAndConditions" color="primary" />} label="I agree to the Terms and conditions " />
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
-                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon/>} color='info' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 0, mb: 0, width: '270px' }}/>
+                <LoaderButton type="submit" text='Sign Up' endicon={<PersonAddAltIcon />} color='info' onClick={(e) => onSubmit(e, 'signup')} loading={signUpLoading} variant="contained" sx={{ mt: 0, mb: 0, width: '270px' }} />
               </Grid>
               <Grid mt={0} container gap={4} textAlign={'center'} display={'flex'} justifyContent={'center'}>
-              <LoaderButton onClick={googleLogin} variant='contained' color='error' startIcon={<img src={GoogleImage} alt='img' style={{height:'25px'}}/> } text="&nbsp; Sign up with Google"/>
+                {/* <LoaderButton onClick={googleSignUp} variant='contained' color='error' startIcon={<img src={GoogleImage} alt='img' style={{ height: '25px' }} />} text="&nbsp; Sign up with Google" /> */}
               </Grid>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <Grid md={6} item>
-                  <LinkButton sx={{textTransform:'capitalize'}} onClick={() => setIsSigninForm(true)} style={{ fontWeight: '600' }} text={'Already  have an account? Sign in'} />
+                  <LinkButton sx={{ textTransform: 'capitalize' }} onClick={() => setIsSigninForm(true)} style={{ fontWeight: '600' }} text={'Already  have an account? Sign in'} />
                 </Grid>
               </Grid>
             </Box>
@@ -244,101 +283,90 @@ export const SignInForm = ({ route }) => {
 
       {/* Otp Verification */}
 
-      <APDialog
-        open={isOpen}
-        close={() => setIsOpen(false)}
-        content={
-          <>
-            <Box sx={{ padding: 2 }}>
-              <Typography textAlign={'center'}>Verify Your Email</Typography>
+      <Modal open={isOpen} disableClose={true} >
+        <Box sx={{ padding: 2 }}>
+          <Typography textAlign={'center'}>Verify Your Email</Typography>
+          <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
+            <InputLabel htmlFor="standard-adornment-password">Enter Your OTP</InputLabel>
+            <Input
+              autoComplete="otp"
+              name="otp"
+              id="standard-adornment-password"
+              type="number"
+              onChange={handleOtpChange}
+              inputProps={{
+                style: { '-moz-appearance': 'textfield' },
+                'aria-hidden': true,
+              }}
+            />
+          </FormControl>
+          <Box mt={3} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+            <Button variant="outlined" onClick={otpSubmission}>
+              Submit
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+
+      {/* Forgot PAssword */}
+
+      <Modal open={isOpenForgotPassword} disableClose={true}>
+        <Box sx={{ padding: 2 }}>
+          <Typography textAlign={'center'}>Forgot Password</Typography>
+          {isEmailSent && (
+            <>
               <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
-                <InputLabel htmlFor="standard-adornment-password">Enter Your OTP</InputLabel>
+                <InputLabel htmlFor="standard-adornment-password">Otp</InputLabel>
                 <Input
                   autoComplete="otp"
                   name="otp"
                   id="standard-adornment-password"
                   type="number"
-                  onChange={handleOtpChange}
+                  onChange={handleChangeForgotPassword}
                   inputProps={{
                     style: { '-moz-appearance': 'textfield' },
                     'aria-hidden': true,
                   }}
                 />
               </FormControl>
-              <Box mt={3} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                <Button variant="outlined" onClick={otpSubmission}>
-                  Submit
-                </Button>
-              </Box>
-            </Box>
-          </>
-        }
-      />
+              <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
+                <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
 
-      {/* Forgot PAssword */}
+                <Input name="password" onChange={handleChangeForgotPassword} fullWidth required type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
+              </FormControl>
+              <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
+                <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
 
-      <APDialog
-        open={isOpenForgotPassword}
-        close={() => setIsOpenForgotPassword(false)}
-        content={
-          <>
-            <Box sx={{ padding: 2 }}>
-              <Typography textAlign={'center'}>Forgot Password</Typography>
-              {isEmailSent && (
-                <>
-                  <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
-                    <InputLabel htmlFor="standard-adornment-password">Otp</InputLabel>
-                    <Input
-                      autoComplete="otp"
-                      name="otp"
-                      id="standard-adornment-password"
-                      type="number"
-                      onChange={handleChangeForgotPassword}
-                      inputProps={{
-                        style: { '-moz-appearance': 'textfield' },
-                        'aria-hidden': true,
-                      }}
-                    />
-                  </FormControl>
-                  <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
-                    <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+                <Input name="confirmPassword" onChange={handleChangeForgotPassword} fullWidth required type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
+              </FormControl>
+            </>
+          )}
 
-                    <Input name="password" onChange={handleChangeForgotPassword} fullWidth required type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
-                  </FormControl>
-                  <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
-                    <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
+          {!isEmailSent && (
+            <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
+              <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
+              <Input
+                autoComplete="email"
+                name="email"
+                id="standard-adornment-password"
+                type="email"
+                onChange={handleChangeForgotPassword}
+                inputProps={{
+                  style: { '-moz-appearance': 'textfield' },
+                  'aria-hidden': true,
+                }}
+              />
+            </FormControl>
+          )}
 
-                    <Input name="confirmPassword" onChange={handleChangeForgotPassword} fullWidth required type={showPassword ? 'text' : 'password'} endAdornment={<InputAdornment position="end">{showPassword ? <VisibilityOff style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} /> : <Visibility style={{ cursor: 'pointer' }} onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} />}</InputAdornment>} />
-                  </FormControl>
-                </>
-              )}
+          <Box mt={3} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+            <Button variant="outlined" onClick={!isEmailSent ? () => sendOtp() : () => submitForgotpasswordRequest()}>
+              {!isEmailSent ? 'send email' : 'Change Password'}
+            </Button>
+          </Box>
+        </Box>
 
-              {!isEmailSent && (
-                <FormControl variant="standard" fullWidth sx={{ mt: 1 }}>
-                  <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                  <Input
-                    autoComplete="email"
-                    name="email"
-                    id="standard-adornment-password"
-                    type="email"
-                    onChange={handleChangeForgotPassword}
-                    inputProps={{
-                      style: { '-moz-appearance': 'textfield' },
-                      'aria-hidden': true,
-                    }}
-                  />
-                </FormControl>
-              )}
-
-              <Box mt={3} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                <Button variant="outlined" onClick={!isEmailSent ? () => sendOtp() : () => submitForgotpasswordRequest()}>
-                  {!isEmailSent ? 'send email' : 'Change Password'}
-                </Button>
-              </Box>
-            </Box>
-          </>
-        }
-      />
-    </Grid>
+      </Modal>
+    </Grid >
   );
 };

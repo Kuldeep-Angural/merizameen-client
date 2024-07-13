@@ -5,6 +5,7 @@ import CarRentalIcon from '@mui/icons-material/CarRental';
 import CropLandscapeIcon from '@mui/icons-material/CropLandscape';
 import DirectionsRailwayIcon from '@mui/icons-material/DirectionsRailway';
 import EngineeringIcon from '@mui/icons-material/Engineering';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import GrassIcon from '@mui/icons-material/Grass';
@@ -16,6 +17,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PowerIcon from '@mui/icons-material/Power';
 import SubwayIcon from '@mui/icons-material/Subway';
 import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
+import CardMedia from '@mui/material/CardMedia';
 import moment from 'moment/moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,11 +30,9 @@ import { dateFormat } from '../../constants/constant';
 import { Wrapper } from '../home/Wrapper';
 import '../items/Item.scss';
 import { getSpecificProperty, selectLoading } from '../postAd/postPropertySlice';
-import CardMedia from '@mui/material/CardMedia';
 export const PropertyView = () => {
   const [property, setProperty] = useState({});
   const [propertyImages, setPropertyImages] = useState([]);
-  const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [locationModal, setLocatiionModal] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
@@ -48,14 +48,12 @@ export const PropertyView = () => {
         setProperty(foundItem);
         let images = [foundItem?.mainImage];
         foundItem &&
-          foundItem?.propertyImages.map((element) => {
-            images.push(element);
-          });
+          foundItem?.propertyImages.map((element) => images.push(element));
         setPropertyImages(images);
         setImageIndex(0);
       }
     });
-  }, []);
+  }, [dispatch , params]);
 
   useEffect(() => {
     window.scrollTo({
@@ -65,12 +63,10 @@ export const PropertyView = () => {
   }, []);
 
   const openImageViewer = useCallback((index) => {
-    setCurrentImage(index);
     setIsViewerOpen(true);
   }, []);
 
   const closeImageViewer = () => {
-    setCurrentImage(0);
     setIsViewerOpen(false);
   };
 
@@ -95,7 +91,7 @@ export const PropertyView = () => {
           <Box style={{ position: 'relative', display: 'inline-block' }}>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
               <div id="imgContainer" style={{ position: 'relative', display: 'inline-block' }}>
-                <img onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width: '100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer', borderRadius: '10px' }} id="img" src={property?.mainImage} alt="Property Image" />
+                <img onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width: '100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer', borderRadius: '10px' }} src={property?.mainImage} alt="Property" />
                 <IconButton style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0', transition: 'opacity 0.3s' }} onMouseEnter={(e) => (e.target.style.opacity = '1')} onMouseLeave={(e) => (e.target.style.opacity = '0')} aria-label="View Image" onClick={openImageViewer}>
                   <FullscreenIcon />
                 </IconButton>
@@ -104,7 +100,7 @@ export const PropertyView = () => {
             </Box>
 
             <CardContent sx={{ display: { xs: 'flex', sm: 'flex', md: 'none' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
-              <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', maxWidth: '100%', minWidth: '350px', maxHeight: '350px', height: '300px', borderRadius: '10px' }} id="img" src={propertyImages[imageIndex]} alt="Property Image" />
+              <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', maxWidth: '100%', minWidth: '350px', maxHeight: '350px', height: '300px', borderRadius: '10px' }}  src={propertyImages[imageIndex]} alt="Property" />
               <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
             </CardContent>
           </Box>
@@ -188,10 +184,13 @@ export const PropertyView = () => {
                 <ToolTipButton title={property?.amenities?.[3] || ''} icon={<EngineeringIcon style={{ fontSize: '35px', color: property?.amenities?.mainMaintenance === 'Y' ? 'green' : 'grey' }} />} text={'Maintenance'} />
               </Grid>
               <Grid item sx={12} md={3}>
-                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<GrassIcon style={{ fontSize: '35px', color: property?.amenities?.gym === 'Y' ? 'green' : 'grey' }} />} text={'Gym'} />
+                <ToolTipButton title={property?.amenities?.[4] || ''} icon={<FitnessCenterIcon style={{ fontSize: '35px', color: property?.amenities?.gym === 'Y' ? 'green' : 'grey' }} />} text={'Gym'} />
               </Grid>
               <Grid item sx={12} md={3}>
                 <ToolTipButton title={property?.amenities?.[4] || ''} icon={<Groups2Icon style={{ fontSize: '35px', color: property?.amenities?.clubHouse === 'Y' ? 'green' : 'grey' }} />} text={'Club House'} />
+              </Grid>
+              <Grid item sx={12} md={3}>
+                <ToolTipButton title={property?.amenities?.[5] || ''} icon={<GrassIcon style={{ fontSize: '35px', color: property?.amenities?.park === 'Y' ? 'green' : 'grey' }} />} text={'Park'} />
               </Grid>
             </Grid>
             <Divider></Divider>

@@ -9,7 +9,7 @@ const APToaster = forwardRef(({ title, x, y, type }, ref) => {
     ref,
     () => ({
       showToast: ({messageText , messageType}) => {
-        setmessageData(messageText , messageType);
+        setmessageData({messageText , messageType});
         setOpen(true);
       },
     }),

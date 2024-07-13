@@ -15,8 +15,6 @@ import { getPostedproperties, getSellerLikes, getUserLikes, selectPostedProperti
 import { addDelay } from '../../utils/utility';
 import Emptyview from '../emptyView/Emptyview';
 import Spinner from '../ProgressBar/Progressbar';
-import { PostProperty } from '../../pages/postAd/PostProperty';
-import Modal from '../modal/Modal';
 
 const Dashboard = () => {
 

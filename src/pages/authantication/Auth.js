@@ -5,6 +5,7 @@ import Building from '../../ui/json/building.json';
 import { SignInForm } from './AuthForm';
 import { selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading } from './authSlice';
 import { useSelector } from 'react-redux';
+import Spinner from '../../components/ProgressBar/Progressbar';
 
 const Auth = ({ updatePageTitle }) => {
   const loginLoading = useSelector(selectLoginLoading);
@@ -14,10 +15,11 @@ const Auth = ({ updatePageTitle }) => {
 
   useEffect(() => {
     updatePageTitle('Merizameen');
-  }, []);
+  }, [updatePageTitle]);
 
   return (
     <>
+      <Spinner LoadingState={signUpLoading||loginLoading|| otpLoading||forgotPasswordLoading}/>
       <Grid container gap={2} component="main" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} columns={12} justifyContent={'center'} alignItems="center">
         <Grid item sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} md={6}>
           <Typography padding={2} fontWeight={'600'} letterSpacing={'1px'}>

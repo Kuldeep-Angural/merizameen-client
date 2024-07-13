@@ -1,4 +1,5 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
 import InfoIcon from '@mui/icons-material/Info';
 import MenuIcon from '@mui/icons-material/Menu';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -16,23 +17,20 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import CompanyLogo from '../../ui/logos/newLogo.png';
-import { APDialog } from '../modal/APDialog';
-import '../../pages/Global.scss';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SESSION_KEYS, options, userSettings } from '../../constants/constant';
-import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectUserData } from '../../pages/authantication/authSlice';
-import Profile from '../../pages/profile/Profile';
-import Modal from '../modal/Modal';
-import LoaderButton from '../loadingbutton/LoaderButton';
-import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
-import Progressbar from '../ProgressBar/Progressbar';
-import { APRoutes } from '../../constants/routes';
-import { getUserDetails, selectDataObj, setData } from '../../pages/profile/profileSlice';
-import { useEffect } from 'react';
-import { GoogleMap } from '../googleMap/GoogleMap';
+import '../../pages/Global.scss';
 import MemberShip from '../../pages/memberShip/MemberShip';
+import Profile from '../../pages/profile/Profile';
+import { getUserDetails, selectDataObj } from '../../pages/profile/profileSlice';
+import CompanyLogo from '../../ui/logos/newLogo.png';
+import { GoogleMap } from '../googleMap/GoogleMap';
+import LoaderButton from '../loadingbutton/LoaderButton';
+import Progressbar from '../ProgressBar/Progressbar';
+import Modal from '../modal/Modal';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -42,7 +40,7 @@ export const APNavBar = () => {
   const [profileModal, setProfileModal] = React.useState(false);
   const [planModal, setPlanModal] = React.useState(false);
 
-  const[loadingstate,setLoadingState] = React.useState(false)
+  const [loadingstate, setLoadingState] = React.useState(false)
   const profileRef = React.useRef();
   const dataObj = useSelector(selectDataObj);
 
@@ -120,7 +118,7 @@ export const APNavBar = () => {
         naviGate('/');
       });
     }
-    else if(eventName === 'Dashboard'){
+    else if (eventName === 'Dashboard') {
       naviGate('/dashboard')
     }
     if (eventName === 'Profile') {
@@ -136,17 +134,17 @@ export const APNavBar = () => {
     profileRef?.current?.Update();
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getUserDetails(USER._id));
-  },[])
+  }, [])
 
 
- 
+
 
 
   return (
     <>
-    <Progressbar LoadingState={loadingstate}/>
+      <Progressbar LoadingState={loadingstate} />
       <AppBar elevation={0} position="static" color='transparent'>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -199,7 +197,7 @@ export const APNavBar = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                
+
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">Agents</Typography>
                 </MenuItem>
@@ -238,13 +236,13 @@ export const APNavBar = () => {
                 textDecoration: 'none',
               }}
             ></Typography>
-            <Box sx={{ flexGrow: 1,flexShrink:2, display: { xs:'none',sm: 'none', md: 'flex' } }}>
-              
-              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Agents" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
+            <Box sx={{ flexGrow: 1, flexShrink: 2, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+
+              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Agents" sx={{ my: 1, color: 'black', borderRadius: '180px' }}>
               </LoaderButton>
-              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Services" sx={{ my: 1, color: 'black', borderRadius:'180px'}}>
+              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Services" sx={{ my: 1, color: 'black', borderRadius: '180px' }}>
               </LoaderButton>
-                <LoaderButton endicon={<AddHomeWorkIcon/>} onClick={handlePostPropertyEvent} text='Post Property' variant="contained" sx={{ marginLeft: {md:'30px'}, margin:1, borderRadius: '50px' }}/>
+              <LoaderButton endicon={<AddHomeWorkIcon />} onClick={handlePostPropertyEvent} text='Post Property' variant="contained" sx={{ marginLeft: { md: '30px' }, margin: 1, borderRadius: '50px' }} />
             </Box>
 
             <Tooltip title="Contact us">
@@ -299,143 +297,134 @@ export const APNavBar = () => {
           </Toolbar>
         </Container>
         {/* Contact Dialoug */}
-        <APDialog
-          open={openDialog}
-          close={handleCloseDialog}
-          content={
-            <>
-              <Typography textAlign={'center'} fontWeight={'700'}>
-                Contact Us
-              </Typography>
-              <Typography>1st Floor, Manchanda Tower opposite Novelty Mall, Pathankot, Punjab, India </Typography>
+        <Modal open={openDialog} onClose={handleCloseDialog} >
+          <Typography textAlign={'center'} fontWeight={'700'}>
+            Contact Us
+          </Typography>
+          <Typography>1st Floor, Manchanda Tower opposite Novelty Mall, Pathankot, Punjab, India </Typography>
 
-              <Typography>9:00AM to 6:00PM IST</Typography>
+          <Typography>9:00AM to 6:00PM IST</Typography>
 
-              <Grid container gap={2}>
-                <Tooltip title="Call">
-                  <Button variant="outlined" sx={{ fontSize: '10px' }} color="text" md={6} startIcon={<PhoneIcon style={{ paddingTop: '0px' }} />}>
-                    9877726857
-                  </Button>
-                </Tooltip>
-                <Tooltip title="Request a callBack">
-                  <Button variant="outlined" sx={{ fontSize: '10px' }} onClick={() => openCallBackDailog()} color="text" md={6} startIcon={<PhoneForwardedIcon style={{ paddingTop: '3px' }} />}>
-                    Request a callBack
-                  </Button>
-                </Tooltip>
-              </Grid>
-              {GoogleMap({ city:'pathankot', country:'India', state:'Punjab', zip:'145001'})}
-              <Box justifyContent={'space-around'} display={'flex'} textAlign={'center'} mt={1}>
-                <Button variant="outlined" onClick={() => openQuery()} textAlign={'center'}>
-                  click here to share your query
-                </Button>
-                <Button variant="outlined" onClick={handleCloseDialog}>
-                  close
-                </Button>
-              </Box>
-            </>
-          }
-        />
+          <Grid container gap={2}>
+            <Tooltip title="Call">
+              <Button variant="outlined" sx={{ fontSize: '10px' }} color="text" md={6} startIcon={<PhoneIcon style={{ paddingTop: '0px' }} />}>
+                9877726857
+              </Button>
+            </Tooltip>
+            <Tooltip title="Request a callBack">
+              <Button variant="outlined" sx={{ fontSize: '10px' }} onClick={() => openCallBackDailog()} color="text" md={6} startIcon={<PhoneForwardedIcon style={{ paddingTop: '3px' }} />}>
+                Request a callBack
+              </Button>
+            </Tooltip>
+          </Grid>
+          {GoogleMap({ city: 'pathankot', country: 'India', state: 'Punjab', zip: '145001' })}
+          <Box justifyContent={'space-around'} display={'flex'} textAlign={'center'} mt={1}>
+            <Button variant="outlined" onClick={() => openQuery()} textAlign={'center'}>
+              click here to share your query
+            </Button>
+            <Button variant="outlined" onClick={handleCloseDialog}>
+              close
+            </Button>
+          </Box>
+        </Modal>
+
 
         {/* Contact Call-Back dialog */}
-        <APDialog
+        <Modal
           open={openCallBack}
-          close={handleCloseCallBackDailog}
-          content={
-            <>
-              <Typography textAlign={'center'} fontWeight={'600'}>
-                Call Back Request
-              </Typography>
-              <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-                <FormControl variant="standard" fullWidth>
-                  <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-                  <Input autoComplete="name" required id="standard-adornment-password" type="text" />
-                </FormControl>
+          onClose={handleCloseCallBackDailog}>
 
-                <FormControl variant="standard" fullWidth>
-                  <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                  <Input autoComplete="email" required id="standard-adornment-password" type="email" />
-                </FormControl>
 
-                <FormControl variant="standard" fullWidth>
-                  <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
-                  <Input autoComplete="mobile" required id="standard-adornment-password" type="Mobile" />
-                </FormControl>
+          <Typography textAlign={'center'} fontWeight={'600'}>
+            Call Back Request
+          </Typography>
+          <Box component="form" noValidate mt={3} onSubmit={() => { }}>
+            <FormControl variant="standard" fullWidth>
+              <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
+              <Input autoComplete="name" required id="standard-adornment-password" type="text" />
+            </FormControl>
 
-                <FormControl variant="standard" fullWidth sx={{ mt: 2 }}>
-                  <InputLabel htmlFor="standard-adornment-password"> </InputLabel>
-                  <TextField id="outlined-select-currency" variant="standard" label="i am " select>
-                    {options.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </FormControl>
+            <FormControl variant="standard" fullWidth>
+              <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
+              <Input autoComplete="email" required id="standard-adornment-password" type="email" />
+            </FormControl>
 
-                <FormControl variant="standard" fullWidth>
-                  <InputLabel htmlFor="standard-adornment-password">Query</InputLabel>
-                  <Input multiline rowsF={4} autoComplete="text" required id="standard-adornment-password" type="text" />
-                </FormControl>
-              </Box>
+            <FormControl variant="standard" fullWidth>
+              <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
+              <Input autoComplete="mobile" required id="standard-adornment-password" type="Mobile" />
+            </FormControl>
 
-              <DialogActions>
-                <Button fullWidth variant="outlined" onClick={handleCloseCallBackDailog}>
-                  close
-                </Button>
+            <FormControl variant="standard" fullWidth sx={{ mt: 2 }}>
+              <InputLabel htmlFor="standard-adornment-password"> </InputLabel>
+              <TextField id="outlined-select-currency" variant="standard" label="i am " select>
+                {options.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
 
-                <Button fullWidth variant="outlined" onClick={handleSendCallBackRequest}>
-                  Send
-                </Button>
-              </DialogActions>
-            </>
-          }
-        />
+            <FormControl variant="standard" fullWidth>
+              <InputLabel htmlFor="standard-adornment-password">Query</InputLabel>
+              <Input multiline rowsF={4} autoComplete="text" required id="standard-adornment-password" type="text" />
+            </FormControl>
+          </Box>
+
+          <DialogActions>
+            <Button fullWidth variant="outlined" onClick={handleCloseCallBackDailog}>
+              close
+            </Button>
+
+            <Button fullWidth variant="outlined" onClick={handleSendCallBackRequest}>
+              Send
+            </Button>
+          </DialogActions>
+        </Modal>
 
         {/* Feedback / query  Dialoug */}
 
-        <APDialog
+        <Modal
           open={openQueryPannel}
-          close={handleCloseFeedback}
-          content={
-            <>
-              <Typography textAlign={'center'} fontWeight={'600'}>
-                Feedback Form
-              </Typography>
-              <Box component="form" noValidate mt={3} onSubmit={() => {}}>
-                <FormControl variant="standard" fullWidth>
-                  <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-                  <Input autoComplete="name" autoFocus required id="standard-adornment-password" type="text" />
-                </FormControl>
+          onClose={handleCloseFeedback}
+        >
+          <Typography textAlign={'center'} fontWeight={'600'}>
+            Feedback Form
+          </Typography>
+          <Box component="form" noValidate mt={3} onSubmit={() => { }}>
+            <FormControl variant="standard" fullWidth>
+              <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
+              <Input autoComplete="name" autoFocus required id="standard-adornment-password" type="text" />
+            </FormControl>
 
-                <FormControl variant="standard" fullWidth>
-                  <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                  <Input autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
-                </FormControl>
+            <FormControl variant="standard" fullWidth>
+              <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
+              <Input autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
+            </FormControl>
 
-                <FormControl variant="standard" fullWidth>
-                  <InputLabel htmlFor="standard-adornment-password">Enter your feedback</InputLabel>
-                  <Input multiline rowsF={4} autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
-                </FormControl>
-              </Box>
+            <FormControl variant="standard" fullWidth>
+              <InputLabel htmlFor="standard-adornment-password">Enter your feedback</InputLabel>
+              <Input multiline rowsF={4} autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
+            </FormControl>
+          </Box>
 
-              <DialogActions>
-                <Button fullWidth variant="outlined" onClick={handleCloseFeedback}>
-                  close
-                </Button>
-                <Button fullWidth variant="outlined" onClick={handleSendFeedBack}>
-                  Send
-                </Button>
-              </DialogActions>
-            </>
-          }
-        />
-        <Modal open={profileModal}   hideCancelButton={true} draggable={true} hideCreateButton={true} submitButtonTitle={"Update"} onClose={()=>setProfileModal(false)} title="" style={{minWidth:'150px' , maxWidth:'360px'}}>
-            <Profile dataObj={dataObj}  ref={profileRef}/>
+          <DialogActions>
+            <Button fullWidth variant="outlined" onClick={handleCloseFeedback}>
+              close
+            </Button>
+            <Button fullWidth variant="outlined" onClick={handleSendFeedBack}>
+              Send
+            </Button>
+          </DialogActions>
         </Modal>
 
-        <Modal open={planModal} hideCreateButton={true} hideCancelButton={true} draggable={true} title="" style={{maxWidth:'600px'}} onClose={()=>setPlanModal(false)} >
-            <MemberShip />
-        </Modal>      
+        <Modal open={profileModal} draggable={true} onClose={() => setProfileModal(false)} title="" style={{ minWidth: '150px', maxWidth: '360px' }}>
+          <Profile dataObj={dataObj} ref={profileRef} />
+        </Modal>
+
+        <Modal open={planModal} draggable={true} title="" style={{ maxWidth: '600px' }} onClose={() => setPlanModal(false)} >
+          <MemberShip />
+        </Modal>
       </AppBar>
     </>
   );
