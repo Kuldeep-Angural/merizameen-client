@@ -1,6 +1,6 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Box, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Checkbox, Divider, FormControl, FormControlLabel, Grid, Input, InputAdornment, InputLabel, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { LinkButton } from '../../components/buttons/LinkButton';
@@ -208,8 +208,9 @@ export const SignInForm = ({ route }) => {
               <InputField label='Password' value={credentials.password} name="password" required onChange={handleChange} type='password' />
               {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'} mt={2}>
-                <LoaderButton type="submit" startIcon={<LoginIcon />} text={'Sign in'} loading={loginLoading} color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{ width: '260px' }} />
+                <LoaderButton type="submit" startIcon={<LoginIcon />} text={'Sign in'} loading={loginLoading} color='info' onClick={(e) => onSubmit(e, 'login')} variant="contained" size="large" sx={{ width: '180px' }} />
               </Grid>
+              <Divider>or continue</Divider>
               <Grid container textAlign={'center'} display={'flex'} justifyContent={'center'}>
                 <GoogleLogin
                   clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
