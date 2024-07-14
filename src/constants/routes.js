@@ -27,15 +27,6 @@ export const APRoutes = ({ toastRef }) => {
     document.title = pageTitle;
   }, [pageTitle]);
 
-  const onSuccess = (resp) => {
-    console.log(resp);
-  }
-
-  const onFailure = (error) => {
-    console.log(error);
-
-  }
-
 
 
   return (

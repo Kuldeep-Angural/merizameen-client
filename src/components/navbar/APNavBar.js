@@ -31,6 +31,7 @@ import { GoogleMap } from '../googleMap/GoogleMap';
 import LoaderButton from '../loadingbutton/LoaderButton';
 import Progressbar from '../ProgressBar/Progressbar';
 import Modal from '../modal/Modal';
+import APToaster from '../Toaster/APToaster';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -41,7 +42,7 @@ export const APNavBar = () => {
   const [planModal, setPlanModal] = React.useState(false);
 
   const [loadingstate, setLoadingState] = React.useState(false)
-  const profileRef = React.useRef();
+  const toastRef = React.useRef();
   const dataObj = useSelector(selectDataObj);
 
   const USER = useSelector(selectUserData);
@@ -130,10 +131,7 @@ export const APNavBar = () => {
     return handleCloseUserMenu();
   };
 
-  const onSubmitCLick = () => {
-    profileRef?.current?.Update();
-  }
-
+ 
   useEffect(() => {
     dispatch(getUserDetails(USER._id));
   }, [])
@@ -145,6 +143,7 @@ export const APNavBar = () => {
   return (
     <>
       <Progressbar LoadingState={loadingstate} />
+      <APToaster ref={toastRef}/>
       <AppBar elevation={0} position="static" color='transparent'>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -419,7 +418,7 @@ export const APNavBar = () => {
         </Modal>
 
         <Modal open={profileModal} draggable={true} onClose={() => setProfileModal(false)} title="" style={{ minWidth: '150px', maxWidth: '360px' }}>
-          <Profile dataObj={dataObj} ref={profileRef} />
+          <Profile dataObj={dataObj} toastRef={toastRef} />
         </Modal>
 
         <Modal open={planModal} draggable={true} title="" style={{ maxWidth: '600px' }} onClose={() => setPlanModal(false)} >

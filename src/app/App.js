@@ -13,7 +13,10 @@ if (process.env.REACT_APP_IS_PRODCTION_ENV) {
   console.error = () => { };
 }
 export const App = () => {
+  const dispatch = useDispatch();
   const toastRef = useRef();
+
+
 
   return (
     <div className="app" style={{ height: '100%', width: '100%' }}>

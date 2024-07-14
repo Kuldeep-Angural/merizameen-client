@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Progressbar from '../../components/ProgressBar/Progressbar';
 import ItemNotFound from '../../ui/json/noDataFOund.json';
-import { addDelay } from '../../utils/utility';
+import { addDelay, getFirstWord } from '../../utils/utility';
 import { allProperties, getAllProperties, likeproperty, selectLoading } from '../postAd/postPropertySlice';
 import './Item.scss';
 import { logout } from '../authantication/authSlice';
@@ -22,6 +22,7 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
   const [properties, setProperties] = useState([]);
   const [apLoading, setAppLoading] = useState(false);
   const [currentCitiesData, setCurrentCitiesData] = useState([])
+  const [isLiked, setIsLiked] = useState(false)
 
   const openItem = (id) => {
     naviGate(`/home/${id}`);
@@ -29,6 +30,7 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
 
   const doLike = (id) => {
     dispatch(likeproperty({ id: id })).then((resp) => { });
+    setIsLiked(true)
   };
 
   const RenderCard = ({ item }) => {
@@ -46,7 +48,7 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
             {item.price} /- &#8377;
           </Typography>
           <IconButton sx={{ marginLeft: '40px' }} aria-label="Add to Cart" onClick={() => { }}>
-            <FavoriteBorderIcon onClick={() => doLike(item._id)} className="like-Button" />
+            <FavoriteBorderIcon  onClick={() => doLike(item._id)} className="like-Button" />
           </IconButton>
         </Box>
       </Grid>
@@ -54,21 +56,14 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
   };
 
 
-
-
   useEffect(() => {
     setAppLoading(true);
-    console.log(location);
     let data = ![null, undefined, ''].includes(filterParams) ? dataObj?.filter((e) => e.propertyType === filterParams) : dataObj;
-    let citiesData = [];
+    const citiesData = dataObj?.filter((e) => {
+      const firstWord = getFirstWord(location?.city);
+      return ![null, undefined, ''].includes(filterParams) ? e.propertyType === filterParams && e?.location?.city.includes(firstWord) : e?.location?.city.includes(firstWord);
+    });
 
-    if (![null, undefined, ''].includes(filterParams)) {
-      citiesData = dataObj?.filter((e) =>
-        e.propertyType === filterParams && location?.city.includes(e.location.city)
-      );
-    }
-
-    console.log(data);
     addDelay(2000).then(() => {
       setProperties(data);
       setCurrentCitiesData(citiesData);
@@ -88,7 +83,6 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
     });
   }, []);
 
-  console.log(currentCitiesData);
 
   return (
     <>
@@ -97,21 +91,25 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
         {properties.length > 0 ? (
           <>
             <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
-              {properties.map((item, index) => (
-                <RenderCard key={index} item={item} />
-              ))}
-            </Grid>
+              <Grid item md={12}>
+                {/* <Titleheader title={"Property In Your City"} /> */}
+                {/* <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
+                  {currentCitiesData?.map((item, index) => (
+                    <RenderCard key={index} item={item} />
+                  ))}
+                </Grid> */}
+              </Grid>
 
-            {
-              <>
-                <Titleheader title={currentCitiesData?.length > 0 ? 'Properties pposted in your city' : ""} />
+
+              <Grid item md={12}>
+                {/* <Titleheader title={"Property outside from  Your City"} /> */}
                 <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
-                  {currentCitiesData?.length > 0 && currentCitiesData?.map((item, index) => (
+                  {properties.map((item, index) => (
                     <RenderCard key={index} item={item} />
                   ))}
                 </Grid>
-              </>
-            }
+              </Grid>
+            </Grid>
           </>
         ) : (
           <Grid container md={12} xs={12} display={'flex'} justifyContent={'center'}>

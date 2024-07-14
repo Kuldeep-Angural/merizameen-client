@@ -10,6 +10,10 @@ export const isBothObjectEqual = ({obj1,obj2}) => {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 };
 
+export const getFirstWord = (inputString) => {
+  return  inputString?.split(' ')[0];
+}
+
 export const  calculateEndDate = (currentDate, numberOfMonths) => {
   let endDate = new Date(currentDate);
   endDate.setMonth(endDate.getMonth() + numberOfMonths);

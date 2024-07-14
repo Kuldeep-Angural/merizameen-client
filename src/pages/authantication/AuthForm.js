@@ -148,43 +148,16 @@ export const SignInForm = ({ route }) => {
       dispatch(loginWithGoogle({
         credentials:
         resp?.credential })).then((resp)=>{
-        if (resp.payload.status===200) {
-          
-        }
+         toastRef.current.showToast({ messageType: resp?.payload?.message.messageType, messageText: resp?.payload?.message.messageText });
         setloading(false)
       })
     }
   }
 
   const onFailure = (error) => {
-    console.log(error);
-
+    toastRef.current.showToast({ messageType: 'error', messageText: 'Something went-wrong' });
   }
 
-
-  const googleLogout = () => {
-    <googleLogout
-      clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-      buttonText="Login with Google"
-      onSuccess={onSuccess}
-      onFailure={onFailure}
-      cookiePolicy={'single_host_origin'}
-      isSignedIn={true}
-    />
-  }
-
-  const googleSignUp = () => {
-    //   return (
-    //     <Google
-    //     clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-    //     buttonText="Login with Google"
-    //     onSuccess={onSuccess}
-    //     onFailure={onFailure}
-    //     cookiePolicy={'single_host_origin'}
-    //     isSignedIn={true}
-    //   />
-    //   )
-  }
 
   return (
     <Grid>

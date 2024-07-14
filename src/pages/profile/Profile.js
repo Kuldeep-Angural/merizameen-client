@@ -7,7 +7,7 @@ import { dateFormat } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
 import { selectDataObj, selectLoading, setData, updateUser } from './profileSlice';
 
-const Profile = React.forwardRef((ref) => {
+const Profile = React.forwardRef(({toastRef}) => {
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   const dataObj = useSelector(selectDataObj);
@@ -33,9 +33,8 @@ const Profile = React.forwardRef((ref) => {
 
   const onSubmitCLick = () => {
     dispatch(updateUser(dataObj)).then((resp) => {
-      if (resp.payload.status===200) {
-          console.log(resp.payload.message);
-      }
+        const message = resp.payload.message;
+        toastRef.current.showToast({messageText:message.messageText , messageType:message.messageType});
     });
   };
 
