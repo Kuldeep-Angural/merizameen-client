@@ -7,11 +7,13 @@ import { useDispatch } from 'react-redux';
 import APToaster from '../components/Toaster/APToaster';
 import { APRoutes } from '../constants/routes';
 import { theme } from '../theme/theme';
+
 if (process.env.REACT_APP_IS_PRODCTION_ENV) {
   console.log = () => { };
   console.warn = () => { };
   console.error = () => { };
 }
+
 export const App = () => {
   const dispatch = useDispatch();
   const toastRef = useRef();
@@ -20,13 +22,13 @@ export const App = () => {
 
   return (
     <div className="app" style={{ height: '100%', width: '100%' }}>
-      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>.
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <APToaster ref={toastRef} />
           <APRoutes toastref={toastRef} />
         </ThemeProvider>
-      </GoogleOAuthProvider>;
+      </GoogleOAuthProvider>
     </div>
   );
 };
