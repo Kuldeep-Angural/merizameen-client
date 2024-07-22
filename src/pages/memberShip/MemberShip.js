@@ -99,18 +99,7 @@ const MemberShip = () => {
                     {Standard_Access.posts.info}
                   </Typography>
 
-                  <Typography align="center" mt={2} lineHeight={1.5}>
-                    Masking: Yes
-                  </Typography>
-                  <Typography fontWeight={500} lineHeight={1}>
-                    {Standard_Access.masking.locationMasking}
-                  </Typography>
-                  <Typography fontWeight={500} mt={1} lineHeight={1}>
-                    {Standard_Access.masking.contactMasking}
-                  </Typography>
-                  <Typography fontWeight={500} mt={1} lineHeight={1}>
-                    {Standard_Access.masking.likes}
-                  </Typography>
+                 
                 </Card>
               )}
 
@@ -121,19 +110,6 @@ const MemberShip = () => {
                   </Typography>
                   <Typography fontWeight={500} lineHeight={1}>
                     {Premium_Access.posts.info}
-                  </Typography>
-
-                  <Typography align="center" mt={2} lineHeight={1.5}>
-                    Masking: No
-                  </Typography>
-                  <Typography fontWeight={500} lineHeight={1}>
-                    {Premium_Access.masking.locationMasking}
-                  </Typography>
-                  <Typography fontWeight={500} mt={1} lineHeight={1}>
-                    {Premium_Access.masking.contactMasking}
-                  </Typography>
-                  <Typography fontWeight={500} mt={1} lineHeight={1}>
-                    {Premium_Access.masking.likes}
                   </Typography>
                 </Card>
               )}
@@ -162,18 +138,7 @@ const MemberShip = () => {
                       {Premium_Access.posts.info}
                     </Typography>
 
-                    <Typography align="center" mt={2} lineHeight={1.5}>
-                      Masking: No
-                    </Typography>
-                    <Typography fontWeight={500} lineHeight={1}>
-                      {Premium_Access.masking.locationMasking}
-                    </Typography>
-                    <Typography fontWeight={500} mt={1} lineHeight={1}>
-                      {Premium_Access.masking.contactMasking}
-                    </Typography>
-                    <Typography fontWeight={500} mt={1} lineHeight={1}>
-                      {Premium_Access.masking.likes}
-                    </Typography>
+                   
                   </Grid>
                   <Button
                       sx={{

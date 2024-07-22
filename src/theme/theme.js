@@ -4,12 +4,19 @@ import { blue, green, orange, red } from '@mui/material/colors';
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#45a148',
-      light: '#82C984',
-      dark: '#f5bc00',
+      main: '#2196F3', // Change to your chosen primary color
     },
     secondary: {
-      main: '#ffe180',
+      main: '#FFC107', // Change to your chosen secondary color
+    },
+    background: {
+      default: '#F5F5F5', // Change to your chosen background color
+    },
+    text: {
+      primary: '#212121', // Change to your chosen text color
+    },
+    secondary: {
+      main: '#FFC107',
     },
     success: {
       main: green[200],

@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import { HEADERS } from '../../configuration/headers';
 const BASE_ENDPOINT = process.env.REACT_APP_API_END_POINT;

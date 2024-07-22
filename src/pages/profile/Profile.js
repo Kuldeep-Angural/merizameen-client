@@ -7,7 +7,7 @@ import { dateFormat } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
 import { selectDataObj, selectLoading, setData, updateUser } from './profileSlice';
 
-const Profile = React.forwardRef(({toastRef}) => {
+const Profile = ({toastRef}) => {
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   const dataObj = useSelector(selectDataObj);
@@ -81,6 +81,6 @@ const Profile = React.forwardRef(({toastRef}) => {
       </Grid>
     </>
   );
-});
+};
 
 export default Profile;

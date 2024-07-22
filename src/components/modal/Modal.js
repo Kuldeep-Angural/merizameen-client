@@ -91,7 +91,7 @@ Modal.Footer = (props) => {
 
 Modal.Close = (props) => {
   return (
-    <IconButton aria-label="close" onClick={props.onClick} sx={{ position: 'absolute', right: 8, top: 8, color: theme => theme.palette.grey[500] }}>
+    <IconButton aria-label="close" onClick={props.onClick} sx={{ position: 'absolute', right: 8, top: 8, color: 'grey' }}>
       <CloseIcon /></IconButton>
   );
 };

@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import { alpha } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -104,7 +103,7 @@ const EnhancedTableToolbar = (props) => {
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
-          bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+          bgcolor: 'grey',
         }),
       }}
     >

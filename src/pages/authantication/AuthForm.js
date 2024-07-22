@@ -125,6 +125,10 @@ export const SignInForm = ({ route }) => {
           addDelay(2000).then(() => {
             setIsEmailSent(true);
           });
+        }else {
+          addDelay(2000).then(()=>{
+            setIsOpenForgotPassword(false)
+          })
         }
       });
     }

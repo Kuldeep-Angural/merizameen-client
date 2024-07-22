@@ -83,7 +83,7 @@ export const LocationAndFilter = ({ setFilterParams, filterParams,searchParams, 
               {filterChips.map((item, index) => {
                 return (
                   <Grid key={index} item onClick={() => handleChipClick(item)}>
-                    <Chip className={'chip-hover'} style={{ cursor: 'pointer', backgroundColor: filterParams === item.name && 'rgba(39, 195, 44, 0.7)' }} label={item.name} variant="filled" />
+                    <Chip className={'chip-hover'} style={{ cursor: 'pointer', backgroundColor: filterParams === item.name && '#2196F3' }} label={item.name} variant="filled" />
                   </Grid>
                 );
               })}
