@@ -40,7 +40,7 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
         <Typography fontWeight={'600'}>{item.title}</Typography>
         <Box display={'flex'}>
           <Typography>Property Type:</Typography>
-          <Typography>{item.type}</Typography>
+          <Typography>{item.propertyType}</Typography>
         </Box>
         <Box display={'flex'} alignItems="center">
           <Typography fontSize={'15px'}>{'Price'}:</Typography>
