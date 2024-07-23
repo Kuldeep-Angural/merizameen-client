@@ -35,7 +35,7 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
 
   const RenderCard = ({ item }) => {
     return (
-      <Grid item md={3} sm={6} xs={12} style={{ cursor: 'pointer' }}>
+      <Grid item md={4} sm={6} xs={12} style={{ cursor: 'pointer' }}>
         <img loading="lazy" style={{ borderRadius: '3%' }} onClick={() => openItem(item._id)} src={item.mainImage} height={'275px'} width={'100%'} />
         <Typography fontWeight={'600'}>{item.title}</Typography>
         <Box display={'flex'}>
