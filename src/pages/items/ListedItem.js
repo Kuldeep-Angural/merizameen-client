@@ -103,7 +103,7 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
 
               <Grid item md={12}>
                 {/* <Titleheader title={"Property outside from  Your City"} /> */}
-                <Grid container rowSpacing={3} columnSpacing={3} spacing={3}>
+                <Grid container  spacing={3}>
                   {properties.map((item, index) => (
                     <RenderCard key={index} item={item} />
                   ))}
