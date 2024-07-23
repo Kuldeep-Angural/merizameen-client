@@ -93,7 +93,7 @@ export const PropertyView = () => {
               <div id="imgContainer" style={{ position: 'relative', display: 'inline-block' }}>
                 <img onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width: '100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer', borderRadius: '10px' }} src={property?.mainImage} alt="Property" />
                 <IconButton style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0', transition: 'opacity 0.3s' }} onMouseEnter={(e) => (e.target.style.opacity = '1')} onMouseLeave={(e) => (e.target.style.opacity = '0')} aria-label="View Image" onClick={openImageViewer}>
-                  <FullscreenIcon />
+                  <FullscreenIcon style={{color:'white'}} />
                 </IconButton>
               </div>
               <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
