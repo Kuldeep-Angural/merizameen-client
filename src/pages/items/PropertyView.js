@@ -30,8 +30,11 @@ import { dateFormat } from '../../constants/constant';
 import { Wrapper } from '../home/Wrapper';
 import '../items/Item.scss';
 import { getSpecificProperty, selectLoading } from '../postAd/postPropertySlice';
+import { InputField } from '../../components/input/InputField';
 export const PropertyView = () => {
   const [property, setProperty] = useState({});
+  const [callBackData, setCallBackData] = useState({});
+
   const [propertyImages, setPropertyImages] = useState([]);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [locationModal, setLocatiionModal] = useState(false);
@@ -53,7 +56,7 @@ export const PropertyView = () => {
         setImageIndex(0);
       }
     });
-  }, [dispatch , params]);
+  }, [dispatch, params]);
 
   useEffect(() => {
     window.scrollTo({
@@ -83,26 +86,24 @@ export const PropertyView = () => {
     );
   };
 
+  const handleCallBack = (e) => {
+    const {name , value} = e.target;
+    setCallBackData({...callBackData, [name]:value});
+  }
+
+  const submitCallBackRequest = () => {
+    console.log(callBackData);
+    alert('under progress')
+  }
+
   return (
     <Wrapper>
       <Spinner LoadingState={loading} />
       <Grid container spacing={2} mt={1} style={{ padding: '10px' }}>
         <Grid item md={6} sm={12} xs={12}>
-          <Box style={{ position: 'relative', display: 'inline-block' }}>
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
-              <div id="imgContainer" style={{ position: 'relative', display: 'inline-block' }}>
-                <img onClick={openImageViewer} title="click to view all images" style={{ display: 'block', width: '100%', maxHeight: '400px', minHeight: '400px', cursor: 'pointer', borderRadius: '10px' }} src={property?.mainImage} alt="Property" />
-                <IconButton style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0', transition: 'opacity 0.3s' }} onMouseEnter={(e) => (e.target.style.opacity = '1')} onMouseLeave={(e) => (e.target.style.opacity = '0')} aria-label="View Image" onClick={openImageViewer}>
-                  <FullscreenIcon style={{color:'white'}} />
-                </IconButton>
-              </div>
-              <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
-            </Box>
-
-            <CardContent sx={{ display: { xs: 'flex', sm: 'flex', md: 'none' }, mr: 1, backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
-              <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', maxWidth: '100%', minWidth: '350px', maxHeight: '350px', height: '300px', borderRadius: '10px' }}  src={propertyImages[imageIndex]} alt="Property" />
-              <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
-            </CardContent>
+          <Box >
+            <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', width: '100%', borderRadius: '10px' }} src={propertyImages[imageIndex]} alt="Property" />
+            <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
           </Box>
         </Grid>
 
@@ -114,7 +115,7 @@ export const PropertyView = () => {
           <Typography style={{ marginTop: 2, fontSize: '11px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>Listing Id #{property?.id}</Typography>
           <Typography style={{ marginTop: 2, fontSize: '15px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>{property?.description}</Typography>
 
-          <CardContent>
+          <CardContent sx={{ mt: 4.5 }}>
             <Card>
               <CardContent sx={{ backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
                 <Grid container mt={2} justifyContent={'center'}>
@@ -144,21 +145,21 @@ export const PropertyView = () => {
                   </Typography>
                 </Grid>
 
-                <Grid container spacing={1} mt={3}>
+                {/* <Grid container spacing={1} mt={3}>
                   <Grid item md={3} xs={4}>
-                    <Button variant="outlined">Enquiry Now</Button>
+                    <Button size='small' variant="outlined">Enquiry Now</Button>
                   </Grid>
 
                   <Grid item md={3} xs={4}>
-                    <Button variant="outlined">Get Phone No</Button>
+                    <Button size='small' variant="outlined">Get Phone No</Button>
                   </Grid>
 
                   <Grid item md={3} xs={4}>
-                    <Button variant="outlined">
+                    <Button size='small' variant="outlined">
                       <LocationOnIcon onClick={() => setLocatiionModal(true)} />
                     </Button>
                   </Grid>
-                </Grid>
+                </Grid> */}
               </CardContent>
             </Card>
           </CardContent>
@@ -227,21 +228,41 @@ export const PropertyView = () => {
             <Divider></Divider>
           </CardContent>
         </Grid>
+
+        <Grid item md={6} sm={12} xs={12} p={3}>
+          <GoogleMap data={{ state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
+        </Grid>
+
+        <Grid item md={6} sm={12} xs={12} p={3}>
+          <Card>
+            <CardContent sx={{mt:1}}>
+              <Typography align='center' mb={2}>Request CallBack</Typography>
+              <InputField sx={{mt:2}}  style={{marginTop:'19'}} onChange={handleCallBack} name={'name'} value={callBackData.name} placeholder={'Name'}/>
+              <InputField style={{marginTop:'19'}}  onChange={handleCallBack} name={'email'} value={callBackData.email} placeholder={'Email'}/>
+              <InputField style={{marginTop:'19'}} onChange={handleCallBack} name={'mobile'} value={callBackData.mobile} placeholder={'Mobile'}/>
+              <InputField style={{marginTop:'19'}} onChange={handleCallBack} name={'message'} value={callBackData.message} placeholder={'Message'}/>
+              <Box  display={'flex'} justifyContent={'center'} alignContent={'center'}>
+              <Button variant='contained'  sx={{marginTop:'30px' , width:'120px'}} onClick={submitCallBackRequest}> Send </Button>
+
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
 
-      <Modal open={locationModal} onSubmit={() => {}} hideCreateButton={true} onClose={() => setLocatiionModal(false)} title="" >
+      <Modal open={locationModal} onSubmit={() => { }} hideCreateButton={true} onClose={() => setLocatiionModal(false)} title="" >
         <Grid container>
           <Grid item md={12}>
             <Typography fontWeight={550}>{property?.location?.city + ' ,' + property?.location?.state + ' ,' + property?.location?.pinCode}</Typography>
           </Grid>
           <Grid item md={12} sm={12} xs={12}>
-          <CardMedia sx={{ height: '400px', position: 'relative' }}>
-            <GoogleMap data={{ state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
-          </CardMedia>
+            <CardMedia sx={{ height: '400px', position: 'relative' }}>
+              <GoogleMap data={{ state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
+            </CardMedia>
           </Grid>
         </Grid>
       </Modal>
-      
+
     </Wrapper>
   );
 };
