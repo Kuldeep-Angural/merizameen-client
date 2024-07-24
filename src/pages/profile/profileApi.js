@@ -3,8 +3,8 @@ import { HEADERS } from '../../configuration/headers';
 const BASE_ENDPOINT = process.env.REACT_APP_API_END_POINT;
 
 export const getUserDetail = async (data) => {
-  return axios.post(BASE_ENDPOINT +'/user/details',data,  )
-  .then(function (response) {
+  return axios.post(BASE_ENDPOINT +'/user/details',data, {
+    headers: HEADERS.AUTHENTIC(),}).then(function (response) {
     if (response.status === 200) {
       return { ...response.data };
     }
@@ -16,7 +16,9 @@ export const getUserDetail = async (data) => {
 
 export const updateUserDetails = async (data) => {
   return axios
-    .post(BASE_ENDPOINT + '/user/updateUser', data, )
+    .post(BASE_ENDPOINT + '/user/updateUser', data,{
+      headers: HEADERS.AUTHENTIC(),
+    } )
     .then(function (response) {
       if (response.status === 200) {
         return { ...response.data };
