@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createObject, deleteSpecificProperty, getAll, getProperty, like } from './postPropertyApi';
+import { createObject, deleteSpecificProperty, getAll, getProperty, like, requestForCallBack } from './postPropertyApi';
 import { ReplyAll } from '@mui/icons-material';
 
 
@@ -35,6 +35,11 @@ export const deleteProperty =  createAsyncThunk('/user/deleteProperty', async (d
   return response;
 });
 
+export const requestCallBack =  createAsyncThunk('/user/requestCallBack', async (data) => {
+  const response = await requestForCallBack(data);
+  return response;
+});
+
 
 
 
@@ -65,6 +70,19 @@ export const postpropertySlice = createSlice({
         state.loading = true;
       })
       .addCase(getSpecificProperty.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(requestCallBack.pending,(state)=>{
+        state.loading = true;
+      })
+      .addCase(requestCallBack.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+
+      .addCase(deleteProperty.pending,(state)=>{
+        state.loading = true;
+      })
+      .addCase(deleteProperty.fulfilled, (state, action) => {
         state.loading = false;
       })
       

@@ -24,7 +24,7 @@ export const propertyTypes = [
 
 export const pages = ['Products', 'Pricing', 'Blog'];
 
-export const userSettings = ['Profile', 'Dashboard', 'Plans', 'Logout'];
+export const userSettings = ['Admin-Area' ,  'Dashboard' , 'Plans' ,'Profile', 'Logout' ];
 
 export const MemberShips = {
   Premium_Access: 'Premium Access',

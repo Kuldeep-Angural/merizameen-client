@@ -22,3 +22,19 @@ export const  calculateEndDate = (currentDate, numberOfMonths) => {
   }
   return endDate;
 }
+
+export const fullAddress = (data) => {
+  if (!data) return "";
+
+  const { localAddress, city, state, pinCode } = data;
+
+  const addressParts = [
+    localAddress || "",
+    city || "",
+    state || "",
+    pinCode || ""
+  ];
+
+  return addressParts.filter(part => part).join(", ");
+};
+

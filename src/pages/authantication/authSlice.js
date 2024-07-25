@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { forgotPassword, googleLoginApi, loginGoogle, loginUser, logoutUser, sendEmailForotp, signUpUser, verify } from './authApi';
+import { forgotPassword, googleLoginApi, loginGoogle, loginUser, logoutUser, sendEmailForotp, sendfeedBackMessage, signUpUser, verify } from './authApi';
 import { createSession, invalidateSession } from '../../configuration/session';
 import { SESSION_KEYS } from '../../constants/constant';
 
@@ -9,6 +9,7 @@ const initialState = {
   loginLoading:false,
   otpLoading:false,
   forgotPasswordLoading:false,
+  loading:false,
   userData:JSON.parse(localStorage.getItem(SESSION_KEYS.USER)),
   status: 'done',
 };
@@ -49,6 +50,10 @@ export const changePassword = createAsyncThunk('auth/ChangePassword', async (cre
   return response;
 });
 
+export const sendFeedBack = createAsyncThunk('auth/feedBack', async (payload) => {
+  const response = await sendfeedBackMessage(payload);
+  return response;
+});
 
 
 export const logout = createAsyncThunk('auth/logout', async () => {
@@ -130,11 +135,18 @@ export const authSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state, action) => {
         state.forgotPasswordLoading = false;
+      })
+      .addCase(sendFeedBack.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(sendFeedBack.fulfilled, (state, action) => {
+        state.loading = false;
       });
   },
 });
 export const { logoutSession } = authSlice.actions;
 
+export const selectContactUsLoading = (state) => state.auth.loading; 
 export const selectAuthData = (state) => state.auth.authData;
 export const selectLoginLoading = (state) => state.auth.loginLoading;
 export const selectSignUpLoading = (state) => state.auth.signUpLoading;

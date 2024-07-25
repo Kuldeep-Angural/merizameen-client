@@ -37,7 +37,7 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
     return (
       <Grid item md={4} sm={6} xs={12} style={{ cursor: 'pointer' }}>
         <img loading="lazy" style={{ borderRadius: '3%' }} onClick={() => openItem(item._id)} src={item.mainImage} height={'275px'} width={'100%'} />
-        <Typography fontWeight={'600'}>{item.title}</Typography>
+        <Typography fontWeight={'600'}>{item.title.length > 80 ? String(item.title).slice(0, 80) + '. . .': item?.title }</Typography>
         <Box display={'flex'}>
           <Typography>Property Type:</Typography>
           <Typography>{item.propertyType}</Typography>

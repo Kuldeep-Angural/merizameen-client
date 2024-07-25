@@ -14,7 +14,8 @@ import { medium, propertyTypes, state } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
 import { Wrapper } from '../home/Wrapper';
 import { getAllProperties, getSpecificProperty, postProperty, selectPostLoading } from './postPropertySlice';
-
+import { AccountCircle } from '@mui/icons-material';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
   const [postAdData, setPostAdData] = useState({});
@@ -37,23 +38,23 @@ export const PostProperty = () => {
     setCities(location?.state === 'Punjab' ? punjabCities : himachalCities);
   }, [location]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (params?.listId) {
-      dispatch(getSpecificProperty(params)).then((resp)=>{
+      dispatch(getSpecificProperty(params)).then((resp) => {
         const data = resp.payload.data || {}
         if (resp.payload.data) {
-          setBasicInfo({...data.basicInfo , title:data.title, description:data.description ,price:data.price ,   })
+          setBasicInfo({ ...data.basicInfo, title: data.title, description: data.description, price: data.price, })
           setAmenities(data.amenities)
           setLandMarks(data.landMarks)
           setPostAdData({
-            propertyImages:data.propertyImages,
-            mainImage:data.mainImage,
+            propertyImages: data.propertyImages,
+            mainImage: data.mainImage,
           })
 
         }
       })
     }
-  },[params , dispatch])
+  }, [params, dispatch])
 
   const handleChange = (e) => {
     if (e.target.name === 'mainImage') {
@@ -180,7 +181,7 @@ export const PostProperty = () => {
                 <Grid item md={4} sm={6} xs={6}>
                   <Tooltip title="Upload Main Image">
                     <Button variant="text" component="label">
-                      <img onClick={() => {}} style={{ cursor: 'pointer', borderRadius: '10px' }} src={postAdData.mainImage ? postAdData.mainImage : imageIcon} height={'150px'}  width={'100%'} alt="upload" />
+                      <img onClick={() => { }} style={{ cursor: 'pointer', borderRadius: '10px' }} src={postAdData.mainImage ? postAdData.mainImage : imageIcon} height={'150px'} width={'100%'} alt="upload" />
                       <input onChange={handleChange} accept="image/*" name="mainImage" type="file" hidden />
                     </Button>
                   </Tooltip>
@@ -191,7 +192,7 @@ export const PostProperty = () => {
                   <Grid container spacing={2}>
                     <Grid item md={4} xs={12}>
                       <Tooltip title="Upload Property Images">
-                        <Button fullWidth onClick={postAdData?.propertyImages?.length > 0 ? () => setOpenModal(true) : () => {}} sx={{ height: '60px' }} variant="outlined" component="label">
+                        <Button fullWidth onClick={postAdData?.propertyImages?.length > 0 ? () => setOpenModal(true) : () => { }} sx={{ height: '60px' }} variant="outlined" component="label">
                           <input style={{ width: '100%' }} onChange={handleChange} accept="image/*" name="propertyImages" multiple type="file" hidden />
                           <Badge bac badgeContent={postAdData?.propertyImages?.length || 0} color="primary">
                             <BackupIcon style={{ fontSize: '60px', color: '#bdbdbd', width: '100%' }} />
@@ -276,6 +277,12 @@ export const PostProperty = () => {
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
+                          <TextField disabled={params?.listId} required label="Landmark"  onChange={handleLocationChange} helpertext="This Field is Required" value={location?.localAddress || ''} aria-describedby="outlined-weight-helper-text" name={'localAddress'} />
+                        </FormControl>
+                      </Grid>
+
+                      <Grid item md={6} xs={6} sm={6}>
+                        <FormControl fullWidth variant="outlined">
                           <TextField disabled={params?.listId} required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
                         </FormControl>
                       </Grid>
@@ -335,7 +342,7 @@ export const PostProperty = () => {
                   {amenitiesConstant.map((item) => {
                     return (
                       <Grid item md={4}>
-                        <FormControlLabel control={<Checkbox checked={amenities?.[item?.name]==='Y'} value={amenities?.[item?.name] || '' } name={item?.name} />} onClick={handleAmenities} label={item.label} />
+                        <FormControlLabel control={<Checkbox checked={amenities?.[item?.name] === 'Y'} value={amenities?.[item?.name] || ''} name={item?.name} />} onClick={handleAmenities} label={item.label} />
                       </Grid>
                     );
                   })}
@@ -379,12 +386,12 @@ export const PostProperty = () => {
             </CardContent>
           </Card>
           <Box display={'flex'} justifyContent={'center'} mt={3} mb={3}>
-            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px' , width:'250px' }} text="Post Ad" loading={loading} variant="contained" onClick={!params?.listId ?  handlePostButton : handleUpdateProperty} />
+            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px', width: '250px' }} text="Post Ad" loading={loading} variant="contained" onClick={!params?.listId ? handlePostButton : handleUpdateProperty} />
           </Box>
         </Grid>
       </Grid>
 
-      <Modal open={openModal} onClose={()=>setOpenModal()}>
+      <Modal open={openModal} onClose={() => setOpenModal()}>
         <Box>
           {postAdData?.propertyImages?.map((e) => {
             const index = postAdData.propertyImages.findIndex((i) => i === e);
@@ -392,7 +399,7 @@ export const PostProperty = () => {
               <Grid container spacing={3} mb={2} gap={2}>
                 <Grid item md={12} mb={2}>
                   <Card>
-                    <img src={e} height={'260px'} width={'300px'} alt='propertyImages'/>
+                    <img src={e} height={'260px'} width={'300px'} alt='propertyImages' />
                     <Divider />
                   </Card>
                   <Grid item md={12} display={'flex'} justifyContent={'center'}>

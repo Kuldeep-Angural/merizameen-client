@@ -32,6 +32,7 @@ import LoaderButton from '../loadingbutton/LoaderButton';
 import Progressbar from '../ProgressBar/Progressbar';
 import Modal from '../modal/Modal';
 import APToaster from '../Toaster/APToaster';
+import ContactUsModal from '../modal/ContactUsModal';
 export const APNavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -128,22 +129,23 @@ export const APNavBar = () => {
     if (eventName === 'Plans') {
       setPlanModal(true);
     }
+    if (eventName === 'Admin-Area') {
+      naviGate('/adminArea')
+    }
     return handleCloseUserMenu();
   };
 
- 
   useEffect(() => {
     dispatch(getUserDetails(USER._id));
   }, [])
 
-
-
-
+  const filteredSettings = USER.roles === 'owner' ? userSettings : userSettings.filter(setting => setting !== 'Admin-Area');
 
   return (
+
     <>
       <Progressbar LoadingState={loadingstate} />
-      <APToaster ref={toastRef}/>
+      <APToaster ref={toastRef} />
       <AppBar elevation={0} position="static" color='transparent'>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -286,7 +288,8 @@ export const APNavBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {userSettings.map((setting) => (
+
+                {filteredSettings.map((setting) => (
                   <MenuItem key={setting} onClick={() => handleUserClick(setting)}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
@@ -296,126 +299,12 @@ export const APNavBar = () => {
           </Toolbar>
         </Container>
         {/* Contact Dialoug */}
-        <Modal open={openDialog} onClose={handleCloseDialog} >
-          <Typography textAlign={'center'} fontWeight={'700'}>
-            Contact Us
-          </Typography>
-          <Typography>1st Floor, Manchanda Tower opposite Novelty Mall, Pathankot, Punjab, India </Typography>
-
-          <Typography>9:00AM to 6:00PM IST</Typography>
-
-          <Grid container gap={2}>
-            <Tooltip title="Call">
-              <Button variant="outlined" sx={{ fontSize: '10px' }} color="text" md={6} startIcon={<PhoneIcon style={{ paddingTop: '0px' }} />}>
-                9877726857
-              </Button>
-            </Tooltip>
-            <Tooltip title="Request a callBack">
-              <Button variant="outlined" sx={{ fontSize: '10px' }} onClick={() => openCallBackDailog()} color="text" md={6} startIcon={<PhoneForwardedIcon style={{ paddingTop: '3px' }} />}>
-                Request a callBack
-              </Button>
-            </Tooltip>
-          </Grid>
-          {GoogleMap({ city: 'pathankot', country: 'India', state: 'Punjab', zip: '145001' })}
-          <Box justifyContent={'space-around'} display={'flex'} textAlign={'center'} mt={1}>
-            <Button variant="outlined" onClick={() => openQuery()} textAlign={'center'}>
-              click here to share your query
-            </Button>
-            <Button variant="outlined" onClick={handleCloseDialog}>
-              close
-            </Button>
-          </Box>
-        </Modal>
+        <ContactUsModal openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
 
 
-        {/* Contact Call-Back dialog */}
-        <Modal
-          open={openCallBack}
-          onClose={handleCloseCallBackDailog}>
 
 
-          <Typography textAlign={'center'} fontWeight={'600'}>
-            Call Back Request
-          </Typography>
-          <Box component="form" noValidate mt={3} onSubmit={() => { }}>
-            <FormControl variant="standard" fullWidth>
-              <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-              <Input autoComplete="name" required id="standard-adornment-password" type="text" />
-            </FormControl>
 
-            <FormControl variant="standard" fullWidth>
-              <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-              <Input autoComplete="email" required id="standard-adornment-password" type="email" />
-            </FormControl>
-
-            <FormControl variant="standard" fullWidth>
-              <InputLabel htmlFor="standard-adornment-password">Mobile</InputLabel>
-              <Input autoComplete="mobile" required id="standard-adornment-password" type="Mobile" />
-            </FormControl>
-
-            <FormControl variant="standard" fullWidth sx={{ mt: 2 }}>
-              <InputLabel htmlFor="standard-adornment-password"> </InputLabel>
-              <TextField id="outlined-select-currency" variant="standard" label="i am " select>
-                {options.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </FormControl>
-
-            <FormControl variant="standard" fullWidth>
-              <InputLabel htmlFor="standard-adornment-password">Query</InputLabel>
-              <Input multiline rowsF={4} autoComplete="text" required id="standard-adornment-password" type="text" />
-            </FormControl>
-          </Box>
-
-          <DialogActions>
-            <Button fullWidth variant="outlined" onClick={handleCloseCallBackDailog}>
-              close
-            </Button>
-
-            <Button fullWidth variant="outlined" onClick={handleSendCallBackRequest}>
-              Send
-            </Button>
-          </DialogActions>
-        </Modal>
-
-        {/* Feedback / query  Dialoug */}
-
-        <Modal
-          open={openQueryPannel}
-          onClose={handleCloseFeedback}
-        >
-          <Typography textAlign={'center'} fontWeight={'600'}>
-            Feedback Form
-          </Typography>
-          <Box component="form" noValidate mt={3} onSubmit={() => { }}>
-            <FormControl variant="standard" fullWidth>
-              <InputLabel htmlFor="standard-adornment-password">Name</InputLabel>
-              <Input autoComplete="name" autoFocus required id="standard-adornment-password" type="text" />
-            </FormControl>
-
-            <FormControl variant="standard" fullWidth>
-              <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-              <Input autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
-            </FormControl>
-
-            <FormControl variant="standard" fullWidth>
-              <InputLabel htmlFor="standard-adornment-password">Enter your feedback</InputLabel>
-              <Input multiline rowsF={4} autoComplete="email" autoFocus required id="standard-adornment-password" type="email" />
-            </FormControl>
-          </Box>
-
-          <DialogActions>
-            <Button fullWidth variant="outlined" onClick={handleCloseFeedback}>
-              close
-            </Button>
-            <Button fullWidth variant="outlined" onClick={handleSendFeedBack}>
-              Send
-            </Button>
-          </DialogActions>
-        </Modal>
 
         <Modal open={profileModal} draggable={true} onClose={() => setProfileModal(false)} title="" style={{ minWidth: '150px', maxWidth: '360px' }}>
           <Profile dataObj={dataObj} toastRef={toastRef} />

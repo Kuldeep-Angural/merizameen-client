@@ -19,7 +19,7 @@ import SubwayIcon from '@mui/icons-material/Subway';
 import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import moment from 'moment/moment';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { GoogleMap } from '../../components/googleMap/GoogleMap';
@@ -29,17 +29,22 @@ import Spinner from '../../components/ProgressBar/Progressbar';
 import { dateFormat } from '../../constants/constant';
 import { Wrapper } from '../home/Wrapper';
 import '../items/Item.scss';
-import { getSpecificProperty, selectLoading } from '../postAd/postPropertySlice';
+import { getSpecificProperty, requestCallBack, selectLoading } from '../postAd/postPropertySlice';
 import { InputField } from '../../components/input/InputField';
+import { fullAddress } from '../../utils/utility';
+import APToaster from '../../components/Toaster/APToaster';
+import { selectUserData } from '../authantication/authSlice';
 export const PropertyView = () => {
   const [property, setProperty] = useState({});
   const [callBackData, setCallBackData] = useState({});
+  const userData = useSelector(selectUserData);
 
   const [propertyImages, setPropertyImages] = useState([]);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [locationModal, setLocatiionModal] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const params = useParams();
+  const toastRef = useRef();
   const loading = useSelector(selectLoading);
 
   const dispatch = useDispatch();
@@ -93,16 +98,34 @@ export const PropertyView = () => {
 
   const submitCallBackRequest = () => {
     console.log(callBackData);
-    alert('under progress')
+    const data = {
+      ...callBackData,
+      propertyId:property._id,
+    }
+
+    if (callBackData?.name && callBackData?.mobile && callBackData?.message) {
+      dispatch(requestCallBack(data)).then((resp)=>{
+        const message = resp.payload.message;
+        if (resp.payload.status===200) {
+          toastRef.current.showToast({messageType:'success' , messageText:'Call Back request Submitted! Please Wait for some time to get Response'})
+        }else{
+          toastRef.current.showToast({messageType:message.messageType , messageText:message.messageText})
+        }
+      })
+    }else{
+      toastRef.current.showToast({messageType:'error' , messageText:'Please fill required field for call-back Request'})
+
+    }
   }
 
   return (
     <Wrapper>
+      <APToaster ref={toastRef} /> 
       <Spinner LoadingState={loading} />
-      <Grid container spacing={2} mt={1} style={{ padding: '10px' }}>
+      <Grid container spacing={2} mt={1} p={2}>
         <Grid item md={6} sm={12} xs={12}>
           <Box >
-            <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', width: '100%', borderRadius: '10px' }} src={propertyImages[imageIndex]} alt="Property" />
+            <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', width: '100%', borderRadius: '4px' }} src={propertyImages[imageIndex]} alt="Property" />
             <APImageViewer images={propertyImages} isViewerOpen={isViewerOpen} closeImageViewer={closeImageViewer} currentImage={imageIndex} />
           </Box>
         </Grid>
@@ -112,9 +135,8 @@ export const PropertyView = () => {
             posted At:{moment(property?.postedAt).format(dateFormat.dateAndTime)}
           </Typography>
           <Typography style={{ marginTop: 2, fontSize: '19px', paddingLeft: 10, fontWeight: 600 }}>{property?.title}</Typography>
-          <Typography style={{ marginTop: 2, fontSize: '11px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>Listing Id #{property?.id}</Typography>
+          <Typography align='center' fontWeight={600} mt={2} mb={2}> <b>Location:</b>  {fullAddress(property?.location)} </Typography>
           <Typography style={{ marginTop: 2, fontSize: '15px', paddingLeft: 10, fontWeight: 500, marginRight: 5 }}>{property?.description}</Typography>
-
           <CardContent sx={{ mt: 4.5 }}>
             <Card>
               <CardContent sx={{ backgroundColor: 'rgb(77, 135, 250,0.1)' }}>
@@ -144,22 +166,6 @@ export const PropertyView = () => {
                     &#8377;:{property?.price}  /-
                   </Typography>
                 </Grid>
-
-                {/* <Grid container spacing={1} mt={3}>
-                  <Grid item md={3} xs={4}>
-                    <Button size='small' variant="outlined">Enquiry Now</Button>
-                  </Grid>
-
-                  <Grid item md={3} xs={4}>
-                    <Button size='small' variant="outlined">Get Phone No</Button>
-                  </Grid>
-
-                  <Grid item md={3} xs={4}>
-                    <Button size='small' variant="outlined">
-                      <LocationOnIcon onClick={() => setLocatiionModal(true)} />
-                    </Button>
-                  </Grid>
-                </Grid> */}
               </CardContent>
             </Card>
           </CardContent>
@@ -229,18 +235,19 @@ export const PropertyView = () => {
           </CardContent>
         </Grid>
 
-        <Grid item md={6} sm={12} xs={12} p={3}>
-          <GoogleMap data={{ state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
+        
+        <Grid item md={6} sm={12} xs={12} >
+          <GoogleMap  data={{  address:property?.location?.localAddress||"" ,state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
         </Grid>
 
-        <Grid item md={6} sm={12} xs={12} p={3}>
+        <Grid item md={6} sm={12} xs={12} >
           <Card>
             <CardContent sx={{mt:1}}>
               <Typography align='center' mb={2}>Request CallBack</Typography>
-              <InputField sx={{mt:2}}  style={{marginTop:'19'}} onChange={handleCallBack} name={'name'} value={callBackData.name} placeholder={'Name'}/>
-              <InputField style={{marginTop:'19'}}  onChange={handleCallBack} name={'email'} value={callBackData.email} placeholder={'Email'}/>
-              <InputField style={{marginTop:'19'}} onChange={handleCallBack} name={'mobile'} value={callBackData.mobile} placeholder={'Mobile'}/>
-              <InputField style={{marginTop:'19'}} onChange={handleCallBack} name={'message'} value={callBackData.message} placeholder={'Message'}/>
+              <InputField sx={{mt:2}} required={true}  style={{marginTop:'19'}} onChange={handleCallBack} name={'name'} value={callBackData.name} placeholder={'Name'}/>
+              <InputField style={{marginTop:'19'}} disabled={true}  name={'email'} value={userData?.email} placeholder={'Email'}/>
+              <InputField style={{marginTop:'19'}} required={true} onChange={handleCallBack} name={'mobile'} value={callBackData.mobile} placeholder={'Mobile'}/>
+              <InputField style={{marginTop:'19'}} required={true} onChange={handleCallBack} name={'message'} value={callBackData.message} placeholder={'Message'}/>
               <Box  display={'flex'} justifyContent={'center'} alignContent={'center'}>
               <Button variant='contained'  sx={{marginTop:'30px' , width:'120px'}} onClick={submitCallBackRequest}> Send </Button>
 

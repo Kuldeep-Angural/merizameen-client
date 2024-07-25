@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Fab, Grid, Tooltip, Typography } from '@mui/material';
 import Lottie from 'lottie-react';
 import React, { useEffect } from 'react';
 import Building from '../../ui/json/building.json';
@@ -6,12 +6,21 @@ import { SignInForm } from './AuthForm';
 import { selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading } from './authSlice';
 import { useSelector } from 'react-redux';
 import Spinner from '../../components/ProgressBar/Progressbar';
+import ContactUs from '../../ui/png/—Pngtree—contact us flat design style_5874427.png';
+import ContactUsModal from '../../components/modal/ContactUsModal';
 
 const Auth = ({ updatePageTitle }) => {
+  const [openDialog, setOpenDialog] = React.useState(false);
   const loginLoading = useSelector(selectLoginLoading);
   const signUpLoading = useSelector(selectSignUpLoading);
   const otpLoading = useSelector(selectOtpLoading);
   const forgotPasswordLoading = useSelector(selectForgotPasswordLoading);
+
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
 
   useEffect(() => {
     updatePageTitle('Merizameen');
@@ -19,7 +28,7 @@ const Auth = ({ updatePageTitle }) => {
 
   return (
     <>
-      <Spinner LoadingState={signUpLoading||loginLoading|| otpLoading||forgotPasswordLoading}/>
+      <Spinner LoadingState={signUpLoading || loginLoading || otpLoading || forgotPasswordLoading} />
       <Grid container gap={2} component="main" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} columns={12} justifyContent={'center'} alignItems="center">
         <Grid item sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} md={6}>
           <Typography padding={2} fontWeight={'600'} letterSpacing={'1px'}>
@@ -32,6 +41,12 @@ const Auth = ({ updatePageTitle }) => {
           <SignInForm />
         </Grid>
       </Grid>
+      <Box sx={{ position: 'absolute', bottom: '20px', right: '20px', cursor: 'pointer' }}  >
+        <Tooltip title="Contact us">
+          <img src={ContactUs} height={'80px'} width={'80px'} onClick={() => setOpenDialog(true)} />
+        </Tooltip>
+        <ContactUsModal openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
+      </Box>
     </>
   );
 };

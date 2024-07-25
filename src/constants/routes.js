@@ -9,6 +9,7 @@ import { Home } from '../pages/home/Home';
 import { PropertyView } from '../pages/items/PropertyView';
 import { PageNotFound } from '../pages/notFoundPage/PageNotFound';
 import { PostProperty } from '../pages/postAd/PostProperty';
+import AdminArea from '../pages/adminArea/AdminArea';
 
 export const APRoutes = ({ toastRef }) => {
   const ROUTES = [
@@ -19,6 +20,8 @@ export const APRoutes = ({ toastRef }) => {
     { name: '/postAd', value: (index) => (<PostProperty key={index} updatePageTitle={updatePageTitle} toastRef={toastRef} />) },
     { name: '/edit/property/:id', value: (index) => (<PostProperty key={index} updatePageTitle={updatePageTitle} toastRef={toastRef} />) },
     { name: '/dashboard', value: (index) => (<Dashboard key={index} updatePageTitle={updatePageTitle} toastRef={toastRef} />) },
+    { name: '/adminArea', value: (index) => (<AdminArea key={index} updatePageTitle={updatePageTitle} toastRef={toastRef} />) },
+
   ];
   const isLoggedIn = useSelector(selectUserData);
   const [pageTitle, updatePageTitle] = useState('');

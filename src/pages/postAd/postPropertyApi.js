@@ -65,6 +65,21 @@ export const deleteSpecificProperty = async (payload) => {
 };
 
 
+export const requestForCallBack = async (payload) => {
+  return axios
+    .post(BASE_ENDPOINT+'/post/requestCallBack', payload, {
+      headers: HEADERS.AUTHENTIC(),
+    })
+    .then(function (response) {
+      if (response.status === 200) {
+        return { ...response.data };
+      }
+    })
+    .catch(function (error) {
+      return error;
+    });
+};
+
 
 export const getAll = async (payload) => {
   return axios

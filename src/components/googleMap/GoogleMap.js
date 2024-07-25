@@ -1,6 +1,6 @@
 export const GoogleMap = ({data}) => {
-    const {   city, country, state, zip } = data || {};
-    const fullAddress = `${city || ''} ${state || ''} ${zip || ''} ${country || ''}`.trim();
+    const {   city, country, state, zip , address='' } = data || {};
+    const fullAddress = ` ${address || ''} ${city || ''} ${state || ''} ${zip || ''} ${country || ''}`.trim();
     const mapSrc = `https://maps.google.com/maps?width=300&height=200&hl=en&q=${encodeURIComponent(fullAddress)}&t=&z=14&ie=UTF8&iwloc=B&output=embed&maptypecontrol=1&disableDefaultUI=false`;
 
     return (

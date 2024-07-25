@@ -11,10 +11,11 @@ import { useNavigate } from 'react-router-dom';
 import { dateFormat } from '../../constants/constant';
 import { Wrapper } from '../../pages/home/Wrapper';
 import { deleteProperty } from '../../pages/postAd/postPropertySlice';
-import { getPostedproperties, getSellerLikes, getUserLikes, selectPostedProperties, selectSellerLikes, selectUserLikes, setActiveProperty, setSoldProperty } from '../../pages/profile/profileSlice';
+import { getPostedproperties, getSellerLikes, getUserLikes, selectLoading, selectPostedProperties, selectSellerLikes, selectUserLikes, setActiveProperty, setSoldProperty } from '../../pages/profile/profileSlice';
 import { addDelay } from '../../utils/utility';
 import Emptyview from '../emptyView/Emptyview';
 import Spinner from '../ProgressBar/Progressbar';
+import { selectUserData } from '../../pages/authantication/authSlice';
 
 const Dashboard = () => {
 
@@ -23,6 +24,8 @@ const Dashboard = () => {
   const userLikes = useSelector(selectUserLikes);
   const sellerLikes = useSelector(selectSellerLikes);
   const postedProperties = useSelector(selectPostedProperties);
+  const isLoading = useSelector(selectLoading);
+  const userData = useSelector(selectUserData);
 
   const [selectedCards, setSelectedCards] = useState('likes');
   const [menuState, setMenuState] = useState({ anchorEl: null, propertyId: null });
@@ -172,7 +175,7 @@ const Dashboard = () => {
          { prop!=='inactive' ?  <MenuItem onClick={handleClickSold}>Mark as Sold</MenuItem> : <MenuItem onClick={handleClickActive}>Set Active</MenuItem>}
         </Menu>}
         <img loading="lazy" style={{ borderRadius: '3%' }} src={item.mainImage} height="200px" width="100%" alt="Property" onClick={() => handleOpenPropertyview(item._id)} />
-        <Typography fontWeight="600">{item.title}</Typography>
+        <Typography fontWeight="600">   {item?.title.length > 80 ? String(item?.title).slice(0, 80) + '. . .': item?.title }</Typography>
         <Box display="flex">
           <Typography>Property Type:</Typography>
           <Typography>{item.type}</Typography>
@@ -201,7 +204,7 @@ const Dashboard = () => {
               <img loading="lazy" style={{ borderRadius: '3%' }} src={mainImage} height="200px" width="100%" alt="Property" onClick={() => handleOpenPropertyview(_id)} />
             </Grid>
             <Grid item md={6} xs={12}>
-              <Typography fontWeight="600">{title}</Typography>
+              <Typography fontWeight="600">{title.length > 80 ? String(title).slice(0, 80) + '. . .': title }</Typography>
               <Box display="flex">
                 <Typography>Property Type:</Typography>
                 <Typography>{propertyType}</Typography>
@@ -234,7 +237,7 @@ const Dashboard = () => {
 
   return (
     <Wrapper>
-      <Spinner LoadingState={loading} />
+      <Spinner LoadingState={loading || isLoading} />
       <Box width="100%" height="100vh" sx={{ backgroundColor: grey[50] }}>
         <Grid container p="5px" spacing="10px">
           {useAnalyticsCards(userLikes, sellerLikes, soldProperties, postedProperties, activeProperties).map(({ name, title, text, color, icon, count }) => (
@@ -249,7 +252,7 @@ const Dashboard = () => {
                     </Grid>
                     <Grid item xs={8} md={8} sm={8}>
                       <Typography align="center" fontWeight={600}>
-                        {title}
+                        {title.length > 80 ? String(title).slice(0, 80) + '. . .': title }
                       </Typography>
                       <Typography align="center" height={'30px'}>
                         {text}
