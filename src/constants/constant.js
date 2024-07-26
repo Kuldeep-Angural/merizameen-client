@@ -40,7 +40,7 @@ export const options = [
 
 export const filterChips = [
   { name: 'Flats', value: 'Flats' },
-  { name: 'PG', value: 'PG' },
+  { name: 'Pg', value: 'Pg' },
   { name: 'Commercial', value: 'Commercial' },
   { name: 'Plot', value: 'Plot' },
   { name: 'Rental', value: 'Rental' },

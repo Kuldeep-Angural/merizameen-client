@@ -6,7 +6,7 @@ import { SignInForm } from './AuthForm';
 import { selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading } from './authSlice';
 import { useSelector } from 'react-redux';
 import Spinner from '../../components/ProgressBar/Progressbar';
-import ContactUs from '../../ui/png/—Pngtree—contact us flat design style_5874427.png';
+import ContactUs from '../../ui/json/Animation - 1722004930910.json';
 import ContactUsModal from '../../components/modal/ContactUsModal';
 
 const Auth = ({ updatePageTitle }) => {
@@ -42,8 +42,9 @@ const Auth = ({ updatePageTitle }) => {
         </Grid>
       </Grid>
       <Box sx={{ position: 'absolute', bottom: '20px', right: '20px', cursor: 'pointer' }}  >
-        <Tooltip title="Contact us">
-          <img src={ContactUs} height={'80px'} width={'80px'} onClick={() => setOpenDialog(true)} />
+        <Tooltip title="Contact us" onClick={() => setOpenDialog(true)}>
+          {/* <img src={ContactUs} height={'80px'} width={'80px'}  /> */}
+          <Lottie loop={true} animationData={ContactUs} style={{ height: '80px' }} />
         </Tooltip>
         <ContactUsModal openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
       </Box>

@@ -102,7 +102,7 @@ const Dashboard = () => {
     });
   };
 
-  const handleEditClick = (event , id) => {
+  const handleEditClick = (event, id) => {
     return navigate('/edit/property/' + id);
 
   }
@@ -120,12 +120,12 @@ const Dashboard = () => {
     return useMemo(() => {
       const cardData = [
         {
-          name: 'likes', title: 'Liked Property',text: 'Properties liked ',   color: 'rgba(224, 119, 196,0.5)',
+          name: 'likes', title: 'Liked Property', text: 'Properties liked ', color: 'rgba(224, 119, 196,0.5)',
           count: userLikes?.length || 0, icon: <FavoriteBorderIcon fontSize="large" style={{ fontSize: '70px' }} />,
         },
         {
-          name: 'solds', title: 'Sold Property', text: 'Properties Sold by You so far.',color: 'rgba(0, 89, 232 , 0.5)',
-          count: soldProperties?.length || 0,icon: <SellIcon fontSize="large" style={{ fontSize: '70px' }} />,
+          name: 'solds', title: 'Sold Property', text: 'Properties Sold by You so far.', color: 'rgba(0, 89, 232 , 0.5)',
+          count: soldProperties?.length || 0, icon: <SellIcon fontSize="large" style={{ fontSize: '70px' }} />,
         },
         {
           name: 'post', title: 'Posted Property', text: 'Properties Posted by You.', color: 'rgba(214, 44, 32 , 0.5)',
@@ -133,11 +133,11 @@ const Dashboard = () => {
         },
         {
           name: 'active', title: 'Active Property', text: 'Active Properties by You.', color: 'rgba(255, 166, 0, 0.5)',
-          count: activeProperties?.length || 0,  icon: <NotificationsIcon fontSize="large" style={{ fontSize: '70px' }} />,
+          count: activeProperties?.length || 0, icon: <NotificationsIcon fontSize="large" style={{ fontSize: '70px' }} />,
         },
         {
           name: 'inActive', title: 'In-Active Property', text: 'Your In-Active Properties.', color: 'rgba(215, 16, 207, 0.5)',
-          count: inActiveProperties?.length || 0,  icon: <NotificationsOffIcon fontSize="large" style={{ fontSize: '70px' }} />,
+          count: inActiveProperties?.length || 0, icon: <NotificationsOffIcon fontSize="large" style={{ fontSize: '70px' }} />,
         },
       ];
 
@@ -149,7 +149,7 @@ const Dashboard = () => {
     return (
       <Grid item md={3} sm={6} xs={12} style={{ cursor: 'pointer' }} className={item?.isSold ? 'container-disabled' : 'container'}>
         <Box display='flex' sx={{ position: 'absolute', justifyContent: 'space-between' }}>
-          {prop === 'post' && !item.isSold  && (
+          {prop === 'post' && !item.isSold && (
             <Tooltip title="Edit">
               <Button id="fade-button" aria-controls={open ? 'fade-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={(event) => handleEditClick(event, item._id)}>
                 <EditNoteIcon style={{ color: 'white' }} />
@@ -171,11 +171,11 @@ const Dashboard = () => {
             </Tooltip>
           )}
         </Box>
-        { !item?.isSold && <Menu id="fade-menu" MenuListProps={{ 'aria-labelledby': 'fade-button' }} anchorEl={menuState.anchorEl} open={open} onClose={handleClose} TransitionComponent={Fade}>
-         { prop!=='inactive' ?  <MenuItem onClick={handleClickSold}>Mark as Sold</MenuItem> : <MenuItem onClick={handleClickActive}>Set Active</MenuItem>}
+        {!item?.isSold && <Menu id="fade-menu" MenuListProps={{ 'aria-labelledby': 'fade-button' }} anchorEl={menuState.anchorEl} open={open} onClose={handleClose} TransitionComponent={Fade}>
+          {prop !== 'inactive' ? <MenuItem onClick={handleClickSold}>Mark as Sold</MenuItem> : <MenuItem onClick={handleClickActive}>Set Active</MenuItem>}
         </Menu>}
         <img loading="lazy" style={{ borderRadius: '3%' }} src={item.mainImage} height="200px" width="100%" alt="Property" onClick={() => handleOpenPropertyview(item._id)} />
-        <Typography fontWeight="600">   {item?.title.length > 80 ? String(item?.title).slice(0, 80) + '. . .': item?.title }</Typography>
+        <Typography fontWeight="600">   {item?.title.length > 80 ? String(item?.title).slice(0, 80) + '. . .' : item?.title}</Typography>
         <Box display="flex">
           <Typography>Property Type:</Typography>
           <Typography>{item.type}</Typography>
@@ -204,7 +204,7 @@ const Dashboard = () => {
               <img loading="lazy" style={{ borderRadius: '3%' }} src={mainImage} height="200px" width="100%" alt="Property" onClick={() => handleOpenPropertyview(_id)} />
             </Grid>
             <Grid item md={6} xs={12}>
-              <Typography fontWeight="600">{title.length > 80 ? String(title).slice(0, 80) + '. . .': title }</Typography>
+              <Typography fontWeight="600">{title.length > 80 ? String(title).slice(0, 80) + '. . .' : title}</Typography>
               <Box display="flex">
                 <Typography>Property Type:</Typography>
                 <Typography>{propertyType}</Typography>
@@ -236,83 +236,87 @@ const Dashboard = () => {
   };
 
   return (
-    <Wrapper>
-      <Spinner LoadingState={loading || isLoading} />
-      <Box width="100%" height="100vh" sx={{ backgroundColor: grey[50] }}>
-        <Grid container p="5px" spacing="10px">
-          {useAnalyticsCards(userLikes, sellerLikes, soldProperties, postedProperties, activeProperties).map(({ name, title, text, color, icon, count }) => (
-            <Grid item mt={2} xs={12} sm={6} md={2.4} key={name}>
-              <Card
-                onClick={() => handleCardCLick(name)}
-                sx={{  border: selectedCards === name ? '3px solid green' : '', minHeight: '160px', maxHeight: '160px',overflow: 'hidden', backgroundColor: color, borderRadius: '16px', transform: 'all', cursor: 'pointer', '&:hover': { boxShadow: 3 }, }}>
-                <CardContent>
-                  <Grid container>
-                    <Grid item xs={4} md={4} sm={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
-                      {icon}
-                    </Grid>
-                    <Grid item xs={8} md={8} sm={8}>
-                      <Typography align="center" fontWeight={600}>
-                        {title.length > 80 ? String(title).slice(0, 80) + '. . .': title }
-                      </Typography>
-                      <Typography align="center" height={'30px'}>
-                        {text}
-                      </Typography>
-                      <Typography align="center" fontSize="40px">
-                        {count}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+    <Box>
 
-        <Grid mt={2} container padding={1}>
-          {selectedCards === 'likes' && (
-            <>
-              <Typography>You likes Someone properties</Typography>
-              <Grid container spacing={2}>
-                {userLikes?.length > 0 ? userLikes?.map((item) => renderPropertyLikesCard(item)) : <Emptyview text={"You haven't liked any properties."} />}
+      <Wrapper>
+        <Spinner LoadingState={loading || isLoading} />
+        <Box width="100%" height="100vh" sx={{ backgroundColor: grey[50] }}>
+          <Grid container p="5px" spacing="10px">
+            {useAnalyticsCards(userLikes, sellerLikes, soldProperties, postedProperties, activeProperties).map(({ name, title, text, color, icon, count }) => (
+              <Grid item mt={2} xs={12} sm={6} md={2.4} key={name}>
+                <Card
+                  onClick={() => handleCardCLick(name)}
+                  sx={{ border: selectedCards === name ? '3px solid green' : '', minHeight: '160px', maxHeight: '160px', overflow: 'hidden', backgroundColor: color, borderRadius: '16px', transform: 'all', cursor: 'pointer', '&:hover': { boxShadow: 3 }, }}>
+                  <CardContent>
+                    <Grid container>
+                      <Grid item xs={4} md={4} sm={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
+                        {icon}
+                      </Grid>
+                      <Grid item xs={8} md={8} sm={8}>
+                        <Typography align="center" fontWeight={600}>
+                          {title.length > 80 ? String(title).slice(0, 80) + '. . .' : title}
+                        </Typography>
+                        <Typography align="center" height={'30px'}>
+                          {text}
+                        </Typography>
+                        <Typography align="center" fontSize="40px">
+                          {count}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
-              <Typography mt={3}>Someone likes your properties.</Typography>
-              <Grid container spacing={2}>
-                {sellerLikes?.length > 0 ? sellerLikes?.map((item) => renderPropertyLikesCard(item)) : <Emptyview text={' No one has liked your properties.'} />}
-              </Grid>
-            </>
-          )}
-          {selectedCards === 'post' && (
-            <Grid item md={12} padding={1}>
-              <Grid container spacing={2}>
-                {postedProperties?.length > 0 ? postedProperties?.map((item) => renderPropertyCard(item, 'post')) : <Emptyview text={'No properties are currently posted.'} />}
-              </Grid>
-            </Grid>
-          )}
-          {selectedCards === 'active' && (
-            <Grid item md={12} padding={1}>
-              <Grid container spacing={2}>
-                {activeProperties?.length > 0 ? activeProperties?.map((item) => renderPropertyCard(item)) : <Emptyview text={'You currently have no active properties.'} />}
-              </Grid>
-            </Grid>
-          )}
-          {selectedCards === 'solds' && (
-            <Grid item md={12} padding={1}>
-              <Grid container spacing={2}>
-                {soldProperties?.length > 0 ? soldProperties?.map((item) => renderPropertyCard(item)) : <Emptyview text={'You currently have no sold properties.'} />}
-              </Grid>
-            </Grid>
-          )}
+            ))}
+          </Grid>
 
-          {selectedCards === 'inActive' && (
-            <Grid item md={12} padding={1}>
-              <Grid container spacing={2}>
-                {inActiveProperties?.length > 0 ? inActiveProperties?.map((item) => renderPropertyCard(item,'inactive')) : <Emptyview text={'You currently have no sold properties.'} />}
+          <Grid mt={2} container padding={1}>
+            {selectedCards === 'likes' && (
+              <>
+                <Typography>You likes Someone properties</Typography>
+                <Grid container spacing={2}>
+                  {userLikes?.length > 0 ? userLikes?.map((item) => renderPropertyLikesCard(item)) : <Emptyview text={"You haven't liked any properties."} />}
+                </Grid>
+                <Typography mt={3}>Someone likes your properties.</Typography>
+                <Grid container spacing={2}>
+                  {sellerLikes?.length > 0 ? sellerLikes?.map((item) => renderPropertyLikesCard(item)) : <Emptyview text={' No one has liked your properties.'} />}
+                </Grid>
+              </>
+            )}
+            {selectedCards === 'post' && (
+              <Grid item md={12} padding={1}>
+                <Grid container spacing={2}>
+                  {postedProperties?.length > 0 ? postedProperties?.map((item) => renderPropertyCard(item, 'post')) : <Emptyview text={'No properties are currently posted.'} />}
+                </Grid>
               </Grid>
-            </Grid>
-          )}
-        </Grid>
-      </Box>
-    </Wrapper>
+            )}
+            {selectedCards === 'active' && (
+              <Grid item md={12} padding={1}>
+                <Grid container spacing={2}>
+                  {activeProperties?.length > 0 ? activeProperties?.map((item) => renderPropertyCard(item)) : <Emptyview text={'You currently have no active properties.'} />}
+                </Grid>
+              </Grid>
+            )}
+            {selectedCards === 'solds' && (
+              <Grid item md={12} padding={1}>
+                <Grid container spacing={2}>
+                  {soldProperties?.length > 0 ? soldProperties?.map((item) => renderPropertyCard(item)) : <Emptyview text={'You currently have no sold properties.'} />}
+                </Grid>
+              </Grid>
+            )}
+
+            {selectedCards === 'inActive' && (
+              <Grid item md={12} padding={1}>
+                <Grid container spacing={2}>
+                  {inActiveProperties?.length > 0 ? inActiveProperties?.map((item) => renderPropertyCard(item, 'inactive')) : <Emptyview text={'You currently have no sold properties.'} />}
+                </Grid>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+      </Wrapper>
+    </Box>
+
   );
 };
 export default Dashboard;

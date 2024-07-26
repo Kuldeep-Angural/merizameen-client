@@ -58,12 +58,8 @@ const ContactUsModal = ({ openDialog, handleCloseDialog }) => {
                     Contact Us
                 </Typography>
                 <Typography>1st Floor, Manchanda Tower opposite Novelty Mall, Pathankot, Punjab, India </Typography>
-
-                <Typography>9:00AM to 6:00PM IST</Typography>
-
                 <Grid container gap={2}>
-            <Spinner LoadingState={loading} />
-
+                    <Spinner LoadingState={loading} />
                     <Grid item md={12} sm={12} xs={12}>
                         <GoogleMap data={{ city: 'pathankot', country: 'India', state: 'Punjab', zip: '145001' }} />
                         <Box component="form" noValidate mt={3} onSubmit={() => { }}>

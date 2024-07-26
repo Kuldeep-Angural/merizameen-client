@@ -18,8 +18,8 @@ export const Home = ({ updatePageTitle }) => {
   return (
     <Box>
       <Wrapper>
-        <LocationAndFilter setFilterParams={setFilterParams} filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} setLocation={setLocation} location={location}/>
-        <HighLightCards />
+        {/* <LocationAndFilter setFilterParams={setFilterParams} filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} setLocation={setLocation} location={location}/> */}
+        <HighLightCards setFilterParams={setFilterParams} filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams} setLocation={setLocation} location={location} />
         <ListedItems filterParams={filterParams} searchParams={searchParams} setSearchParams={setSearchParams}  setLocation={setLocation} location={location}/>
       </Wrapper>
     </Box>

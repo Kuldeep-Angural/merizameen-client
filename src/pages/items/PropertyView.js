@@ -16,10 +16,11 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PowerIcon from '@mui/icons-material/Power';
 import SubwayIcon from '@mui/icons-material/Subway';
-import { Box, Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import { Badge, Box, Button, Card, CardContent, Divider, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import moment from 'moment/moment';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { GoogleMap } from '../../components/googleMap/GoogleMap';
@@ -31,13 +32,15 @@ import { Wrapper } from '../home/Wrapper';
 import '../items/Item.scss';
 import { getSpecificProperty, requestCallBack, selectLoading } from '../postAd/postPropertySlice';
 import { InputField } from '../../components/input/InputField';
-import { fullAddress } from '../../utils/utility';
+import { formatNumber, fullAddress } from '../../utils/utility';
 import APToaster from '../../components/Toaster/APToaster';
 import { selectUserData } from '../authantication/authSlice';
+import { getPostedproperties, selectPostedProperties } from '../profile/profileSlice';
 export const PropertyView = () => {
   const [property, setProperty] = useState({});
   const [callBackData, setCallBackData] = useState({});
   const userData = useSelector(selectUserData);
+  const postedProperties = useSelector(selectPostedProperties);
 
   const [propertyImages, setPropertyImages] = useState([]);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -46,6 +49,7 @@ export const PropertyView = () => {
   const params = useParams();
   const toastRef = useRef();
   const loading = useSelector(selectLoading);
+  const isCurrentUserPost = useMemo(() => postedProperties.some((p) => p._id === params?.listId), [params?.listId, params, postedProperties]);
 
   const dispatch = useDispatch();
 
@@ -67,7 +71,10 @@ export const PropertyView = () => {
     window.scrollTo({
       top: 0,
       behavior: 'instant',
+
     });
+
+    dispatch(getPostedproperties());
   }, []);
 
   const openImageViewer = useCallback((index) => {
@@ -92,37 +99,40 @@ export const PropertyView = () => {
   };
 
   const handleCallBack = (e) => {
-    const {name , value} = e.target;
-    setCallBackData({...callBackData, [name]:value});
+    const { name, value } = e.target;
+    setCallBackData({ ...callBackData, [name]: value });
   }
 
   const submitCallBackRequest = () => {
     console.log(callBackData);
     const data = {
       ...callBackData,
-      propertyId:property._id,
+      propertyId: property._id,
     }
 
     if (callBackData?.name && callBackData?.mobile && callBackData?.message) {
-      dispatch(requestCallBack(data)).then((resp)=>{
+      dispatch(requestCallBack(data)).then((resp) => {
         const message = resp.payload.message;
-        if (resp.payload.status===200) {
-          toastRef.current.showToast({messageType:'success' , messageText:'Call Back request Submitted! Please Wait for some time to get Response'})
-        }else{
-          toastRef.current.showToast({messageType:message.messageType , messageText:message.messageText})
+        if (resp.payload.status === 200) {
+          toastRef.current.showToast({ messageType: 'success', messageText: 'Call Back request Submitted! Please Wait for some time to get Response' })
+        } else {
+          toastRef.current.showToast({ messageType: message.messageType, messageText: message.messageText })
         }
       })
-    }else{
-      toastRef.current.showToast({messageType:'error' , messageText:'Please fill required field for call-back Request'})
+    } else {
+      toastRef.current.showToast({ messageType: 'error', messageText: 'Please fill required field for call-back Request' })
 
     }
   }
 
   return (
     <Wrapper>
-      <APToaster ref={toastRef} /> 
+      <APToaster ref={toastRef} />
       <Spinner LoadingState={loading} />
       <Grid container spacing={2} mt={1} p={2}>
+        <Grid item md={12}>
+          { isCurrentUserPost && (<Badge badgeContent={"Your Property "} style={{ height: '20px', width: '100px' }} color="primary"></Badge>)}
+        </Grid>
         <Grid item md={6} sm={12} xs={12}>
           <Box >
             <img onClick={openImageViewer} title="click to view all images" style={{ cursor: 'pointer', display: 'block', width: '100%', borderRadius: '4px' }} src={propertyImages[imageIndex]} alt="Property" />
@@ -163,7 +173,7 @@ export const PropertyView = () => {
                 </Grid>
                 <Grid mt={2}>
                   <Typography fontSize={'28px'} color={'primary'} fontWeight={'600'}>
-                    &#8377;:{property?.price}  /-
+                    &#8377;:{property?.price ? formatNumber(Number(property?.price)) : ""}  /-
                   </Typography>
                 </Grid>
               </CardContent>
@@ -235,22 +245,21 @@ export const PropertyView = () => {
           </CardContent>
         </Grid>
 
-        
+
         <Grid item md={6} sm={12} xs={12} >
-          <GoogleMap  data={{  address:property?.location?.localAddress||"" ,state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
+          <GoogleMap data={{ address: property?.location?.localAddress || "", state: property?.location?.state, city: property?.location?.city, country: 'India', zip: property?.location?.pinCode }} />
         </Grid>
 
         <Grid item md={6} sm={12} xs={12} >
           <Card>
-            <CardContent sx={{mt:1}}>
+            <CardContent sx={{ mt: 1 }}>
               <Typography align='center' mb={2}>Request CallBack</Typography>
-              <InputField sx={{mt:2}} required={true}  style={{marginTop:'19'}} onChange={handleCallBack} name={'name'} value={callBackData.name} placeholder={'Name'}/>
-              <InputField style={{marginTop:'19'}} disabled={true}  name={'email'} value={userData?.email} placeholder={'Email'}/>
-              <InputField style={{marginTop:'19'}} required={true} onChange={handleCallBack} name={'mobile'} value={callBackData.mobile} placeholder={'Mobile'}/>
-              <InputField style={{marginTop:'19'}} required={true} onChange={handleCallBack} name={'message'} value={callBackData.message} placeholder={'Message'}/>
-              <Box  display={'flex'} justifyContent={'center'} alignContent={'center'}>
-              <Button variant='contained'  sx={{marginTop:'30px' , width:'120px'}} onClick={submitCallBackRequest}> Send </Button>
-
+              <InputField sx={{ mt: 2 }} required={true} style={{ marginTop: '19' }} onChange={handleCallBack} name={'name'} value={callBackData.name} placeholder={'Name'} />
+              <InputField style={{ marginTop: '19' }} disabled={true} name={'email'} value={userData?.email} placeholder={'Email'} />
+              <InputField style={{ marginTop: '19' }} required={true} onChange={handleCallBack} name={'mobile'} value={callBackData.mobile} placeholder={'Mobile'} />
+              <InputField style={{ marginTop: '19' }} required={true} onChange={handleCallBack} name={'message'} value={callBackData.message} placeholder={'Message'} />
+              <Box display={'flex'} justifyContent={'center'} alignContent={'center'}>
+                <Button variant='contained' sx={{ marginTop: '30px', width: '120px' }} disabled={isCurrentUserPost} onClick={submitCallBackRequest}> Send </Button>
               </Box>
             </CardContent>
           </Card>
