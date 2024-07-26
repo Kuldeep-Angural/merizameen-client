@@ -14,8 +14,6 @@ import { medium, propertyTypes, state } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
 import { Wrapper } from '../home/Wrapper';
 import { getAllProperties, getSpecificProperty, postProperty, selectPostLoading } from './postPropertySlice';
-import { AccountCircle } from '@mui/icons-material';
-import MyLocationIcon from '@mui/icons-material/MyLocation';
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
   const [postAdData, setPostAdData] = useState({});
@@ -25,7 +23,10 @@ export const PostProperty = () => {
     city: 'Pathankot',
   });
 
-  const [basicInfo, setBasicInfo] = useState({});
+  const [basicInfo, setBasicInfo] = useState({
+    postFor: 'Sell',
+    propertyType: '3Bhk'
+  });
   const [amenities, setAmenities] = useState({});
   const [landMarks, setLandMarks] = useState({});
 
@@ -277,7 +278,7 @@ export const PostProperty = () => {
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField disabled={params?.listId} required label="Landmark"  onChange={handleLocationChange} helpertext="This Field is Required" value={location?.localAddress || ''} aria-describedby="outlined-weight-helper-text" name={'localAddress'} />
+                          <TextField disabled={params?.listId} required label="Landmark" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.localAddress || ''} aria-describedby="outlined-weight-helper-text" name={'localAddress'} />
                         </FormControl>
                       </Grid>
 
