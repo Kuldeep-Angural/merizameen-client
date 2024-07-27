@@ -199,12 +199,12 @@ export const APNavBar = () => {
                 }}
               >
 
-                <MenuItem onClick={handleCloseNavMenu}>
+                {/* <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">Agents</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">Services</Typography>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handlePostPropertyEvent}>
                   <Typography textAlign="center">Post Property</Typography>
                 </MenuItem>
@@ -237,12 +237,12 @@ export const APNavBar = () => {
                 textDecoration: 'none',
               }}
             ></Typography>
-            <Box sx={{ flexGrow: 1, flexShrink: 2, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+            <Box sx={{ flexGrow: 1, flexShrink: 2, display: { xs: 'none', sm: 'none', md: 'flex' , justifyContent:'flex-end' } }}>
 
-              <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Agents" sx={{ my: 1, color: 'black', borderRadius: '180px' }}>
+              {/* <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Agents" sx={{ my: 1, color: 'black', borderRadius: '180px' }}>
               </LoaderButton>
               <LoaderButton onClick={handleCloseNavMenu} variant='outlined' text="Services" sx={{ my: 1, color: 'black', borderRadius: '180px' }}>
-              </LoaderButton>
+              </LoaderButton> */}
               <LoaderButton endicon={<AddHomeWorkIcon />} onClick={handlePostPropertyEvent} text='Post Property' variant="contained" sx={{ marginLeft: { md: '30px' }, margin: 1, borderRadius: '50px' }} />
             </Box>
 

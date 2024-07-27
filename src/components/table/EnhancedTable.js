@@ -1,7 +1,6 @@
-import DeleteIcon from '@mui/icons-material/Delete';
+import MenuIcon from '@mui/icons-material/Menu';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import MenuButton from '../buttons/MenuButton';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -45,16 +45,16 @@ function stableSort(array, comparator) {
 }
 
 const EnhancedTableHead = (props) => {
-  const { headCells, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, showsCheckBox } = props;
+  const { headCells, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, showsCheckBox, hasActions } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow >
         <TableCell padding="checkbox">
-        {showsCheckBox === true && (
+          {showsCheckBox === true && (
             <Checkbox
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -65,10 +65,10 @@ const EnhancedTableHead = (props) => {
               }}
             />
           )}
-          </TableCell>
+        </TableCell>
 
         {headCells.map((headCell) => (
-          <TableCell key={headCell.id} align={headCell.numeric ? 'right' : 'left'} padding={headCell.disablePadding ? 'none' : 'normal'} sortDirection={orderBy === headCell.id ? order : false}>
+          <TableCell sx={{ fontSize: '12px', fontWeight: 550, width: headCell.width || '200px' }} key={headCell.id} align={headCell.numeric ? 'right' : 'left'} padding={headCell.disablePadding ? 'none' : 'normal'} sortDirection={orderBy === headCell.id ? order : false}>
             <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -79,6 +79,12 @@ const EnhancedTableHead = (props) => {
             </TableSortLabel>
           </TableCell>
         ))}
+
+        {hasActions && (
+          <TableCell padding="checkbox">
+            <Typography>Action</Typography>
+          </TableCell>
+        )}
       </TableRow>
     </TableHead>
   );
@@ -95,7 +101,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, title } = props;
+  const { numSelected, title, topActions } = props;
 
   return (
     <Toolbar
@@ -112,17 +118,19 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
+        <Typography sx={{ flex: '1 1 100%', fontWeight: '550' }} id="tableTitle" component="div">
           {title}
         </Typography>
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        topActions?.map(({ title, action }) => {
+          return (
+            <Tooltip title={title}>
+              {action}
+            </Tooltip>
+          )
+        })
       ) : (
         <></>
       )}
@@ -135,13 +143,13 @@ EnhancedTableToolbar.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true }) => {
+const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true, recordsPerPage = 10, topActions, hasActions = false, actionMenu, selected, setSelected }) => {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState(headCells[0].id);
-  const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(true);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(recordsPerPage);
+  const [buttonCLickSelect, setButtonClickSelect] = React.useState('');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -174,6 +182,10 @@ const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true }) => {
     setSelected(newSelected);
   };
 
+  const handleButtonSelect = (event, id) => {
+    setButtonClickSelect(id)
+  }
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -196,20 +208,21 @@ const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true }) => {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} title={title} />
+        <EnhancedTableToolbar numSelected={selected.length} title={title} topActions={topActions} />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
-            <EnhancedTableHead headCells={headCells} numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={handleSelectAllClick} onRequestSort={handleRequestSort} rowCount={rows.length} showsCheckBox={showsCheckBox} />
+            <EnhancedTableHead headCells={headCells} numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={handleSelectAllClick} onRequestSort={handleRequestSort} rowCount={rows.length} hasActions={hasActions} showsCheckBox={showsCheckBox} actionMenu={actionMenu} />
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow hover onClick={(event) =>showsCheckBox === true && handleClick(event, row.id)} role="checkbox" aria-checked={isItemSelected} tabIndex={-1} key={row.id} selected={isItemSelected} sx={{ cursor: 'pointer' }}>
-                    <TableCell padding="checkbox">
+                  <TableRow hover onClick={(event) => handleButtonSelect(event, row.id)} aria-checked={isItemSelected} tabIndex={-1} key={row.id} selected={isItemSelected} sx={{ cursor: 'pointer' }}>
+                    <TableCell >
                       {showsCheckBox === true && (
                         <Checkbox
+                          onClick={(event) => showsCheckBox === true && handleClick(event, row.id)} role="checkbox"
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
@@ -219,19 +232,21 @@ const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true }) => {
                       )}
                     </TableCell>
                     {headCells.map((cell) => (
-                      <TableCell key={cell.id} align={cell.numeric ? 'right' : 'left'} padding={cell.disablePadding ? 'none' : 'normal'}>
+                      <TableCell style={{ height: '60px' }} key={cell.id} align={cell.numeric ? 'right' : 'left'} sx={{ fontSize: '10px' }} padding={cell.disablePadding ? 'none' : 'normal'}>
                         {row[cell.id]}
                       </TableCell>
                     ))}
+                    {hasActions && (
+                      <TableCell padding="checkbox">
+                        <MenuButton buttonLabel={<MenuIcon />} menuItems={actionMenu} selected={buttonCLickSelect} />
+                      </TableCell>
+                    )}
+
                   </TableRow>
                 );
               })}
               {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
+                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows, }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
