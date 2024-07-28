@@ -4,7 +4,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Badge, Box, Button, Card, CardContent, Checkbox, Chip, Divider, FormControl, FormControlLabel, Grid, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import LoaderButton from '../../components/loadingbutton/LoaderButton';
 import Modal from '../../components/modal/Modal';
 import Progressbar from '../../components/ProgressBar/Progressbar';
@@ -13,10 +13,15 @@ import { himachalCities, punjabCities } from '../../constants/cities';
 import { medium, propertyTypes, state } from '../../constants/constant';
 import imageIcon from '../../ui/images/noImage.webp';
 import { Wrapper } from '../home/Wrapper';
-import { getAllProperties, getSpecificProperty, postProperty, selectPostLoading } from './postPropertySlice';
+import { getAllProperties, getSpecificProperty, postProperty, selectLoading, selectPostLoading, updateProperty } from './postPropertySlice';
 export const PostProperty = () => {
   const [cities, setCities] = useState([]);
   const [postAdData, setPostAdData] = useState({});
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const uselocation = useLocation();
+  const searchParams = new URLSearchParams(uselocation.search);
+
+  console.log(uselocation, searchParams);
   const toastRef = useRef();
   const [location, setLocation] = useState({
     state: 'Punjab',
@@ -31,7 +36,7 @@ export const PostProperty = () => {
   const [landMarks, setLandMarks] = useState({});
 
   const [openModal, setOpenModal] = useState(false);
-  const loading = useSelector(selectPostLoading);
+  const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -39,23 +44,30 @@ export const PostProperty = () => {
     setCities(location?.state === 'Punjab' ? punjabCities : himachalCities);
   }, [location]);
 
-  useEffect(() => {
-    if (params?.listId) {
-      dispatch(getSpecificProperty(params)).then((resp) => {
-        const data = resp.payload.data || {}
-        if (resp.payload.data) {
-          setBasicInfo({ ...data.basicInfo, title: data.title, description: data.description, price: data.price, })
-          setAmenities(data.amenities)
-          setLandMarks(data.landMarks)
-          setPostAdData({
-            propertyImages: data.propertyImages,
-            mainImage: data.mainImage,
-          })
 
-        }
-      })
+  const refetchPostData = () => {
+    dispatch(getSpecificProperty(params)).then((resp) => {
+      const data = resp.payload.data || {}
+      if (resp.payload.data) {
+        setBasicInfo({ ...data.basicInfo, title: data.title, description: data.description, price: data.price, postFor: data.postFor, propertyType: data.propertyType, })
+        setAmenities(data.amenities)
+        setLandMarks(data.landMarks)
+        setLocation(data.location);
+        setPostAdData({
+          propertyImages: data.propertyImages,
+          mainImage: data.mainImage,
+        })
+
+      }
+    })
+  }
+
+
+  useEffect(() => {
+    if (params?.id) {
+      refetchPostData();
     }
-  }, [params, dispatch])
+  }, [params])
 
   const handleChange = (e) => {
     if (e.target.name === 'mainImage') {
@@ -135,8 +147,35 @@ export const PostProperty = () => {
   };
 
   const handleUpdateProperty = () => {
+    const data = {
+      id: params.id,
+      ...postAdData,
+      basicInfo: { ...basicInfo },
+      landMarks: { ...landMarks },
+      amenities: { ...amenities },
+      location: { ...location },
+    };
 
+    setUpdateLoading(true)
+    dispatch(updateProperty(data)).then((resp) => {
+      refetchPostData()
+      if (resp.payload.status === 200) {
+        toastRef.current.showToast({
+          messageType: 'success',
+          messageText: 'Property Update SuccessFully !'
+        })
+      } else {
+        const message = resp.payload.message;
+        toastRef.current.showToast({
+          messageType: message.messageType,
+          messageText: message.messageText
+        })
+      }
+    })
+    console.log(data);
+    setUpdateLoading(false)
   }
+
 
   useEffect(() => {
     dispatch(getAllProperties());
@@ -162,17 +201,17 @@ export const PostProperty = () => {
   ];
 
   const basicInfoConstant = [
-    { name: 'bedRoom', label: 'Bedroom' },
-    { name: 'bathRoom', label: 'Bathroom' },
+    { name: 'bedRooms', label: 'Bedroom' },
+    { name: 'bathRooms', label: 'Bathroom' },
     { name: 'totalArea', label: `Total (Yards)\u00B2` },
-    { name: 'carpetArea', label: `Carpet (Yards)\u00B2` },
-    { name: 'propertyAge', label: `Age Of Property` },
+    { name: 'carPetArea', label: `Carpet (Yards)\u00B2` },
+    { name: 'ageOfProperty', label: `Age Of Property` },
   ];
 
   return (
     <Wrapper>
       <APToaster ref={toastRef} title="" />
-      <Progressbar LoadingState={loading} />
+      <Progressbar LoadingState={loading || updateLoading} />
       <Grid container spacing={1} p={0}>
         <Grid item md={6} xs={12}>
           <Card>
@@ -251,7 +290,7 @@ export const PostProperty = () => {
                     </Typography>
                     <Grid container spacing={2} pl={1} display={'flex'} justifyContent={'center'}>
                       <Grid item md={6} xs={6} sm={6}>
-                        <TextField disabled={params?.listId} fullWidth select value={location?.state || ''} onChange={handleStateAndCityChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
+                        <TextField disabled={params?.id} fullWidth select value={location?.state || ''} onChange={handleStateAndCityChange} defaultValue="Punjab" SelectProps={{ native: true }} name="state" variant="standard">
                           {state.map((option) => (
                             <option key={option} value={option}>
                               {option}
@@ -261,7 +300,7 @@ export const PostProperty = () => {
                       </Grid>
 
                       <Grid item md={6} xs={6} sm={6}>
-                        <TextField fullWidth disabled={params?.listId} select onChange={handleStateAndCityChange} value={location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
+                        <TextField fullWidth disabled={params?.id} select onChange={handleStateAndCityChange} value={location?.city || ''} defaultValue={cities[0]} SelectProps={{ native: true }} name="city" variant="standard">
                           {cities.map((option) => (
                             <option key={option.name} value={option.name}>
                               {option.name}
@@ -272,19 +311,19 @@ export const PostProperty = () => {
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField disabled={params?.listId} required label="District" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
+                          <TextField disabled={params?.id} required label="District" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.district || ''} aria-describedby="outlined-weight-helper-text" name={'district'} />
                         </FormControl>
                       </Grid>
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField disabled={params?.listId} required label="Landmark" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.localAddress || ''} aria-describedby="outlined-weight-helper-text" name={'localAddress'} />
+                          <TextField required label="Landmark" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.localAddress || ''} aria-describedby="outlined-weight-helper-text" name={'localAddress'} />
                         </FormControl>
                       </Grid>
 
                       <Grid item md={6} xs={6} sm={6}>
                         <FormControl fullWidth variant="outlined">
-                          <TextField disabled={params?.listId} required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
+                          <TextField disabled={params?.id} required label="Pincode" onChange={handleLocationChange} helpertext="This Field is Required" value={location?.pinCode || ''} aria-describedby="outlined-weight-helper-text" name={'pinCode'} type="number" />
                         </FormControl>
                       </Grid>
 
@@ -387,7 +426,7 @@ export const PostProperty = () => {
             </CardContent>
           </Card>
           <Box display={'flex'} justifyContent={'center'} mt={3} mb={3}>
-            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px', width: '250px' }} text="Post Ad" loading={loading} variant="contained" onClick={!params?.listId ? handlePostButton : handleUpdateProperty} />
+            <LoaderButton startIcon={<AddHomeIcon fontSize="inherit" />} sx={{ mx: '80px', width: '250px' }} text="Post Ad" loading={loading} variant="contained" onClick={!params?.id ? handlePostButton : handleUpdateProperty} />
           </Box>
         </Grid>
       </Grid>

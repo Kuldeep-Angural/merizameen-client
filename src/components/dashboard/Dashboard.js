@@ -148,7 +148,7 @@ const Dashboard = () => {
   const renderPropertyCard = (item, prop) => {
     return (
       <Grid item md={3} sm={6} xs={12} style={{ cursor: 'pointer' }} className={item?.isSold ? 'container-disabled' : 'container'}>
-        <Box display='flex' sx={{ position: 'absolute', justifyContent: 'space-between' }}>
+        <Box display='flex' sx={{ position: 'relative', top: '40px', justifyContent: 'space-between', width: '100%' }}>
           {prop === 'post' && !item.isSold && (
             <Tooltip title="Edit">
               <Button id="fade-button" aria-controls={open ? 'fade-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={(event) => handleEditClick(event, item._id)}>

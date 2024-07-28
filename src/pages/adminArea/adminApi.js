@@ -67,9 +67,40 @@ export const deleteUserApi = async (payload) => {
 }
 
 
+export const updateUserDetals = async (payload) => {
+    return axios
+        .post(BASE_ENDPOINT + '/admin/updateuser', payload, {
+            headers: HEADERS.AUTHENTIC(),
+        })
+        .then(function (response) {
+            if (response.status === 200) {
+                return { ...response.data };
+            }
+        })
+        .catch(function (error) {
+            return error;
+        });
+}
+
+
 
 export const getUserApi = async (payload) => {
     return axios.post(BASE_ENDPOINT + '/admin/getuser', payload, {
+        headers: HEADERS.AUTHENTIC(),
+    })
+        .then(function (response) {
+            if (response.status === 200) {
+                return { ...response.data };
+            }
+        })
+        .catch(function (error) {
+            return error;
+        });
+}
+
+
+export const deletUserProperty = async (payload) => {
+    return axios.post(BASE_ENDPOINT + '/admin/deleteproperty', payload, {
         headers: HEADERS.AUTHENTIC(),
     })
         .then(function (response) {

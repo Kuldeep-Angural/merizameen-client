@@ -46,7 +46,7 @@ export const APRoutes = ({ toastRef }) => {
       <Route path="/dashboard" element={<PrivateRoute element={<Dashboard updatePageTitle={updatePageTitle} toastRef={toastRef} />} isLoggedIn={isLoggedIn} />} />
       <Route path="/adminArea" element={<PrivateRoute element={<AdminArea updatePageTitle={updatePageTitle} toastRef={toastRef} />} isLoggedIn={isLoggedIn} requiredRole="owner" />} />
       <Route path="/adminArea/user/:id" element={<PrivateRoute element={<ViewUser updatePageTitle={updatePageTitle} toastRef={toastRef} />} isLoggedIn={isLoggedIn} requiredRole="owner" />} />
-
+      <Route path="/adminArea/property/:id" element={<PrivateRoute element={<PostProperty updatePageTitle={updatePageTitle} toastRef={toastRef} />} isLoggedIn={isLoggedIn} />} />
 
       <Route path="*" element={<PageNotFound updatePageTitle={updatePageTitle} />} />
 

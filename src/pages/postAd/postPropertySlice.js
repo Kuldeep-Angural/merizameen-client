@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createObject, deleteSpecificProperty, getAll, getProperty, like, requestForCallBack } from './postPropertyApi';
+import { createObject, deleteSpecificProperty, getAll, getProperty, like, requestForCallBack, updateSpecificProperty } from './postPropertyApi';
 import { ReplyAll } from '@mui/icons-material';
 
 
@@ -35,6 +35,13 @@ export const deleteProperty =  createAsyncThunk('/user/deleteProperty', async (d
   return response;
 });
 
+
+export const updateProperty = createAsyncThunk('/user/updateProperty', async (data) => {
+  const response = await updateSpecificProperty(data);
+  return response;
+});
+
+
 export const requestCallBack =  createAsyncThunk('/user/requestCallBack', async (data) => {
   const response = await requestForCallBack(data);
   return response;
@@ -53,11 +60,11 @@ export const postpropertySlice = createSlice({
     builder
       .addCase(postProperty.pending, (state) => {
         state.status = 'processing';
-        state.postLoading = true;
+        state.loading = true;
       })
       .addCase(postProperty.fulfilled, (state, action) => {
         state.status = 'done';
-        state.postLoading = false;
+        state.loading = false;
       })
       .addCase(getAllProperties.pending, (state) => {
         state.loading = true;
@@ -83,6 +90,12 @@ export const postpropertySlice = createSlice({
         state.loading = true;
       })
       .addCase(deleteProperty.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(updateProperty.pending,(state)=>{
+        state.loading = true;
+      })
+      .addCase(updateProperty.fulfilled, (state, action) => {
         state.loading = false;
       })
       

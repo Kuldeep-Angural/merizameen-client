@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { deleteUserApi, getAll, getAllFeedbacks, getProperty, getUserApi, getUsersProperties } from './adminApi';
+import { deleteUserApi,  deletUserProperty, getAll, getAllFeedbacks, getProperty, getUserApi, getUsersProperties, updateSpecificProperty, updateUserDetals } from './adminApi';
 
 const initialState = {
     allUsers: [],
@@ -19,6 +19,17 @@ export const deleteUser = createAsyncThunk('admin/deleteUser', async (payload) =
     const response = await deleteUserApi(payload);
     return response;
 });
+
+export const updateuser = createAsyncThunk('admin/getUupdateusersers', async (payload) => {
+    const response = await updateUserDetals(payload);
+    return response;
+});
+
+export const deleteProperty = createAsyncThunk('admin/deleteProperty', async (payload) => {
+    const response = await deletUserProperty(payload);
+    return response;
+});
+
 
 
 export const getUser = createAsyncThunk('admin/getUsers', async (payload) => {
@@ -105,7 +116,19 @@ export const adminSlice = createSlice({
                 if (action.payload.data) {
                     state.userProperties = action.payload.data
                 }
-            });
+            })
+            .addCase(updateuser.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(updateuser.fulfilled, (state, action) => {
+                state.loading = false;
+            })
+            .addCase(deleteProperty.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(deleteProperty.fulfilled, (state, action) => {
+                state.loading = false;
+            });;
     },
 });
 

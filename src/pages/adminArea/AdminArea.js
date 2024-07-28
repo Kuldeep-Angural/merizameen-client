@@ -11,6 +11,7 @@ import moment from 'moment'
 import { dateFormat } from '../../constants/constant'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../components/ProgressBar/Progressbar'
+import AlertModal from '../../components/modal/AlertModal'
 
 const propertioesHeaders = [
     { id: 'title', numeric: false, disablePadding: true, label: 'Title', width: '220px' },
@@ -55,6 +56,8 @@ const AdminArea = () => {
     const loading = useSelector(selectLoading);
     const [currentTab, setCurrentTab] = useState('user');
     const [selected, setSelected] = useState([]);
+    const [openAlert, setOpenAlert] = useState(false);
+    const [singleItem, setSingleItem] = useState('');
 
 
     const refetchData = () => {
@@ -77,18 +80,29 @@ const AdminArea = () => {
         console.log(e);
     }
 
+    //user related Methods
     const handleDelete = (e) => {
-        const data = {
-            ids:[e]
+        setSingleItem(e);
+        setOpenAlert(true);
+    }
+
+    const handleUserDeleteResponse = (name) => {
+        if (name === 'yes') {
+            const data = {
+                ids: [singleItem]
+            }
+            dispatch(deleteUser(data)).then(() => {
+                refetchData();
+                setOpenAlert(false)
+            })
+        } else {
+            setOpenAlert(false);
         }
-        dispatch(deleteUser(data)).then(() => {
-            refetchData();
-        })
     }
 
     const removeSelected = () => {
         const data = {
-            ids:selected
+            ids: selected
         }
         dispatch(deleteUser(data)).then(() => {
             refetchData();
@@ -105,7 +119,7 @@ const AdminArea = () => {
         memberShip: user.memberShip.type,
         posts: user.usage.posts,
         createdAt: moment(user.createdAt).format(dateFormat.date),
-        type: user.isGoogleUser == true ? "Google" : 'Merizameen',
+        type: user.isGoogleUser === true ? "Google" : 'Merizameen',
 
     }));
 
@@ -156,6 +170,7 @@ const AdminArea = () => {
 
     return (
         <Wrapper>
+            <AlertModal openAlert={openAlert} closeAlert={() => setOpenAlert(false)} title={'Are you sure you want to delete this'} respponse={handleUserDeleteResponse} />
             <Spinner LoadingState={loading} />
             <Box p={2}>
                 <Tabs onClick={handleTabClick} current={currentTab} tabItems={tabItems} />

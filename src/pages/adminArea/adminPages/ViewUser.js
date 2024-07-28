@@ -2,20 +2,23 @@ import { Circle as CircleIcon, MoreVert as MoreVertIcon } from '@mui/icons-mater
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Box, Button, Grid, Tooltip, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { InputField } from '../../../components/input/InputField';
 import { Wrapper } from '../../home/Wrapper';
 
-import { getUser, getUserProperties, selectLoading, selectUser, selectUserproperties } from '../adminSlice';
+import { deleteProperty, getUser, getUserProperties, selectLoading, selectUser, selectUserproperties, updateuser } from '../adminSlice';
 import Titleheader from '../../../components/header/Titleheader';
 import moment from 'moment';
 import { dateFormat } from '../../../constants/constant';
 import Spinner from '../../../components/ProgressBar/Progressbar';
+import APToaster from '../../../components/Toaster/APToaster';
 export const ViewUser = () => {
     const params = useParams();
+    const toastRef = useRef();
     const loading = useSelector(selectLoading)
+    const naviGate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const properties = useSelector(selectUserproperties);
@@ -23,10 +26,19 @@ export const ViewUser = () => {
     const [userProperties, setUserproperties] = useState([]);
 
 
+    const refetchData = () => {
+        dispatch(getUser(params)).then((resp) => {
+            setUserDetails(resp.payload.data)
+        });
+        dispatch(getUserProperties(params)).then((resp) => {
+            setUserproperties(resp.payload.data)
+        });
+    }
+
     useEffect(() => {
-        dispatch(getUser(params));
-        dispatch(getUserProperties(params));
+        refetchData();
     }, [params.id])
+
 
     useEffect(() => {
         setUserDetails(user)
@@ -59,8 +71,23 @@ export const ViewUser = () => {
     }
 
 
-    const handleDeleteProperty = () => {
-
+    const handleDeleteProperty = (id) => {
+        console.log('property id :', id);
+        dispatch(deleteProperty({ id: id })).then((resp) => {
+            if (resp.payload.status === 200) {
+                toastRef.current.showToast({
+                    messageType: 'success',
+                    messageText: 'Property Deleted  Successfully !'
+                })
+            } else {
+                const message = resp.payload.message;
+                toastRef.current.showToast({
+                    messageType: message.messageType,
+                    messageText: message.messageText,
+                })
+            }
+        })
+        refetchData();
     }
 
     const handleOpenPropertyview = () => {
@@ -71,8 +98,27 @@ export const ViewUser = () => {
 
     }
 
-    const handleEditProperty = () => {
+    const handleEditProperty = (id) => {
+        naviGate(`/adminArea/property/${id}`)
+    }
 
+    const onUpdateUser = () => {
+        dispatch(updateuser(userDetails)).then((resp) => {
+            if (resp.payload.status === 200) {
+                toastRef.current.showToast({
+                    messageType: 'success',
+                    messageText: 'User Update Successfully !'
+                })
+            }
+            else {
+                const message = resp.payload.message;
+                toastRef.current.showToast({
+                    messageType: message.messageType,
+                    messageText: message.messageText,
+                })
+            }
+            refetchData()
+        });
     }
 
 
@@ -87,13 +133,13 @@ export const ViewUser = () => {
                             <DeleteIcon color='primary' sx={{ '&:hover': { color: 'white' } }} />
                         </Button>
                     </Tooltip>
-
                     <Tooltip title="Edit">
                         <Button id="fade-button" onClick={(event) => handleEditProperty(item._id)}>
                             <EditNoteIcon color='primary' sx={{ '&:hover': { color: 'white' } }} />
                         </Button>
                     </Tooltip>
                 </Box>
+
                 <img loading="lazy" style={{ borderRadius: '3%' }} src={item.mainImage} height="200px" width="100%" alt="Property" onClick={() => handleOpenPropertyview(item._id)} />
                 <Typography fontWeight="600">   {item?.title.length > 80 ? String(item?.title).slice(0, 80) + '. . .' : item?.title}</Typography>
                 <Box display="flex">
@@ -113,16 +159,18 @@ export const ViewUser = () => {
                     <Typography fontSize={'10px'}>Posted At: &nbsp;</Typography>
                     <Typography fontSize={'10px'}>{moment(item?.postedAt).format(dateFormat.dateAndTime)}</Typography>
                 </Box>
-
             </Grid>
         );
     };
+
+  
 
     console.log(userDetails);
 
     return (
         <Wrapper>
-            <Spinner LoadingState={loading}/>
+            <APToaster ref={toastRef} />
+            <Spinner LoadingState={loading} />
             <Box p={2}>
                 <Titleheader title={'User Details'} />
             </Box>
@@ -139,15 +187,18 @@ export const ViewUser = () => {
                 <Grid item md={6} sm={12} xs={12}>
                     <InputField name='type' value={userDetails?.memberShip?.type} onChange={handleUserDetails} placeholder={'Membership'} />
                     <InputField name='roles' value={userDetails?.roles?.[0]} onChange={handleUserDetails} placeholder={'Role'} />
-                    <InputField name='posts' value={userDetails?.usage?.posts || 0} onChange={handleUserDetails} placeholder={'Posts'} type='number' />
-                    <InputField name='isVerified' value={userDetails?.isVerified} onChange={handleUserDetails} placeholder={'Verified'} />
+                    <InputField disabled={true} name='posts' value={userDetails?.usage?.posts || 0} onChange={handleUserDetails} placeholder={'Posts'} type='number' />
+                    <InputField disabled={true} name='isVerified' value={userDetails?.isVerified} onChange={handleUserDetails} placeholder={'Verified'} />
 
                 </Grid>
 
+                <Grid item md={6} sm={12} xs={12}>
+                    <Button variant='contained' onClick={onUpdateUser} >Update</Button>
+                </Grid>
                 <Grid item md={12} sm={12} xs={12}>
                     <Titleheader title={'Properties Added By the User'} sx={{ mt: 2 }} />
                     <Grid container spacing={2} mt={2}>
-                        {userProperties.map((item) => renderPropertyCard(item))}
+                        { userProperties?.map((item) => renderPropertyCard(item))}
                     </Grid>
                 </Grid>
             </Grid>
