@@ -1,13 +1,13 @@
-import { Box, Fab, Grid, Tooltip, Typography } from '@mui/material';
+import { Box, Grid, Tooltip, Typography } from '@mui/material';
 import Lottie from 'lottie-react';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import ContactUsModal from '../../components/modal/ContactUsModal';
+import Spinner from '../../components/ProgressBar/Progressbar';
+import ContactUs from '../../ui/json/Animation - 1722004930910.json';
 import Building from '../../ui/json/building.json';
 import { SignInForm } from './AuthForm';
 import { selectForgotPasswordLoading, selectLoginLoading, selectOtpLoading, selectSignUpLoading } from './authSlice';
-import { useSelector } from 'react-redux';
-import Spinner from '../../components/ProgressBar/Progressbar';
-import ContactUs from '../../ui/json/Animation - 1722004930910.json';
-import ContactUsModal from '../../components/modal/ContactUsModal';
 
 const Auth = ({ updatePageTitle }) => {
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -33,7 +33,7 @@ const Auth = ({ updatePageTitle }) => {
         <Grid item sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} md={6}>
           <Typography padding={2} fontWeight={'600'} letterSpacing={'1px'}>
             <Lottie loop={false} animationData={Building} style={{ height: '300px' }} />
-            <span style={{ fontWeight: '900' }}>Welcome</span> to <span style={{ color: '#4d87fa' }}>merizameen.com.</span> We have been serving the needs of the real estate industry in India since 2024. Our single platform is designed to meet the needs of buyers, sellers and brokers of India properties. Our success is attributed to our understanding of the needs of our customers and consistently working to meet those needs utilizing innovative e-commerce solutions. If you are interested in purchasing a home or locate a rental property, you'r in perfect place ,
+            <span style={{ fontWeight: '900' }}>Welcome</span> to <a  href="https://merizameen.vercel.app" style={{ color: '#4d87fa' }}>merizameen.com.</a> We have been serving the needs of the real estate industry in India since 2024. Our single platform is designed to meet the needs of buyers, sellers and brokers of India properties. Our success is attributed to our understanding of the needs of our customers and consistently working to meet those needs utilizing innovative e-commerce solutions. If you are interested in purchasing a home or locate a rental property, you'r in perfect place ,
             using our portal to find the right residential property or commercial property to fit your needs. just register with us and get started..
           </Typography>
         </Grid>
@@ -43,8 +43,7 @@ const Auth = ({ updatePageTitle }) => {
       </Grid>
       <Box sx={{ position: 'absolute', bottom: '20px', right: '20px', cursor: 'pointer' }}  >
         <Tooltip title="Contact us" onClick={() => setOpenDialog(true)}>
-          {/* <img src={ContactUs} height={'80px'} width={'80px'}  /> */}
-          <Lottie loop={true} animationData={ContactUs} style={{ height: '80px' , }} />
+          <Lottie loop={true} animationData={ContactUs} style={{ height: '80px', }} />
         </Tooltip>
         <ContactUsModal openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
       </Box>
