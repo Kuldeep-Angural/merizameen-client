@@ -44,7 +44,7 @@ const Auth = ({ updatePageTitle }) => {
       <Box sx={{ position: 'absolute', bottom: '20px', right: '20px', cursor: 'pointer' }}  >
         <Tooltip title="Contact us" onClick={() => setOpenDialog(true)}>
           {/* <img src={ContactUs} height={'80px'} width={'80px'}  /> */}
-          <Lottie loop={true} animationData={ContactUs} style={{ height: '80px' }} />
+          <Lottie loop={true} animationData={ContactUs} style={{ height: '80px' , }} />
         </Tooltip>
         <ContactUsModal openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
       </Box>
