@@ -134,7 +134,7 @@ const AdminArea = () => {
         totalArea: property?.basicInfo?.totalArea,
         carpetArea: property?.basicInfo?.carPetArea,
         ageOfProperty: property?.basicInfo?.ageOfProperty,
-        isActive: (<CircleIcon style={{ color: property?.isActive === true ? 'green' : 'red' }} />)
+        isActive: (<CircleIcon style={{ color: property?.isActive === true  && property?.isSold===false ? 'green' : property?.isActive === true  && property?.isSold===true 'orange' : 'red' }} />)
     }));
 
 
