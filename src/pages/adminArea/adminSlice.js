@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { deleteUserApi,  deletUserProperty, getAll, getAllFeedbacks, getProperty, getUserApi, getUsersProperties, updateSpecificProperty, updateUserDetals } from './adminApi';
+import { deleteUserApi,  deletUserProperty, getAll, getAllFeedbacks, getProperty, getUserApi, getUsersProperties, updateSpecificProperty, updateUserDetals, userJourney } from './adminApi';
 
 const initialState = {
     allUsers: [],
@@ -45,6 +45,12 @@ export const getUserProperties = createAsyncThunk('admin/getUserProperties', asy
 
 export const getAllProperties = createAsyncThunk('admin/getAllProperties', async () => {
     const response = await getProperty();
+    return response;
+});
+
+
+export const getUserJourney = createAsyncThunk('admin/userJourney', async (payload) => {
+    const response = await userJourney(payload);
     return response;
 });
 
@@ -128,7 +134,13 @@ export const adminSlice = createSlice({
             })
             .addCase(deleteProperty.fulfilled, (state, action) => {
                 state.loading = false;
-            });;
+            }).addCase(getUserJourney.pending, (state) => {
+                
+                state.loading = true
+            })
+            .addCase(getUserJourney.fulfilled, (state, action) => {
+                state.loading = false;
+            });
     },
 });
 

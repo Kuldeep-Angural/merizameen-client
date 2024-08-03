@@ -104,7 +104,6 @@ export const PropertyView = () => {
   }
 
   const submitCallBackRequest = () => {
-    console.log(callBackData);
     const data = {
       ...callBackData,
       propertyId: property._id,

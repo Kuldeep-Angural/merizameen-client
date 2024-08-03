@@ -10,12 +10,12 @@ import { PageNotFound } from '../pages/notFoundPage/PageNotFound';
 import { PostProperty } from '../pages/postAd/PostProperty';
 import AdminArea from '../pages/adminArea/AdminArea';
 import { ViewUser } from '../pages/adminArea/adminPages/ViewUser';
+import UserJourney from '../pages/adminArea/adminPages/UserJourney';
 
 const PrivateRoute = ({ element, isLoggedIn, requiredRole }) => {
   const user = useSelector(selectUserData);
 
 
-  console.log(user);
   if (!isLoggedIn) {
     return <Navigate to="/auth" />;
   }
@@ -32,7 +32,7 @@ export const APRoutes = ({ toastRef }) => {
   const [pageTitle, updatePageTitle] = useState('');
 
   useEffect(() => {
-    document.title = pageTitle;
+    // document.title = pageTitle;
   }, [pageTitle]);
 
   return (
@@ -47,6 +47,8 @@ export const APRoutes = ({ toastRef }) => {
       <Route path="/adminArea" element={<PrivateRoute element={<AdminArea updatePageTitle={updatePageTitle} toastRef={toastRef} />} isLoggedIn={isLoggedIn} requiredRole="owner" />} />
       <Route path="/adminArea/user/:id" element={<PrivateRoute element={<ViewUser updatePageTitle={updatePageTitle} toastRef={toastRef} />} isLoggedIn={isLoggedIn} requiredRole="owner" />} />
       <Route path="/adminArea/property/:id" element={<PrivateRoute element={<PostProperty updatePageTitle={updatePageTitle} toastRef={toastRef} />} isLoggedIn={isLoggedIn} />} />
+      <Route path="/adminArea/userJourney/:id" element={<UserJourney element={<PostProperty updatePageTitle={updatePageTitle} toastRef={toastRef} />} isLoggedIn={isLoggedIn} />} />
+      <Route path="/adminArea/userJourney/propertyView/:listId" element={<PropertyView updatePageTitle={updatePageTitle} toastRef={toastRef} />} />
 
       <Route path="*" element={<PageNotFound updatePageTitle={updatePageTitle} />} />
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Wrapper } from '../home/Wrapper'
 import { allFeedbacks, deleteUser, getAllProperties, getAllUsers, selectAllFeedbacks, selectAllProperties, selectAllUsers, selectLoading } from './adminSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,6 +12,7 @@ import { dateFormat } from '../../constants/constant'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../components/ProgressBar/Progressbar'
 import AlertModal from '../../components/modal/AlertModal'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const propertioesHeaders = [
     { id: 'title', numeric: false, disablePadding: true, label: 'Title', width: '220px' },
@@ -49,6 +50,7 @@ const tabItems = [{ value: 'user', label: 'User' }, { value: 'properties', label
 const AdminArea = () => {
     const dispatch = useDispatch();
     const naviGate = useNavigate();
+    const alertRef = useRef();
 
     const allUsers = useSelector(selectAllUsers);
     const allProperties = useSelector(selectAllProperties)
@@ -56,7 +58,6 @@ const AdminArea = () => {
     const loading = useSelector(selectLoading);
     const [currentTab, setCurrentTab] = useState('user');
     const [selected, setSelected] = useState([]);
-    const [openAlert, setOpenAlert] = useState(false);
     const [singleItem, setSingleItem] = useState('');
 
 
@@ -73,41 +74,39 @@ const AdminArea = () => {
 
     const handleEditClick = (e) => {
         naviGate(`/adminArea/user/${e}`)
-        console.log(e);
     }
 
     const handleJourney = (e) => {
-        console.log(e);
+        naviGate(`/adminArea/userJourney/${e}`);
     }
 
-    //user related Methods
-    const handleDelete = (e) => {
-        setSingleItem(e);
-        setOpenAlert(true);
+
+    const handleDeleteUser = async (e) => {
+        const res = await alertRef.current.showAlert({title:'Are You Sure You Want To Delete This User'});
+            if (res === true) {
+                const data = { ids: [e]}
+                dispatch(deleteUser(data)).then(() => {
+                    refetchData();
+                })
+            } 
     }
 
-    const handleUserDeleteResponse = (name) => {
-        if (name === 'yes') {
-            const data = {
-                ids: [singleItem]
-            }
+
+    const removeSelectedUser = async() => {
+        const res = await alertRef.current.showAlert({title:'Are you sure you want to delete this'});
+        if (res === true) {
+            const data = { ids: selected  }
             dispatch(deleteUser(data)).then(() => {
                 refetchData();
-                setOpenAlert(false)
             })
-        } else {
-            setOpenAlert(false);
         }
     }
 
-    const removeSelected = () => {
-        const data = {
-            ids: selected
+    const removeSelectedProperties = async() => {
+        const res = await alertRef.current.showAlert({title:'Are You Sure You Want To Delete This User'});
+        if (res === true) {
+            
         }
-        dispatch(deleteUser(data)).then(() => {
-            refetchData();
-            setSelected([]);
-        })
     }
 
 
@@ -148,13 +147,9 @@ const AdminArea = () => {
     }));
 
 
-    const propertiesTopActions = [
-        { title: 'Delete', action: <Button onClick={removeSelected}> Delete</Button> }
-    ]
+    const propertiesTopActions = [ { title: 'Delete', action: <Button onClick={removeSelectedProperties}> Delete</Button> }]
 
-    const userTopAction = [
-        { title: 'Delete', action: <Button onClick={removeSelected}> Delete</Button> }
-    ]
+    const userTopAction = [ { title: 'Delete', action: <Button onClick={removeSelectedUser}> <DeleteIcon/> </Button> } ]
 
     useEffect(() => {
         refetchData();
@@ -164,27 +159,27 @@ const AdminArea = () => {
     const menuItems = [
         { title: 'Edit', onClick: handleEditClick },
         { title: 'Journey', onClick: handleJourney },
-        { title: 'Delete', onClick: handleDelete },
+        { title: 'Delete', onClick: handleDeleteUser },
     ];
 
 
     return (
         <Wrapper>
-            <AlertModal openAlert={openAlert} closeAlert={() => setOpenAlert(false)} title={'Are you sure you want to delete this'} respponse={handleUserDeleteResponse} />
+            <AlertModal ref={alertRef} title={'Are you sure you want to delete this'} />
             <Spinner LoadingState={loading} />
             <Box p={2}>
                 <Tabs onClick={handleTabClick} current={currentTab} tabItems={tabItems} />
                 {currentTab === 'user' && (
                     <Grid container spacing={2} p={2}>
                         <Grid item md={12} sm={12} xs={!2}>
-                            <EnhancedTable rows={userRow} headCells={usersHeaders} topActions={userTopAction} title="Users" hasActions={true} selected={selected} setSelected={setSelected} actionMenu={menuItems} />
+                            <EnhancedTable rows={userRow} headCells={usersHeaders} headerActions={userTopAction} title="Users" hasActions={true} selected={selected} setSelected={setSelected} actionMenu={menuItems} />
                         </Grid>
                     </Grid>
                 )}
                 {currentTab === 'properties' && (
                     <Grid container spacing={2} p={2}>
                         <Grid item md={12} sm={12} xs={!2}>
-                            <EnhancedTable rows={propertiesRow} headCells={propertioesHeaders} topActions={propertiesTopActions} hasActions={true} selected={selected} setSelected={setSelected} title="Properties" />
+                            <EnhancedTable rows={propertiesRow} headCells={propertioesHeaders} headerActions={propertiesTopActions} hasActions={true} selected={selected} setSelected={setSelected} title="Properties" />
                         </Grid>
                     </Grid>
                 )}
@@ -192,7 +187,7 @@ const AdminArea = () => {
                 {currentTab === 'feedbacks' && (
                     <Grid container spacing={2} p={2}>
                         <Grid item md={12} sm={12} xs={!2}>
-                            <EnhancedTable rows={feedbacksRow} headCells={feedBackHeaders} topActions={propertiesTopActions} hasActions={true} selected={selected} setSelected={setSelected} title="Feedbacks" />
+                            <EnhancedTable rows={feedbacksRow} headCells={feedBackHeaders} headerActions={propertiesTopActions} hasActions={true} selected={selected} setSelected={setSelected} title="Feedbacks" />
                         </Grid>
                     </Grid>
                 )}

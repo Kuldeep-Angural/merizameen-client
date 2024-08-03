@@ -23,7 +23,6 @@ const ContactUsModal = ({ openDialog, handleCloseDialog }) => {
     const submitFeedBack = () => {
         if (data.name && data.email && data.feedBack) {
             dispatch(sendFeedBack(data)).then((resp) => {
-                console.log(resp);
                 if (resp.payload.status === 200) {
                     toastRef.current.showToast({
                         messageType: "success",

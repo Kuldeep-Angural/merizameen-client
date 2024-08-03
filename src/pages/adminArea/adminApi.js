@@ -113,6 +113,20 @@ export const deletUserProperty = async (payload) => {
         });
 }
 
+export const userJourney = async (payload) => {
+    return axios.post(BASE_ENDPOINT + '/admin/userJourney', payload, {
+        headers: HEADERS.AUTHENTIC(),
+    })
+        .then(function (response) {
+            if (response.status === 200) {
+                return { ...response.data };
+            }
+        })
+        .catch(function (error) {
+            return error;
+        });
+}
+
 
 
 export const getAllFeedbacks = async (payload) => {

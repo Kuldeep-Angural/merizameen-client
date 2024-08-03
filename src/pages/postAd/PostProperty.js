@@ -21,7 +21,6 @@ export const PostProperty = () => {
   const uselocation = useLocation();
   const searchParams = new URLSearchParams(uselocation.search);
 
-  console.log(uselocation, searchParams);
   const toastRef = useRef();
   const [location, setLocation] = useState({
     state: 'Punjab',
@@ -172,7 +171,6 @@ export const PostProperty = () => {
         })
       }
     })
-    console.log(data);
     setUpdateLoading(false)
   }
 

@@ -1,39 +1,50 @@
-import { Box, Button, Grid, Typography } from '@mui/material'
-import React from 'react'
-import Modal from './Modal'
+import { Box, Button, Typography } from '@mui/material';
+import React, { useState, useImperativeHandle, forwardRef, useRef } from 'react';
+import Modal from './Modal';
 
-const AlertModal = ({ openAlert, closeAlert, respponse, title }) => {
+const AlertModal = forwardRef((props, ref) => {
+    const [open, setOpen] = useState(false);
+    const [title, setTitle] = useState('');
+    const resolveRef = useRef(null);
 
-    const onClick = (name) => {
-        respponse(name)
-    }
+    useImperativeHandle(ref, () => ({
+        showAlert: ({ title }) => {
+            setTitle(title);
+            setOpen(true);
 
+            return new Promise((resolve) => {
+                resolveRef.current = resolve;
+            });
+        },
+    }));
+
+    const onClick = (result) => {
+        if (resolveRef.current) {
+            resolveRef.current(result);
+            resolveRef.current = null;
+        }
+        setOpen(false);
+    };
 
     return (
-        <Modal open={openAlert} onClose={closeAlert}  >
+        <Modal open={open} onClose={() => setOpen(false)}>
             <Box sx={{ minHeight: 100 }}>
-                <Typography textAlign="center" fontWeight={700}>
+                <Typography textAlign="center" fontWeight={700} mt={2}>
                     {title}
                 </Typography>
-
-                <Box
-                    display="flex"
-                    sx={{ position: 'relative', top: 40, justifyContent: 'flex-end', width: '100%' }}
-                >
+                <Box display="flex" sx={{ position: 'relative', top: 40, justifyContent: 'flex-end', width: '100%' }}>
                     <Box display="flex" justifyContent="space-between">
-                        <Button sx={{ mr: 3 }} variant="contained" onClick={() => onClick('yes')}>
-                            Yes
-                        </Button>
-                        <Button variant="contained" onClick={() => onClick('no')}>
+                        <Button sx={{ width: '100px', backgroundColor: '#D3D3D3' }} variant="standard" onClick={() => onClick(false)}>
                             No
+                        </Button>
+                        <Button sx={{ ml: 3, width: '100px' }} variant="contained" onClick={() => onClick(true)}>
+                            Yes
                         </Button>
                     </Box>
                 </Box>
             </Box>
-
-
         </Modal>
-    )
-}
+    );
+});
 
-export default AlertModal
+export default AlertModal;

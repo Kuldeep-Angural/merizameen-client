@@ -1,22 +1,25 @@
-import { Circle as CircleIcon, MoreVert as MoreVertIcon } from '@mui/icons-material';
+import { Circle as CircleIcon } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Box, Button, Grid, Tooltip, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InputField } from '../../../components/input/InputField';
 import { Wrapper } from '../../home/Wrapper';
 
-import { deleteProperty, getUser, getUserProperties, selectLoading, selectUser, selectUserproperties, updateuser } from '../adminSlice';
-import Titleheader from '../../../components/header/Titleheader';
 import moment from 'moment';
-import { dateFormat } from '../../../constants/constant';
 import Spinner from '../../../components/ProgressBar/Progressbar';
 import APToaster from '../../../components/Toaster/APToaster';
+import Titleheader from '../../../components/header/Titleheader';
+import AlertModal from '../../../components/modal/AlertModal';
+import { dateFormat } from '../../../constants/constant';
+import { deleteProperty, getUser, getUserProperties, selectLoading, selectUser, selectUserproperties, updateuser } from '../adminSlice';
+import { deleteSpecificProperty } from '../../postAd/postPropertyApi';
 export const ViewUser = () => {
     const params = useParams();
     const toastRef = useRef();
+    const alertModalRef = useRef();
     const loading = useSelector(selectLoading)
     const naviGate = useNavigate();
     const dispatch = useDispatch();
@@ -24,6 +27,9 @@ export const ViewUser = () => {
     const properties = useSelector(selectUserproperties);
     const [userDetails, setUserDetails] = useState({});
     const [userProperties, setUserproperties] = useState([]);
+    const [alertModal , setAlertModal] = useState(false);
+    const [singleItem , setSingleItem] = useState('');
+
 
 
     const refetchData = () => {
@@ -37,17 +43,12 @@ export const ViewUser = () => {
 
     useEffect(() => {
         refetchData();
-    }, [params.id])
+    }, [])
 
 
-    useEffect(() => {
-        setUserDetails(user)
-        setUserproperties(properties)
-    }, [user, properties])
 
     const handleUserDetails = (e) => {
         const { name, value } = e.target;
-        console.log(e);
         setUserDetails({ ...userDetails, [name]: value })
         if (name === 'type') {
             setUserDetails({
@@ -71,8 +72,10 @@ export const ViewUser = () => {
     }
 
 
-    const handleDeleteProperty = (id) => {
-        console.log('property id :', id);
+    const handleDeleteProperty = async(id) => {
+
+        const res = await alertModalRef.current.showAlert({title:'Are you Sure You Want to Delete This Property ?'})
+      if (res===true) {
         dispatch(deleteProperty({ id: id })).then((resp) => {
             if (resp.payload.status === 200) {
                 toastRef.current.showToast({
@@ -88,10 +91,11 @@ export const ViewUser = () => {
             }
         })
         refetchData();
+      }
+        
     }
 
     const handleOpenPropertyview = () => {
-
     }
 
     const handleClick = () => {
@@ -124,8 +128,11 @@ export const ViewUser = () => {
 
 
 
+
+
     const renderPropertyCard = (item, prop) => {
         return (
+
             <Grid item md={3} sm={6} xs={12} style={{ cursor: 'pointer' }} className={item?.isSold ? 'container-disabled' : 'container'}>
                 <Box display='flex' sx={{ position: 'relative', top: '40px', justifyContent: 'space-between', width: '100%' }}>
                     <Tooltip title="Delete">
@@ -165,10 +172,10 @@ export const ViewUser = () => {
 
   
 
-    console.log(userDetails);
 
     return (
         <Wrapper>
+            <AlertModal ref={alertModalRef}/>
             <APToaster ref={toastRef} />
             <Spinner LoadingState={loading} />
             <Box p={2}>

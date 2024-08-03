@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import TextField from '@mui/material/TextField';
 import MenuButton from '../buttons/MenuButton';
 
 function descendingComparator(a, b, orderBy) {
@@ -101,7 +102,7 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, title, topActions } = props;
+  const { numSelected, title, headerActions, searchTerm, onSearchChange, showSearch = true } = props;
 
   return (
     <Toolbar
@@ -109,7 +110,7 @@ const EnhancedTableToolbar = (props) => {
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
-          bgcolor: 'grey',
+          bgcolor: '',
         }),
       }}
     >
@@ -124,7 +125,7 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        topActions?.map(({ title, action }) => {
+        headerActions?.map(({ title, action }) => {
           return (
             <Tooltip title={title}>
               {action}
@@ -134,6 +135,16 @@ const EnhancedTableToolbar = (props) => {
       ) : (
         <></>
       )}
+      {showSearch && <TextField
+        value={searchTerm}
+        onChange={onSearchChange}
+        placeholder="Search..."
+        variant="outlined"
+        size="small"
+        sx={{ marginLeft: 'auto', width: '300px' }}
+      />
+      }
+
     </Toolbar>
   );
 };
@@ -141,15 +152,18 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  onSearchChange: PropTypes.func.isRequired,
 };
 
-const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true, recordsPerPage = 10, topActions, hasActions = false, actionMenu, selected, setSelected }) => {
+const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true, recordsPerPage = 10, headerActions, hasActions = false, actionMenu, selected, setSelected, showSearch }) => {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState(headCells[0].id);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(recordsPerPage);
   const [buttonCLickSelect, setButtonClickSelect] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState('');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -199,19 +213,29 @@ const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true, recordsPe
     setDense(event.target.checked);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const filteredRows = rows.filter(row =>
+    Object.values(row).some(value =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
-  const visibleRows = React.useMemo(() => stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage), [order, orderBy, page, rowsPerPage, rows]);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredRows.length) : 0;
+
+  const visibleRows = React.useMemo(() => stableSort(filteredRows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage), [order, orderBy, page, rowsPerPage, filteredRows]);
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} title={title} topActions={topActions} />
+        <EnhancedTableToolbar numSelected={selected.length} title={title} headerActions={headerActions} searchTerm={searchTerm} onSearchChange={handleSearchChange} showSearch={showSearch} />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
-            <EnhancedTableHead headCells={headCells} numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={handleSelectAllClick} onRequestSort={handleRequestSort} rowCount={rows.length} hasActions={hasActions} showsCheckBox={showsCheckBox} actionMenu={actionMenu} />
+            <EnhancedTableHead headCells={headCells} numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={handleSelectAllClick} onRequestSort={handleRequestSort} rowCount={filteredRows.length} hasActions={hasActions} showsCheckBox={showsCheckBox} actionMenu={actionMenu} />
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
@@ -253,7 +277,7 @@ const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true, recordsPe
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination rowsPerPageOptions={[5, 10, 25]} component="div" count={rows.length} rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} />
+        <TablePagination rowsPerPageOptions={[5, 10, 25]} component="div" count={filteredRows.length} rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} />
       </Paper>
     </Box>
   );
