@@ -147,7 +147,7 @@ export const APNavBar = () => {
       <Progressbar LoadingState={loadingstate} />
       <APToaster ref={toastRef} />
       <AppBar elevation={0} position="static" color='transparent'>
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" sx={{width:'100%'}}>
           <Toolbar disableGutters>
             <Grid sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
               <Link
