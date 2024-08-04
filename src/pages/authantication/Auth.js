@@ -43,7 +43,7 @@ const Auth = ({ updatePageTitle }) => {
       </Grid>
       <Box sx={{ position: 'absolute', bottom: '20px', right: '20px', cursor: 'pointer' }}  >
         <Tooltip title="Contact us" onClick={() => setOpenDialog(true)}>
-          <Lottie loop={true} animationData={ContactUs} style={{ height: '80px', }} />
+          <Lottie loop={true} animationData={ContactUs} style={{ height: '40px', }} />
         </Tooltip>
         <ContactUsModal openDialog={openDialog} handleCloseDialog={handleCloseDialog} />
       </Box>

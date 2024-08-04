@@ -18,7 +18,10 @@ import { dateFormat } from '../../../constants/constant'
 import { formatNumber, fullAddress } from '../../../utils/utility'
 import { Wrapper } from '../../home/Wrapper'
 import { getUser, getUserJourney, selectLoading } from '../adminSlice'
+import CircleIcon from '@mui/icons-material/Circle';
 import Spinner from '../../../components/ProgressBar/Progressbar'
+import Emptyview from '../../../components/emptyView/Emptyview'
+import UpdateIcon from '@mui/icons-material/Update';
 const UserJourney = () => {
 
     const params = useParams()
@@ -60,7 +63,7 @@ const UserJourney = () => {
     const displayContentWithIcon = ({ text, icon }) => (
         <Grid item md={12} sm={12} xs={12} display="flex" alignItems="center">
             {icon}
-            <Typography fontWeight={600} letterSpacing={2} fontSize={15} ml={1}>
+            <Typography lineHeight={'35px'} fontWeight={600} letterSpacing={2} fontSize={15} ml={1}>
                 {text}
             </Typography>
         </Grid>
@@ -85,8 +88,10 @@ const UserJourney = () => {
                         <Box display={'flex'} justifyContent={'center'} alignContent={'center'}>
                             <Typography mr={2} fontWeight={600}> Total Likes : {item?.likes?.length || 0}</Typography>
                             <Typography ml={2} fontWeight={600}> Total Messages : {item?.messages?.length || 0}</Typography>
+                            <Typography ml={2} fontWeight={600}><CircleIcon sx={{ color: item.isActive ? 'green' : 'red' }} />  </Typography>
+
                         </Box>
-                        <Divider/>
+                        <Divider />
                     </Grid>
 
                     {showLikes && item.likes.length > 0 && (
@@ -122,7 +127,6 @@ const UserJourney = () => {
                                                 <Typography fontWeight={550} fontSize={'13px'}>Message:{like?.requestContent?.message || 'n/a'}</Typography>
                                                 <Typography fontWeight={550} fontSize={'13px'}>At:{moment(like?.requestedAt).format(dateFormat.dateAndTime)}</Typography>
                                             </Box>
-
                                         </Grid>
                                     )
                                 })}
@@ -137,7 +141,7 @@ const UserJourney = () => {
 
     return (
         <Wrapper>
-            <Spinner LoadingState={loading}/>
+            <Spinner LoadingState={loading} />
             <Grid container spacing={2}>
                 <Grid sx={{ margin: 2 }} item md={3} sm={12} xs={12} >
                     <Card >
@@ -147,14 +151,15 @@ const UserJourney = () => {
                             </Box>
                             <Grid container spacing={2}>
                                 <Grid item md={12} sm={12} xs={12} mt={2}>
-                                    <Typography fontWeight={'600'} letterSpacing={2} fontSize={'20px'}>{userDetails.name}</Typography>
+                                    <Typography fontWeight={'600'} letterSpacing={2} fontSize={'20px'}>{userDetails?.name}</Typography>
                                 </Grid>
-                                {displayContentWithIcon({ icon: <EmailOutlined />, text: userDetails.email })}
+                                {displayContentWithIcon({ icon: <EmailOutlined />, text: userDetails?.email })}
                                 {displayContentWithIcon({ icon: <PhoneIphoneIcon />, text: userDetails?.mobile ? `+91-${userDetails?.mobile}` : 'n/a' })}
                                 {displayContentWithIcon({ icon: <PersonIcon />, text: userDetails?.isGoogleUser ? 'Google' : 'Merizameen' })}
                                 {displayContentWithIcon({ icon: <VerifiedUserIcon />, text: userDetails?.isVerified ? 'Verified' : 'unVerified' })}
-                                {displayContentWithIcon({ icon: <HandshakeIcon />, text: moment(userDetails?.createdAt).format(dateFormat.dateAndTime) })}
+                                {displayContentWithIcon({ icon: <HandshakeIcon />, text: moment(userDetails?.createdAt).format(dateFormat?.dateAndTime) })}
                                 {displayContentWithIcon({ icon: <LoyaltyIcon />, text: userDetails?.memberShip?.type })}
+                                {displayContentWithIcon({ icon: <UpdateIcon />, text: moment(userDetails?.updatedAt).format(dateFormat?.dateAndTime)  })}
 
                             </Grid>
                         </CardContent>
@@ -181,14 +186,17 @@ const UserJourney = () => {
                                 </Tooltip>
                             </Box>
                         </Grid>
-                        <CardContent style={{ maxHeight: '85vh', overflow: 'scroll' }}>
+                        <CardContent style={{ maxHeight: '78vh', overflow: 'scroll' }}>
                             <Grid container spacing={2}>
-
-                                <Grid item md={12} sm={12} xs={12} mt={1}>
+                                {userJourney?.length > 0 ? (<Grid item md={12} sm={12} xs={12} mt={1}>
                                     {userJourney.map((item) => {
                                         return renderJourneyCards(item);
                                     })}
-                                </Grid>
+                                </Grid>) : (
+                                    <Grid item md={12} sm={12} xs={12} mt={1}>
+                                      <Emptyview/>
+                                    </Grid>)
+                                }
                             </Grid>
                         </CardContent>
                     </Card>
