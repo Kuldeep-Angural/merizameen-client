@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Wrapper } from '../home/Wrapper'
-import { allFeedbacks, deleteUser, getAllProperties, getAllUsers, selectAllFeedbacks, selectAllProperties, selectAllUsers, selectLoading } from './adminSlice'
+import { allFeedbacks, deleteProperty, deleteUser, getAllProperties, getAllUsers, selectAllFeedbacks, selectAllProperties, selectAllUsers, selectLoading } from './adminSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Button, Grid } from '@mui/material'
 import EnhancedTable from '../../components/table/EnhancedTable'
@@ -13,7 +13,8 @@ import { useNavigate } from 'react-router-dom'
 import Spinner from '../../components/ProgressBar/Progressbar'
 import AlertModal from '../../components/modal/AlertModal'
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import APToaster from '../../components/Toaster/APToaster'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 const propertioesHeaders = [
     { id: 'title', numeric: false, disablePadding: true, label: 'Title', width: '220px' },
     { id: 'price', numeric: true, disablePadding: false, label: 'Price', width: '50px' },
@@ -51,6 +52,7 @@ const AdminArea = () => {
     const dispatch = useDispatch();
     const naviGate = useNavigate();
     const alertRef = useRef();
+    const toastRef = useRef();
 
     const allUsers = useSelector(selectAllUsers);
     const allProperties = useSelector(selectAllProperties)
@@ -86,6 +88,10 @@ const AdminArea = () => {
             if (res === true) {
                 const data = { ids: [e]}
                 dispatch(deleteUser(data)).then(() => {
+                    toastRef.current.showToast({
+                        messageType: 'success',
+                        messageText: 'User Deleted Successfully !'
+                    })
                     refetchData();
                 })
             } 
@@ -97,17 +103,15 @@ const AdminArea = () => {
         if (res === true) {
             const data = { ids: selected  }
             dispatch(deleteUser(data)).then(() => {
+                toastRef.current.showToast({
+                    messageType: 'success',
+                    messageText: 'Selected User Deleted Successfully !'
+                })
                 refetchData();
             })
         }
     }
 
-    const removeSelectedProperties = async() => {
-        const res = await alertRef.current.showAlert({title:'Are You Sure You Want To Delete This User'});
-        if (res === true) {
-            
-        }
-    }
 
 
     const userRow = allUsers?.map((user) => ({
@@ -147,13 +151,53 @@ const AdminArea = () => {
     }));
 
 
-    const propertiesTopActions = [ { title: 'Delete', action: <Button onClick={removeSelectedProperties}> Delete</Button> }]
-
-    const userTopAction = [ { title: 'Delete', action: <Button onClick={removeSelectedUser}> <DeleteIcon/> </Button> } ]
-
+   
     useEffect(() => {
         refetchData();
     }, [])
+
+
+    const editProperty  = (id) => {
+        naviGate(`/adminArea/property/${id}`)
+    }
+
+    const propertyAnalytics  = (id) => {
+        
+    }
+
+    const deleteProperties  = async(id) => {
+        const res = await alertRef.current.showAlert({title:'Are you Sure you want To Delete this property'});
+        if (res===true) {
+            dispatch(deleteProperty({ id: id })).then((resp) => {
+                if (resp.payload.status === 200) {
+                    toastRef.current.showToast({
+                        messageType: 'success',
+                        messageText: 'Property Deleted  Successfully !'
+                    })
+                } else {
+                    const message = resp.payload.message;
+                    toastRef.current.showToast({
+                        messageType: message.messageType,
+                        messageText: message.messageText,
+                    })
+                }
+                refetchData();
+            })
+        }
+        refetchData();
+
+    }
+
+    
+    const removeSelectedProperties = async() => {
+        const res = await alertRef.current.showAlert({title:'Are You Sure You Want To Delete This User'});
+        if (res === true) {
+            
+        }
+    }
+
+
+    const userTopAction = [ { title: 'Delete', action: <Button onClick={removeSelectedUser}> <DeleteIcon/> </Button> } ]
 
 
     const menuItems = [
@@ -162,9 +206,16 @@ const AdminArea = () => {
         { title: 'Delete', onClick: handleDeleteUser },
     ];
 
+    const propertiesActionMenu =  [
+        { title: 'Edit', onClick: editProperty },
+        { title: 'Analytics', onClick:propertyAnalytics  },
+        { title: 'Delete', onClick: deleteProperties },
+    ];
+
 
     return (
         <Wrapper>
+            <APToaster ref={toastRef} />
             <AlertModal ref={alertRef} title={'Are you sure you want to delete this'} />
             <Spinner LoadingState={loading} />
             <Box p={2}>
@@ -179,7 +230,7 @@ const AdminArea = () => {
                 {currentTab === 'properties' && (
                     <Grid container spacing={2} p={2}>
                         <Grid item md={12} sm={12} xs={!2}>
-                            <EnhancedTable rows={propertiesRow} headCells={propertioesHeaders} headerActions={propertiesTopActions} hasActions={true} selected={selected} setSelected={setSelected} title="Properties" />
+                            <EnhancedTable rows={propertiesRow} headCells={propertioesHeaders} headerActions={[]} hasActions={true} selected={selected} setSelected={setSelected} actionMenu={propertiesActionMenu} title="Properties" />
                         </Grid>
                     </Grid>
                 )}
@@ -187,7 +238,7 @@ const AdminArea = () => {
                 {currentTab === 'feedbacks' && (
                     <Grid container spacing={2} p={2}>
                         <Grid item md={12} sm={12} xs={!2}>
-                            <EnhancedTable rows={feedbacksRow} headCells={feedBackHeaders} headerActions={propertiesTopActions} hasActions={true} selected={selected} setSelected={setSelected} title="Feedbacks" />
+                            <EnhancedTable rows={feedbacksRow} headCells={feedBackHeaders} headerActions={[]} hasActions={true} selected={selected} setSelected={setSelected} title="Feedbacks" />
                         </Grid>
                     </Grid>
                 )}

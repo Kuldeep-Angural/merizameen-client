@@ -18,6 +18,10 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import MenuButton from '../buttons/MenuButton';
+import { Button } from '@mui/material';
+import * as XLSX from 'xlsx';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -102,49 +106,15 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
-  const { numSelected, title, headerActions, searchTerm, onSearchChange, showSearch = true } = props;
+  const { numSelected, title, headerActions, searchTerm, onSearchChange, showSearch = true, showExport = true, handleExport } = props;
 
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: '',
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography sx={{ flex: '1 1 100%', fontWeight: '550' }} id="tableTitle" component="div">
-          {title}
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        headerActions?.map(({ title, action }) => {
-          return (
-            <Tooltip title={title}>
-              {action}
-            </Tooltip>
-          )
-        })
-      ) : (
-        <></>
-      )}
-      {showSearch && <TextField
-        value={searchTerm}
-        onChange={onSearchChange}
-        placeholder="Search..."
-        variant="outlined"
-        size="small"
-        sx={{ marginLeft: 'auto', width: '300px' }}
-      />
-      }
-
+    <Toolbar sx={{ pl: { sm: 2 },pr: { xs: 1, sm: 1 }, ...(numSelected > 0 && {bgcolor: '',}),}}>
+      {numSelected > 0 ? (<Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">{numSelected} selected</Typography>) 
+      : (<Typography sx={{ flex: '1 1 100%', fontWeight: '550' }} id="tableTitle" component="div">{title}</Typography>)}
+      {numSelected > 0 ? ( headerActions?.map(({ title, action }) => {return (<Tooltip title={title}>{action}</Tooltip>)})) : (<></>)}
+      {numSelected > 0 && showExport && <Tooltip title="Export"> <Button sx={{ marginLeft: 'auto',  }}onClick={handleExport}><ExitToAppIcon/></Button></Tooltip> }
+      {showSearch && <TextField value={searchTerm} onChange={onSearchChange} placeholder="Search..." variant="outlined"size="small"sx={{ marginLeft: 'auto', width: '300px' }}/>}
     </Toolbar>
   );
 };
@@ -225,6 +195,14 @@ const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true, recordsPe
     )
   );
 
+  const handleExport = () => {
+    const exportData = selected.length > 0 ? rows.filter(row => selected.includes(row.id)) : rows;
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${title}.xlsx`);
+  };
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredRows.length) : 0;
 
   const visibleRows = React.useMemo(() => stableSort(filteredRows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage), [order, orderBy, page, rowsPerPage, filteredRows]);
@@ -232,9 +210,9 @@ const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true, recordsPe
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} title={title} headerActions={headerActions} searchTerm={searchTerm} onSearchChange={handleSearchChange} showSearch={showSearch} />
+        <EnhancedTableToolbar numSelected={selected.length} title={title} headerActions={headerActions} searchTerm={searchTerm} onSearchChange={handleSearchChange} showSearch={showSearch} handleExport={handleExport} />
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
+          <Table exportButton={true} sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
             <EnhancedTableHead headCells={headCells} numSelected={selected.length} order={order} orderBy={orderBy} onSelectAllClick={handleSelectAllClick} onRequestSort={handleRequestSort} rowCount={filteredRows.length} hasActions={hasActions} showsCheckBox={showsCheckBox} actionMenu={actionMenu} />
             <TableBody>
               {visibleRows.map((row, index) => {
