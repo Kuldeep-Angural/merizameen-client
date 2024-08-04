@@ -24,12 +24,8 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
+  if (b[orderBy] < a[orderBy]) { return -1 }
+  if (b[orderBy] > a[orderBy]) { return 1}
   return 0;
 }
 
@@ -51,6 +47,7 @@ function stableSort(array, comparator) {
 
 const EnhancedTableHead = (props) => {
   const { headCells, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, showsCheckBox, hasActions } = props;
+
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -59,28 +56,15 @@ const EnhancedTableHead = (props) => {
     <TableHead>
       <TableRow >
         <TableCell padding="checkbox">
-          {showsCheckBox === true && (
-            <Checkbox
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                'aria-label': 'select all items',
-              }}
-            />
-          )}
+          {showsCheckBox === true && ( 
+            <Checkbox color="primary" indeterminate={numSelected > 0 && numSelected < rowCount} checked={rowCount > 0 && numSelected === rowCount} onChange={onSelectAllClick} inputProps={{'aria-label': 'select all items',}}/>)}
         </TableCell>
 
         {headCells.map((headCell) => (
           <TableCell sx={{ fontSize: '12px', fontWeight: 550, width: headCell.width || '200px' }} key={headCell.id} align={headCell.numeric ? 'right' : 'left'} padding={headCell.disablePadding ? 'none' : 'normal'} sortDirection={orderBy === headCell.id ? order : false}>
             <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={createSortHandler(headCell.id)}>
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
+              {orderBy === headCell.id ? ( <Box component="span" sx={visuallyHidden}> {order === 'desc' ? 'sorted descending' : 'sorted ascending'} </Box> ) : null}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -223,14 +207,7 @@ const EnhancedTable = ({ rows, headCells, title, showsCheckBox = true, recordsPe
                   <TableRow hover onClick={(event) => handleButtonSelect(event, row.id)} aria-checked={isItemSelected} tabIndex={-1} key={row.id} selected={isItemSelected} sx={{ cursor: 'pointer' }}>
                     <TableCell >
                       {showsCheckBox === true && (
-                        <Checkbox
-                          onClick={(event) => showsCheckBox === true && handleClick(event, row.id)} role="checkbox"
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
+                        <Checkbox onClick={(event) => showsCheckBox === true && handleClick(event, row.id)} role="checkbox" color="primary" checked={isItemSelected}inputProps={{'aria-labelledby': labelId,}}/>
                       )}
                     </TableCell>
                     {headCells.map((cell) => (
