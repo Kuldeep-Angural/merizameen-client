@@ -109,7 +109,7 @@ const ListedItems = ({ filterParams, searchParams, setLocation, location }) => {
         )}
         <Box display={'flex'} justifyContent={'center'} mb={2}>
           {
-           dataObj?.length > 6  && <Pagination data={dataObj} currentRecords={getCurrentRecords} filterParams={filterParams} searchParams={searchParams} setProperties={setProperties} setAppLoading={setAppLoading}  recordsPerPage={6}/>
+           dataObj?.length > 10  && <Pagination data={dataObj} currentRecords={getCurrentRecords} filterParams={filterParams} searchParams={searchParams} setProperties={setProperties} setAppLoading={setAppLoading}  recordsPerPage={10}/>
 
           }
         </Box>
