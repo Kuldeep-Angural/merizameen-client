@@ -67,6 +67,7 @@ const AdminArea = () => {
         dispatch(getAllUsers())
         dispatch(getAllProperties());
         dispatch(allFeedbacks());
+        setSelected([])
     }
 
     const handleTabClick = (e) => {
