@@ -184,6 +184,7 @@ export const SignInForm = ({ route }) => {
                 label='Email'
                 autoComplete="email"
                 required
+                placeholder="kuldeep.navv@gmail.com"
                 name="email"
                 type="email"
                 onChange={handleChange}
