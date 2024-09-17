@@ -5,11 +5,12 @@ import '../../pages/Global.scss';
 
 const Spinner = ({ LoadingState }) => {
   return LoadingState ? (
-    <div>
-      <Backdrop sx={{ color: 'skyblue', zIndex: 10 ,  backdropFilter: blur(1px); }} open={LoadingState}>
-        <CircularProgress color="inherit" size={60} />
-      </Backdrop>
-    </div>
+    <Backdrop
+    sx={{color: 'skyblue',zIndex: 10, backdropFilter: 'blur(1px)'}}
+    open={LoadingState}
+  >
+    <CircularProgress color="inherit" size={60} />
+  </Backdrop>
   ) : null;
 };
 
